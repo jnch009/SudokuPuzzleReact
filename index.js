@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Button } from "shards-react";
 import './index.css';
 
 class Square extends React.Component {
