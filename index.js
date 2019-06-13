@@ -90,6 +90,41 @@ class Square extends React.Component {
                     {this.renderSquare(53)}
                 </div>
             </div>
+            <div className="sudoku-row">
+                <div className="sudoku-grid">
+                    {this.renderSquare(54)}
+                    {this.renderSquare(55)}
+                    {this.renderSquare(56)}
+                    {this.renderSquare(57)}
+                    {this.renderSquare(58)}
+                    {this.renderSquare(59)}
+                    {this.renderSquare(60)}
+                    {this.renderSquare(61)}
+                    {this.renderSquare(62)}
+                </div>
+                <div className="sudoku-grid">
+                    {this.renderSquare(63)}
+                    {this.renderSquare(64)}
+                    {this.renderSquare(65)}
+                    {this.renderSquare(66)}
+                    {this.renderSquare(67)}
+                    {this.renderSquare(68)}
+                    {this.renderSquare(69)}
+                    {this.renderSquare(70)}
+                    {this.renderSquare(71)}
+                </div>
+                <div className="sudoku-grid">
+                    {this.renderSquare(72)}
+                    {this.renderSquare(73)}
+                    {this.renderSquare(74)}
+                    {this.renderSquare(75)}
+                    {this.renderSquare(76)}
+                    {this.renderSquare(77)}
+                    {this.renderSquare(78)}
+                    {this.renderSquare(79)}
+                    {this.renderSquare(80)}
+                </div>
+            </div>
         </div>
       );
     }
