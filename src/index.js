@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
  class Square extends React.Component {
+    /*constructor(props){
+
+    }*/
+
     render() {
       return (
         <button className="square">
@@ -24,116 +28,117 @@ import './index.css';
         return Math.floor(Math.random() * (max - min)) + min;
     }
 
-    renderSquare(i) {
+    renderSquare() {
       return <Square number={this.randomlyGeneratedValue()}/>;
+    }
+
+    renderGrid() {
+        var arr = [1,2,3,4,5,6,7,8,9];
+        var renderGrid = arr.map(function(val){
+            return <Square number={val}/>;
+        })
+
+        return renderGrid;
     }
   
     render() {
       return (
         <div className="sudoku">
-            <div id="r1" className="sudoku-row">
-                <div id="g1" className="sudoku-grid">
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                    {this.renderSquare(9)}
+            <div className="sudoku-row">
+                <div className="sudoku-grid">
+                    {this.renderGrid()}
                 </div>
                 <div className="sudoku-grid">
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                    {this.renderSquare(9)}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
                 </div>
                 <div className="sudoku-grid">
-                {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                    {this.renderSquare(9)}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
                 </div>
             </div>
             <div className="sudoku-row">
                 <div className="sudoku-grid">
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                    {this.renderSquare(9)}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
                 </div>
                 <div className="sudoku-grid">
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                    {this.renderSquare(9)}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
                 </div>
                 <div className="sudoku-grid">
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                    {this.renderSquare(9)}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
                 </div>
             </div>
             <div className="sudoku-row">
                 <div className="sudoku-grid">
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                    {this.renderSquare(9)}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
                 </div>
                 <div className="sudoku-grid">
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                    {this.renderSquare(9)}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
                 </div>
                 <div className="sudoku-grid">
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                    {this.renderSquare(9)}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
+                    {this.renderSquare()}
                 </div>
             </div>
         </div>
