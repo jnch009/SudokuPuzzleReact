@@ -13,9 +13,14 @@ import './index.css';
   }
   
   class Board extends React.Component {
+    generateInitialState(){
+        var sqr = document.getElementsByClassName("sudoku-row");
+        console.log(sqr);
+    }
+    
     randomlyGeneratedValue(){
         let min = 1;
-        let max = 9;
+        let max = 10;
         return Math.floor(Math.random() * (max - min)) + min;
     }
 
@@ -26,8 +31,8 @@ import './index.css';
     render() {
       return (
         <div className="sudoku">
-            <div className="sudoku-row">
-                <div className="sudoku-grid">
+            <div id="r1" className="sudoku-row">
+                <div id="g1" className="sudoku-grid">
                     {this.renderSquare(1)}
                     {this.renderSquare(2)}
                     {this.renderSquare(3)}
@@ -142,6 +147,7 @@ import './index.css';
         <div className="game">
           <div className="game-board">
             <Board />
+            <div>{this.generateInitialState}</div>
           </div>
           <div className="game-info">
             <div>{/* status */}</div>
