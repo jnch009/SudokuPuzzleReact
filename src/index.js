@@ -42,7 +42,6 @@ import './index.css';
         }
 
         var order = Array(9).fill(0);
-        
         i = 0;
         while (i < numElements){
             var positionAdd = this.randomlyGeneratedValue(0,9);
@@ -52,7 +51,6 @@ import './index.css';
             i++;
         }
 
-        console.log(order.length);
         var renderGrid = order.map(function(val){
             if (val !== 0){
                 return <Square number={val}/>;
