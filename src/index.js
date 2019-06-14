@@ -31,7 +31,18 @@ import './index.css';
     renderGrid() {
         // number of elements to set 
         var numElements = this.randomlyGeneratedValue();
-        var arr = [1,2,3,4,5,6,7,8,9];
+        var arr = [];
+
+        // generating the unique values
+        var i = 0;
+        while (i < numElements){
+            var toAdd = this.randomlyGeneratedValue();
+            if (arr.indexOf(toAdd) === -1) {
+                arr.push(toAdd);
+                i++;
+            }
+        }
+
         var renderGrid = arr.map(function(val){
             return <Square number={val}/>;
         })
