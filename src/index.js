@@ -22,21 +22,19 @@ import './index.css';
         console.log(sqr);
     }
     
-    randomlyGeneratedValue(){
-        let min = 1;
-        let max = 10;
+    randomlyGeneratedValue(min,max){
         return Math.floor(Math.random() * (max - min)) + min;
     }
 
     renderGrid() {
         // number of elements to set 
-        var numElements = this.randomlyGeneratedValue();
+        var numElements = this.randomlyGeneratedValue(1,10);
         var arr = [];
 
         // generating the unique values
         var i = 0;
         while (i < numElements){
-            var toAdd = this.randomlyGeneratedValue();
+            var toAdd = this.randomlyGeneratedValue(1,10);
             if (arr.indexOf(toAdd) === -1) {
                 arr.push(toAdd);
                 i++;
@@ -44,6 +42,14 @@ import './index.css';
         }
 
         var order = Array(9).fill(0);
+        i = 0;
+        while (i < numElements){
+            var positionAdd = this.randomlyGeneratedValue(0,9);
+            if (order[positionAdd] === 0){
+                order.splice(positionAdd,0,arr[i]);
+            }
+            i++;
+        }
 
         var renderGrid = order.map(function(val){
             if (val !== 0){
