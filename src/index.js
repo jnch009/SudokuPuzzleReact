@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class Square extends React.Component {
+ class Square extends React.Component {
     render() {
       return (
         <button className="square">
@@ -13,8 +13,14 @@ class Square extends React.Component {
   }
   
   class Board extends React.Component {
+    randomlyGeneratedValue(){
+        let min = 1;
+        let max = 9;
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+
     renderSquare(i) {
-      return <Square number={i}/>;
+      return <Square number={this.randomlyGeneratedValue()}/>;
     }
   
     render() {
