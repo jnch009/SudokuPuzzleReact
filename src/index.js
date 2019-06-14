@@ -43,8 +43,14 @@ import './index.css';
             }
         }
 
-        var renderGrid = arr.map(function(val){
-            return <Square number={val}/>;
+        var order = Array(9).fill(0);
+
+        var renderGrid = order.map(function(val){
+            if (val !== 0){
+                return <Square number={val}/>;
+            } else {
+                return <Square number={null}/>;
+            }
         })
 
         return renderGrid;
