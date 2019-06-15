@@ -21,7 +21,7 @@ import './index.css';
       super(props);
       this.state = {
         // https://stackoverflow.com/questions/966225/how-can-i-create-a-two-dimensional-array-in-javascript
-        grid = Array(9).fill(null).map(x=>Array(9).fill(null))
+        grid: Array(9).fill(null).map(x=>Array(9).fill(null))
       };
     }
     
@@ -33,7 +33,7 @@ import './index.css';
 
     }
 
-    renderGrid() {
+    renderGrid(startRow,startCol) {
         // number of elements to set 
         var numElements = this.randomlyGeneratedValue(1,10);
         var arr = [];
@@ -58,7 +58,7 @@ import './index.css';
             i++;
         }
 
-        var renderGrid = order.map(function(val){
+        var renderGrid = order.map(function(val,i){
             if (val !== 0){
                 return <Square number={val}/>;
             } else {
@@ -74,35 +74,35 @@ import './index.css';
         <div className="sudoku">
             <div className="sudoku-row">
                 <div className="sudoku-grid">
-                    {this.renderGrid()}
+                    {this.renderGrid(8,0)}
                 </div>
                 <div className="sudoku-grid">
-                    {this.renderGrid()}
+                    {this.renderGrid(8,3)}
                 </div>
                 <div className="sudoku-grid">
-                    {this.renderGrid()}
-                </div>
-            </div>
-            <div className="sudoku-row">
-                <div className="sudoku-grid">
-                    {this.renderGrid()}
-                </div>
-                <div className="sudoku-grid">
-                    {this.renderGrid()}
-                </div>
-                <div className="sudoku-grid">
-                    {this.renderGrid()}
+                    {this.renderGrid(8,6)}
                 </div>
             </div>
             <div className="sudoku-row">
                 <div className="sudoku-grid">
-                    {this.renderGrid()}
+                    {this.renderGrid(5,0)}
                 </div>
                 <div className="sudoku-grid">
-                    {this.renderGrid()}
+                    {this.renderGrid(5,3)}
                 </div>
                 <div className="sudoku-grid">
-                    {this.renderGrid()}
+                    {this.renderGrid(5,6)}
+                </div>
+            </div>
+            <div className="sudoku-row">
+                <div className="sudoku-grid">
+                    {this.renderGrid(2,0)}
+                </div>
+                <div className="sudoku-grid">
+                    {this.renderGrid(2,3)}
+                </div>
+                <div className="sudoku-grid">
+                    {this.renderGrid(2,6)}
                 </div>
             </div>
         </div>
