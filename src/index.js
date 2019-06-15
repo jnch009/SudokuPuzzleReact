@@ -25,10 +25,8 @@ import './index.css';
 
     componentDidMount(){
       //temporary
-      var startRow = 8;
+      var startRow = 0;
       var startCol = 0;
-      var currentRow = startRow;
-      var currentCol = startCol;
 
       // number of elements to set 
       var numElements = this.randomlyGeneratedValue(1,20);
@@ -53,7 +51,32 @@ import './index.css';
         targetGrid+=1;
       }
 
-      this.setState(() => ({grid: arr}));
+      // putting the array into grids
+
+      var newGrid = Array(9).fill(null).map(x=>Array(9).fill(null));
+      this.generateBox(0,0,arr,newGrid,0);
+      this.generateBox(0,3,arr,newGrid,1);
+      this.generateBox(0,6,arr,newGrid,2);
+      this.generateBox(3,0,arr,newGrid,3);
+      this.generateBox(3,3,arr,newGrid,4);
+      this.generateBox(3,6,arr,newGrid,5);
+      this.generateBox(6,0,arr,newGrid,6);
+      this.generateBox(6,3,arr,newGrid,7);
+      this.generateBox(6,6,arr,newGrid,8);
+
+      this.setState(() => ({grid: newGrid}));
+    }
+
+    generateBox(beginRow,beginCol,arrEntries, newGrid, arrIndex){
+      var indexing = 0;
+      for (var i = beginRow;i < beginRow+3; i++){
+        for (var j = beginCol; j < beginCol+3; j++){
+          newGrid[i].splice(j,1,arrEntries[arrIndex][indexing]);
+          indexing += 1;
+        }
+      }
+
+      return newGrid;
     }
 
     randomlyGeneratedArrayValue(min,max,arr){
