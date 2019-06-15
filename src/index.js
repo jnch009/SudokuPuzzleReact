@@ -41,7 +41,7 @@ import './index.css';
       while (targetGrid < 9) {
         var entryCopy = entries.slice();
         i = 0;
-        var cellsToFill = this.randomlyGeneratedValue(0,10);
+        var cellsToFill = this.randomlyGeneratedValue(3,10);
         while (i < cellsToFill){
           var toAdd = this.randomlyGeneratedArrayValue(0,entryCopy.length,entryCopy);
           arr[targetGrid].splice(i,1,toAdd);
@@ -54,15 +54,13 @@ import './index.css';
       // putting the array into grids
 
       var newGrid = Array(9).fill(null).map(x=>Array(9).fill(null));
-      this.generateBox(0,0,arr,newGrid,0);
-      this.generateBox(0,3,arr,newGrid,1);
-      this.generateBox(0,6,arr,newGrid,2);
-      this.generateBox(3,0,arr,newGrid,3);
-      this.generateBox(3,3,arr,newGrid,4);
-      this.generateBox(3,6,arr,newGrid,5);
-      this.generateBox(6,0,arr,newGrid,6);
-      this.generateBox(6,3,arr,newGrid,7);
-      this.generateBox(6,6,arr,newGrid,8);
+      var indexArr = 0;
+      for (var i = 0; i <= 6; i += 3){
+        for (var j = 0; j <= 6; j += 3){
+          this.generateBox(i,j,arr,newGrid,indexArr);
+          indexArr+=1;
+        }
+      }
 
       this.setState(() => ({grid: newGrid}));
     }
