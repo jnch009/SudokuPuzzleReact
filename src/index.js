@@ -61,14 +61,21 @@ import './index.css';
             i++;
         }
 
+        var currentGrid = this.state.grid.slice();
         var renderGrid = order.map(function(val,i){
             if (val !== 0){
+                //const newGrid = thisState.state.grid.slice();
+                currentGrid[currentRow][currentCol] = val;
+                
+                if (i % 2 === 0 || i % 5 === 0 || i % 7 === 0){
+                  currentCol = startCol;
+                  currentRow -= 1;
+                } else {
+                  currentCol += 1;
+                }
 
-                const grid = this.state.grid.slice(0);
-                grid[currentRow][currentCol] = val;
-                this.setState({ grid: grid });
+                //thisState.setState({ grid: newGrid });
                 return <Square number={val}/>;
-
             } else if (i % 2 === 0 || i % 5 === 0 || i % 7 === 0){
                 currentCol = startCol;
                 currentRow -= 1;
@@ -79,7 +86,7 @@ import './index.css';
                 return <Square number={null}/>;
             }
         })
-
+        this.setState({grid: currentGrid});
         return renderGrid;
     }
   
