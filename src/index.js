@@ -21,7 +21,7 @@ import './index.css';
       super(props);
       this.state = {
         // https://stackoverflow.com/questions/966225/how-can-i-create-a-two-dimensional-array-in-javascript
-        grid: Array(9).fill(null).map(x=>Array(9).fill(null))
+        grid: Array(9).fill(null).map(x=>Array(9).fill(null)),
       };
     }
     
@@ -63,17 +63,21 @@ import './index.css';
 
         var renderGrid = order.map(function(val,i){
             if (val !== 0){
-                const tempGrid = this.state.grid.slice();
-                tempGrid[startRow][startCol] = val;
-                this.setState(() => ({
-                    grid: tempGrid
-                }));
-                
+
+                const grid = this.state.grid.slice(0);
+                grid[currentRow][currentCol] = val;
+                this.setState({ grid: grid });
                 return <Square number={val}/>;
-            } else {
+
+            } else if (i % 2 === 0 || i % 5 === 0 || i % 7 === 0){
+                currentCol = startCol;
+                currentRow -= 1;
+                return <Square number={null}/>;
+            } 
+            else {
+                currentCol += 1;
                 return <Square number={null}/>;
             }
-            currentCol += 1;
         })
 
         return renderGrid;
