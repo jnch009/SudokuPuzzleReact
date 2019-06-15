@@ -31,25 +31,34 @@ import './index.css';
       var currentCol = startCol;
 
       // number of elements to set 
-      var numElements = this.randomlyGeneratedValue(1,10);
-      var arr = [];
+      var numElements = this.randomlyGeneratedValue(1,20);
+      var arr = Array(9).fill(null).map(x=>Array(9).fill(null));
+      var entries = [1,2,3,4,5,6,7,8,9];
 
       // generating the unique values
+      
+      var targetGrid = 0;
       var i = 0;
-      while (i < numElements){
-          var toAdd = this.randomlyGeneratedValue(1,10);
-          if (arr.indexOf(toAdd) === -1) {
-              arr.push(toAdd);
-              i++;
-          }
-      }
 
-      var order = Array(9).fill(0);
+      while (targetGrid < 9) {
+        var entryCopy = entries.slice();
+        i = 0;
+        while (i < 9){
+          var toAdd = this.randomlyGeneratedArrayValue(0,entryCopy.length,entryCopy);
+          arr[targetGrid].splice(i,1,toAdd);
+          entryCopy.splice(entryCopy.indexOf(toAdd),1);
+          i++;
+        }
+        targetGrid+=1;
+      }
+    
+      var order = Array(9).fill(null).map(x=>Array(9).fill(null));
         i = 0;
         while (i < numElements){
-            var positionAdd = this.randomlyGeneratedValue(0,9);
-            if (order[positionAdd] === 0){
-                order.splice(positionAdd,1,arr[i]);
+            var positionAddRow = this.randomlyGeneratedValue(0,9);
+            var positionAddCol = this.randomlyGeneratedValue(0,9);
+            if (order[positionAddRow][positionAddCol] === null){
+                order[positionAddRow].splice(positionAddCol,1,arr[i]);
             }
             i++;
         }
@@ -79,6 +88,10 @@ import './index.css';
         })
         this.setState(() => ({grid: currentGrid}));
         return renderGrid;
+    }
+
+    randomlyGeneratedArrayValue(min,max,arr){
+      return arr[Math.floor(Math.random() * (max - min)) + min];
     }
     
     randomlyGeneratedValue(min,max){
