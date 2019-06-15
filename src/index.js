@@ -15,41 +15,22 @@ import './index.css';
       );
     }
   }
-
-  class Row extends React.Component {
-      constructor(props) {
-        super(props);
-        this.state = {
-          entries: []
-        };
-      }
-
-      render(){
-        return this.state.entries;
-      }
-  }
-
-  class Col extends React.Component {
-      constructor(props) {
-        super(props);
-        this.state = {
-          entries: []
-        };
-      }
-
-      render(){
-        return this.state.entries;
-      }
-  }
   
   class Board extends React.Component {
-    /*generateInitialState(){
-        var sqr = document.getElementsByClassName("sudoku-row");
-        console.log(sqr);
-    }*/
+    constructor(props){
+      super(props);
+      this.state = {
+        // https://stackoverflow.com/questions/966225/how-can-i-create-a-two-dimensional-array-in-javascript
+        grid = Array(9).fill(null).map(x=>Array(9).fill(null))
+      };
+    }
     
     randomlyGeneratedValue(min,max){
         return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    checkConditions(){
+
     }
 
     renderGrid() {
