@@ -24,12 +24,7 @@ import './index.css';
     }
 
     componentDidMount(){
-      //temporary
-      var startRow = 0;
-      var startCol = 0;
-
       // number of elements to set 
-      var numElements = this.randomlyGeneratedValue(1,20);
       var arr = Array(9).fill(null).map(x=>Array(9).fill(null));
       var entries = [1,2,3,4,5,6,7,8,9];
 
