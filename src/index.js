@@ -19,14 +19,14 @@ import './index.css';
       super(props);
       this.state = {
         // https://stackoverflow.com/questions/966225/how-can-i-create-a-two-dimensional-array-in-javascript
-        grid: Array(3).fill(null).map(x=>Array(3).fill(null)),
+        grid: Array(9).fill(null).map(x=>Array(9).fill(null)),
       };
     }
 
     componentDidMount(){
-      //temporary 
-      var startRow = 2;
-      var startCol = 0; 
+      //temporary
+      var startRow = 8;
+      var startCol = 0;
       var currentRow = startRow;
       var currentCol = startCol;
 
@@ -102,6 +102,76 @@ import './index.css';
         <div className="sudoku">
             <div className="sudoku-row">
                 <div className="sudoku-grid">
+                    {this.renderSquare(8,0)}
+                    {this.renderSquare(8,1)}
+                    {this.renderSquare(8,2)}
+                    {this.renderSquare(7,0)}
+                    {this.renderSquare(7,1)}
+                    {this.renderSquare(7,2)}
+                    {this.renderSquare(6,0)}
+                    {this.renderSquare(6,1)}
+                    {this.renderSquare(6,2)}
+                </div>
+                <div className="sudoku-grid">
+                    {this.renderSquare(8,3)}
+                    {this.renderSquare(8,4)}
+                    {this.renderSquare(8,5)}
+                    {this.renderSquare(7,3)}
+                    {this.renderSquare(7,4)}
+                    {this.renderSquare(7,5)}
+                    {this.renderSquare(6,3)}
+                    {this.renderSquare(6,4)}
+                    {this.renderSquare(6,5)}
+                </div>
+                <div className="sudoku-grid">
+                    {this.renderSquare(8,6)}
+                    {this.renderSquare(8,7)}
+                    {this.renderSquare(8,8)}
+                    {this.renderSquare(7,6)}
+                    {this.renderSquare(7,7)}
+                    {this.renderSquare(7,8)}
+                    {this.renderSquare(6,6)}
+                    {this.renderSquare(6,7)}
+                    {this.renderSquare(6,8)}
+                </div>
+            </div>
+            <div className="sudoku-row">
+                <div className="sudoku-grid">
+                    {this.renderSquare(5,0)}
+                    {this.renderSquare(5,1)}
+                    {this.renderSquare(5,2)}
+                    {this.renderSquare(4,0)}
+                    {this.renderSquare(4,1)}
+                    {this.renderSquare(4,2)}
+                    {this.renderSquare(3,0)}
+                    {this.renderSquare(3,1)}
+                    {this.renderSquare(3,2)}
+                </div>
+                <div className="sudoku-grid">
+                    {this.renderSquare(5,3)}
+                    {this.renderSquare(5,4)}
+                    {this.renderSquare(5,5)}
+                    {this.renderSquare(4,3)}
+                    {this.renderSquare(4,4)}
+                    {this.renderSquare(4,5)}
+                    {this.renderSquare(3,3)}
+                    {this.renderSquare(3,4)}
+                    {this.renderSquare(3,5)}
+                </div>
+                <div className="sudoku-grid">
+                    {this.renderSquare(5,6)}
+                    {this.renderSquare(5,7)}
+                    {this.renderSquare(5,8)}
+                    {this.renderSquare(4,6)}
+                    {this.renderSquare(4,7)}
+                    {this.renderSquare(4,8)}
+                    {this.renderSquare(3,6)}
+                    {this.renderSquare(3,7)}
+                    {this.renderSquare(3,8)}
+                </div>
+            </div>
+            <div className="sudoku-row">
+                <div className="sudoku-grid">
                     {this.renderSquare(2,0)}
                     {this.renderSquare(2,1)}
                     {this.renderSquare(2,2)}
@@ -111,6 +181,28 @@ import './index.css';
                     {this.renderSquare(0,0)}
                     {this.renderSquare(0,1)}
                     {this.renderSquare(0,2)}
+                </div>
+                <div className="sudoku-grid">
+                    {this.renderSquare(2,3)}
+                    {this.renderSquare(2,4)}
+                    {this.renderSquare(2,5)}
+                    {this.renderSquare(1,3)}
+                    {this.renderSquare(1,4)}
+                    {this.renderSquare(1,5)}
+                    {this.renderSquare(0,3)}
+                    {this.renderSquare(0,4)}
+                    {this.renderSquare(0,5)}
+                </div>
+                <div className="sudoku-grid">
+                    {this.renderSquare(2,6)}
+                    {this.renderSquare(2,7)}
+                    {this.renderSquare(2,8)}
+                    {this.renderSquare(1,6)}
+                    {this.renderSquare(1,7)}
+                    {this.renderSquare(1,8)}
+                    {this.renderSquare(0,6)}
+                    {this.renderSquare(0,7)}
+                    {this.renderSquare(0,8)}
                 </div>
             </div>
         </div>
