@@ -24,6 +24,10 @@ import './index.css';
         grid: Array(9).fill(null).map(x=>Array(9).fill(null)),
       };
     }
+
+    componentDidMount(){
+
+    }
     
     randomlyGeneratedValue(min,max){
         return Math.floor(Math.random() * (max - min)) + min;
@@ -61,22 +65,21 @@ import './index.css';
             i++;
         }
 
-        var currentGrid = this.state.grid.slice();
+        var currentGrid = this;
         var renderGrid = order.map(function(val,i){
             if (val !== 0){
-                //const newGrid = thisState.state.grid.slice();
-                currentGrid[currentRow][currentCol] = val;
+                const newGrid = currentGrid.state.grid.slice();
+                newGrid[currentRow][currentCol] = val;
                 
-                if (i % 2 === 0 || i % 5 === 0 || i % 7 === 0){
+                if (i === 2 || i === 5 || i === 7){
                   currentCol = startCol;
                   currentRow -= 1;
                 } else {
                   currentCol += 1;
                 }
-
-                //thisState.setState({ grid: newGrid });
+                
                 return <Square number={val}/>;
-            } else if (i % 2 === 0 || i % 5 === 0 || i % 7 === 0){
+            } else if (i === 2 || i === 5 || i === 7){
                 currentCol = startCol;
                 currentRow -= 1;
                 return <Square number={null}/>;
@@ -86,8 +89,16 @@ import './index.css';
                 return <Square number={null}/>;
             }
         })
-        this.setState({grid: currentGrid});
+        //this.setState({grid: currentGrid});
         return renderGrid;
+    }
+
+    renderSquare(i,j){
+      return (
+        <Square
+          number = {this.state.grid[i][j]}
+        />
+      )
     }
   
     render() {
@@ -95,35 +106,15 @@ import './index.css';
         <div className="sudoku">
             <div className="sudoku-row">
                 <div className="sudoku-grid">
-                    {this.renderGrid(8,0)}
-                </div>
-                <div className="sudoku-grid">
-                    {this.renderGrid(8,3)}
-                </div>
-                <div className="sudoku-grid">
-                    {this.renderGrid(8,6)}
-                </div>
-            </div>
-            <div className="sudoku-row">
-                <div className="sudoku-grid">
-                    {this.renderGrid(5,0)}
-                </div>
-                <div className="sudoku-grid">
-                    {this.renderGrid(5,3)}
-                </div>
-                <div className="sudoku-grid">
-                    {this.renderGrid(5,6)}
-                </div>
-            </div>
-            <div className="sudoku-row">
-                <div className="sudoku-grid">
-                    {this.renderGrid(2,0)}
-                </div>
-                <div className="sudoku-grid">
-                    {this.renderGrid(2,3)}
-                </div>
-                <div className="sudoku-grid">
-                    {this.renderGrid(2,6)}
+                    {this.renderSquare(8,0)}
+                    {this.renderSquare(8,1)}
+                    {this.renderSquare(8,2)}
+                    {this.renderSquare(7,0)}
+                    {this.renderSquare(7,1)}
+                    {this.renderSquare(7,2)}
+                    {this.renderSquare(6,0)}
+                    {this.renderSquare(6,1)}
+                    {this.renderSquare(6,2)}
                 </div>
             </div>
         </div>
