@@ -2,18 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
- class Square extends React.Component {
+ function Square(props) {
     /*constructor(props){
 
     }*/
 
-    render() {
       return (
         <button className="square">
-          {this.props.number}
+          {props.number}
         </button>
       );
-    }
   }
   
   class Board extends React.Component {
@@ -21,12 +19,66 @@ import './index.css';
       super(props);
       this.state = {
         // https://stackoverflow.com/questions/966225/how-can-i-create-a-two-dimensional-array-in-javascript
-        grid: Array(9).fill(null).map(x=>Array(9).fill(null)),
+        grid: Array(3).fill(null).map(x=>Array(3).fill(null)),
       };
     }
 
     componentDidMount(){
+      //temporary 
+      var startRow = 2;
+      var startCol = 0; 
+      var currentRow = startRow;
+      var currentCol = startCol;
 
+      // number of elements to set 
+      var numElements = this.randomlyGeneratedValue(1,10);
+      var arr = [];
+
+      // generating the unique values
+      var i = 0;
+      while (i < numElements){
+          var toAdd = this.randomlyGeneratedValue(1,10);
+          if (arr.indexOf(toAdd) === -1) {
+              arr.push(toAdd);
+              i++;
+          }
+      }
+
+      var order = Array(9).fill(0);
+        i = 0;
+        while (i < numElements){
+            var positionAdd = this.randomlyGeneratedValue(0,9);
+            if (order[positionAdd] === 0){
+                order.splice(positionAdd,1,arr[i]);
+            }
+            i++;
+        }
+
+        var currentGrid = this.state.grid.slice();
+        var renderGrid = order.map(function(val,i){
+            if (val !== 0){
+                currentGrid[currentRow][currentCol] = val;
+                
+                if (i === 2 || i === 5){
+                  currentCol = startCol;
+                  currentRow -= 1;
+                } else {
+                  currentCol += 1;
+                }
+                
+                return <Square number={val}/>;
+            } else if (i === 2 || i === 5){
+                currentCol = startCol;
+                currentRow -= 1;
+                return <Square number={null}/>;
+            } 
+            else {
+                currentCol += 1;
+                return <Square number={null}/>;
+            }
+        })
+        this.setState(() => ({grid: currentGrid}));
+        return renderGrid;
     }
     
     randomlyGeneratedValue(min,max){
@@ -37,68 +89,12 @@ import './index.css';
 
     }
 
-    renderGrid(startRow,startCol) {
-        var currentRow = startRow;
-        var currentCol = startCol;
-
-        // number of elements to set 
-        var numElements = this.randomlyGeneratedValue(1,10);
-        var arr = [];
-
-        // generating the unique values
-        var i = 0;
-        while (i < numElements){
-            var toAdd = this.randomlyGeneratedValue(1,10);
-            if (arr.indexOf(toAdd) === -1) {
-                arr.push(toAdd);
-                i++;
-            }
-        }
-
-        var order = Array(9).fill(0);
-        i = 0;
-        while (i < numElements){
-            var positionAdd = this.randomlyGeneratedValue(0,9);
-            if (order[positionAdd] === 0){
-                order.splice(positionAdd,1,arr[i]);
-            }
-            i++;
-        }
-
-        var currentGrid = this;
-        var renderGrid = order.map(function(val,i){
-            if (val !== 0){
-                const newGrid = currentGrid.state.grid.slice();
-                newGrid[currentRow][currentCol] = val;
-                
-                if (i === 2 || i === 5 || i === 7){
-                  currentCol = startCol;
-                  currentRow -= 1;
-                } else {
-                  currentCol += 1;
-                }
-                
-                return <Square number={val}/>;
-            } else if (i === 2 || i === 5 || i === 7){
-                currentCol = startCol;
-                currentRow -= 1;
-                return <Square number={null}/>;
-            } 
-            else {
-                currentCol += 1;
-                return <Square number={null}/>;
-            }
-        })
-        //this.setState({grid: currentGrid});
-        return renderGrid;
-    }
-
     renderSquare(i,j){
       return (
         <Square
           number = {this.state.grid[i][j]}
         />
-      )
+      );
     }
   
     render() {
@@ -106,15 +102,15 @@ import './index.css';
         <div className="sudoku">
             <div className="sudoku-row">
                 <div className="sudoku-grid">
-                    {this.renderSquare(8,0)}
-                    {this.renderSquare(8,1)}
-                    {this.renderSquare(8,2)}
-                    {this.renderSquare(7,0)}
-                    {this.renderSquare(7,1)}
-                    {this.renderSquare(7,2)}
-                    {this.renderSquare(6,0)}
-                    {this.renderSquare(6,1)}
-                    {this.renderSquare(6,2)}
+                    {this.renderSquare(2,0)}
+                    {this.renderSquare(2,1)}
+                    {this.renderSquare(2,2)}
+                    {this.renderSquare(1,0)}
+                    {this.renderSquare(1,1)}
+                    {this.renderSquare(1,2)}
+                    {this.renderSquare(0,0)}
+                    {this.renderSquare(0,1)}
+                    {this.renderSquare(0,2)}
                 </div>
             </div>
         </div>
