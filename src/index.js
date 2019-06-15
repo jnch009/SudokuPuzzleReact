@@ -43,7 +43,8 @@ import './index.css';
       while (targetGrid < 9) {
         var entryCopy = entries.slice();
         i = 0;
-        while (i < 9){
+        var cellsToFill = this.randomlyGeneratedValue(0,10);
+        while (i < cellsToFill){
           var toAdd = this.randomlyGeneratedArrayValue(0,entryCopy.length,entryCopy);
           arr[targetGrid].splice(i,1,toAdd);
           entryCopy.splice(entryCopy.indexOf(toAdd),1);
@@ -51,43 +52,8 @@ import './index.css';
         }
         targetGrid+=1;
       }
-    
-      var order = Array(9).fill(null).map(x=>Array(9).fill(null));
-        i = 0;
-        while (i < numElements){
-            var positionAddRow = this.randomlyGeneratedValue(0,9);
-            var positionAddCol = this.randomlyGeneratedValue(0,9);
-            if (order[positionAddRow][positionAddCol] === null){
-                order[positionAddRow].splice(positionAddCol,1,arr[i]);
-            }
-            i++;
-        }
 
-        var currentGrid = this.state.grid.slice();
-        var renderGrid = order.map(function(val,i){
-            if (val !== 0){
-                currentGrid[currentRow][currentCol] = val;
-                
-                if (i === 2 || i === 5){
-                  currentCol = startCol;
-                  currentRow -= 1;
-                } else {
-                  currentCol += 1;
-                }
-                
-                return <Square number={val}/>;
-            } else if (i === 2 || i === 5){
-                currentCol = startCol;
-                currentRow -= 1;
-                return <Square number={null}/>;
-            } 
-            else {
-                currentCol += 1;
-                return <Square number={null}/>;
-            }
-        })
-        this.setState(() => ({grid: currentGrid}));
-        return renderGrid;
+      this.setState(() => ({grid: arr}));
     }
 
     randomlyGeneratedArrayValue(min,max,arr){
