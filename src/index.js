@@ -34,6 +34,9 @@ import './index.css';
     }
 
     renderGrid(startRow,startCol) {
+        var currentRow = startRow;
+        var currentCol = startCol;
+
         // number of elements to set 
         var numElements = this.randomlyGeneratedValue(1,10);
         var arr = [];
@@ -60,10 +63,17 @@ import './index.css';
 
         var renderGrid = order.map(function(val,i){
             if (val !== 0){
+                const tempGrid = this.state.grid.slice();
+                tempGrid[startRow][startCol] = val;
+                this.setState(() => ({
+                    grid: tempGrid
+                }));
+                
                 return <Square number={val}/>;
             } else {
                 return <Square number={null}/>;
             }
+            currentCol += 1;
         })
 
         return renderGrid;
