@@ -15,6 +15,14 @@ import './index.css';
       );
     }
   }
+
+  class Row extends React.Component {
+
+  }
+
+  class Col extends React.Component {
+    
+  }
   
   class Board extends React.Component {
     generateInitialState(){
