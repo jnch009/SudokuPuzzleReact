@@ -17,11 +17,21 @@ import './index.css';
   }
 
   class Row extends React.Component {
-
+      constructor(props) {
+        super(props);
+        this.state = {
+          entries: []
+        };
+      }
   }
 
   class Col extends React.Component {
-    
+      constructor(props) {
+        super(props);
+        this.state = {
+          entries: []
+        };
+      }
   }
   
   class Board extends React.Component {
