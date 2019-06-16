@@ -24,11 +24,8 @@ import './index.css';
     }
 
     componentDidMount(){
-      // number of elements to set 
       var arr = Array(9).fill(null).map(x=>Array(9).fill(null));
       var entries = [1,2,3,4,5,6,7,8,9];
-
-      // generating the unique values
       
       var targetGrid = 0;
       var i = 0;
@@ -45,8 +42,6 @@ import './index.css';
         }
         targetGrid+=1;
       }
-
-      // putting the array into grids
 
       var newGrid = Array(9).fill(null).map(x=>Array(9).fill(null));
       var indexArr = 0;
@@ -83,10 +78,6 @@ import './index.css';
     }
 
     checkConditions(valueToAdd,rowNumber,colNumber,grid){
-      // check the rows and columns and don't add if the number exists already
-      // we don't need to check the box for unique as that was done in componentDidMount
-      // take parameters from generateBox
-
       if (!this.checkRow(grid,rowNumber,valueToAdd) || !this.checkCol(grid,colNumber,valueToAdd)){
         return false;
       }
