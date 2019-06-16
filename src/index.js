@@ -64,6 +64,7 @@ import './index.css';
       var indexing = 0;
       for (var i = beginRow;i < beginRow+3; i++){
         for (var j = beginCol; j < beginCol+3; j++){
+          // call checkConditions
           newGrid[i].splice(j,1,arrEntries[arrIndex][indexing]);
           indexing += 1;
         }
@@ -80,7 +81,13 @@ import './index.css';
         return Math.floor(Math.random() * (max - min)) + min;
     }
 
-    checkConditions(){
+    checkConditions(rowNumber,colNumber,grid){
+      // check the rows and columns and don't add if the number exists already
+      // we don't need to check the box for unique as that was done in componentDidMount
+      // take parameters from generateBox
+
+      //get row
+
 
     }
 
