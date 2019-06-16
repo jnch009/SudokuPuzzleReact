@@ -36,7 +36,7 @@ import './index.css';
       while (targetGrid < 9) {
         var entryCopy = entries.slice();
         i = 0;
-        var cellsToFill = this.randomlyGeneratedValue(3,10);
+        var cellsToFill = this.randomlyGeneratedValue(1,10);
         while (i < cellsToFill){
           var toAdd = this.randomlyGeneratedArrayValue(0,entryCopy.length,entryCopy);
           arr[targetGrid].splice(i,1,toAdd);
@@ -50,9 +50,9 @@ import './index.css';
 
       var newGrid = Array(9).fill(null).map(x=>Array(9).fill(null));
       var indexArr = 0;
-      for (i = 0; i <= 6; i += 3){
-        for (var j = 0; j <= 6; j += 3){
-          this.generateBox(i,j,arr,newGrid,indexArr);
+      for (var row = 0; row <= 6; row += 3){
+        for (var col = 0; col <= 6; col += 3){
+          this.generateBox(row,col,arr,newGrid,indexArr);
           indexArr+=1;
         }
       }
@@ -62,11 +62,10 @@ import './index.css';
 
     generateBox(beginRow,beginCol,arrEntries, newGrid, arrIndex){
       var indexing = 0;
-      // TODO: change i and j to row and col
-      for (var i = beginRow; i < beginRow+3; i++){
-        for (var j = beginCol; j < beginCol+3; j++){
-          if (this.checkConditions(arrEntries[arrIndex][indexing],i,j,newGrid)){
-              newGrid[i].splice(j,1,arrEntries[arrIndex][indexing]);
+      for (var row = beginRow; row < beginRow+3; row++){
+        for (var col = beginCol; col < beginCol+3; col++){
+          if (this.checkConditions(arrEntries[arrIndex][indexing],row,col,newGrid)){
+              newGrid[row].splice(col,1,arrEntries[arrIndex][indexing]);
           }
           indexing += 1;
         }
