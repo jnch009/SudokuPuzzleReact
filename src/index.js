@@ -62,7 +62,8 @@ import './index.css';
 
     generateBox(beginRow,beginCol,arrEntries, newGrid, arrIndex){
       var indexing = 0;
-      for (var i = beginRow;i < beginRow+3; i++){
+      // TODO: change i and j to row and col
+      for (var i = beginRow; i < beginRow+3; i++){
         for (var j = beginCol; j < beginCol+3; j++){
           if (this.checkConditions(arrEntries[arrIndex][indexing],i,j,newGrid)){
               newGrid[i].splice(j,1,arrEntries[arrIndex][indexing]);
@@ -87,7 +88,7 @@ import './index.css';
       // we don't need to check the box for unique as that was done in componentDidMount
       // take parameters from generateBox
 
-      if (!this.checkRow() || !this.checkCol()){
+      if (!this.checkRow(grid,rowNumber,valueToAdd) || !this.checkCol(grid,colNumber,valueToAdd)){
         return false;
       }
       return true;
@@ -100,8 +101,14 @@ import './index.css';
       return true;
     }
 
-    checkCol(grid, colNumber, valueToAdd, valueIndex){
+    checkCol(grid, colNumber, valueToAdd){
+      for (var row = 0; row < 9; row += 1) {
+        if (grid[row][colNumber] === valueToAdd) {
+          return false;
+        }
+      }
 
+      return true;
     }
 
     renderSquare(i,j){
