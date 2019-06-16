@@ -64,7 +64,6 @@ import './index.css';
       var indexing = 0;
       for (var i = beginRow;i < beginRow+3; i++){
         for (var j = beginCol; j < beginCol+3; j++){
-          // call checkConditions
           if (this.checkConditions(arrEntries[arrIndex][indexing],i,j,newGrid)){
               newGrid[i].splice(j,1,arrEntries[arrIndex][indexing]);
           }
@@ -88,11 +87,21 @@ import './index.css';
       // we don't need to check the box for unique as that was done in componentDidMount
       // take parameters from generateBox
 
-      //get row
+      if (!this.checkRow() || !this.checkCol()){
+        return false;
+      }
+      return true;
+    }
+    
+    checkRow(grid, rowNumber, valueToAdd){
       if (grid[rowNumber].indexOf(valueToAdd) !== -1) {
         return false;
       }
       return true;
+    }
+
+    checkCol(grid, colNumber, valueToAdd, valueIndex){
+
     }
 
     renderSquare(i,j){
