@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Button from 'react-bootstrap/Button';
+//import Button from 'react-bootstrap/Button';
+import { Button } from "shards-react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "shards-ui/dist/css/shards.min.css"
 import './index.css';
 
  function Square(props) {
@@ -9,11 +12,18 @@ import './index.css';
     }*/
 
       return (
-        <Button active="true" className="square">
+        <Button disabled theme="dark" active="true" className="square">
           {props.number}
         </Button>
-        /*<Button variant="primary">Primary</Button>*/
       );
+  }
+
+  function ActiveSquare(props) {
+    return (
+      <Button theme="dark" active="true" className="square">
+        {props.number}
+      </Button>
+    );
   }
   
   class Board extends React.Component {
@@ -104,11 +114,19 @@ import './index.css';
     }
 
     renderSquare(i,j){
-      return (
-        <Square
-          number = {this.state.grid[i][j]}
-        />
-      );
+      if (this.state.grid[i][j] !== null){
+        return (
+          <Square
+            number = {this.state.grid[i][j]}
+          />
+        );
+      } else {
+        return (
+          <ActiveSquare
+            number = {this.state.grid[i][j]}
+          />
+        )
+      }
     }
   
     render() {
