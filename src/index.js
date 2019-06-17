@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Button from 'react-bootstrap/Button';
 import './index.css';
 
  function Square(props) {
@@ -8,9 +9,10 @@ import './index.css';
     }*/
 
       return (
-        <button className="square">
+        <Button active="true" className="square">
           {props.number}
-        </button>
+        </Button>
+        /*<Button variant="primary">Primary</Button>*/
       );
   }
   
