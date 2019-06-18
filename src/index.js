@@ -56,16 +56,16 @@ import './index.css';
         }
         //targetGrid+=1;
       //}
-      
+
       var newGrid = Array(9).fill(null).map(x=>Array(9).fill(null));
       var boxGrid = Array(9).fill(null).map(x=>[]);
 
-      this.generateValidEntries(boxGrid,entries,0,0,newGrid);
+      //this.generateValidEntries(boxGrid,entries,0,0,newGrid);
 
       var indexArr = 0;
       for (var row = 0; row < 1; row += 1){
-        for (var col = 0; col <= 6; col += 3){
-          this.generateBox(row,col,arr[indexArr],newGrid);
+        for (var col = 0; col < 3; col += 3){
+          this.generateBox(row,col,arr,newGrid);
           indexArr+=1;
         }
       }
@@ -85,7 +85,7 @@ import './index.css';
             newGrid[row].splice(col,1,arrEntries[indexing]);
           } else {
             var entryToAdd = arrEntries[indexing];
-            var indexOfEntry = arrEntries.indexOf(entryToAdd);
+            var indexOfEntry = arrEntries[indexing].indexOf(entryToAdd);
             arrEntries.splice(indexOfEntry,1);
             arrEntries.push(entryToAdd);
             continue;
