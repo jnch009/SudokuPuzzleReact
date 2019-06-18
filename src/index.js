@@ -86,17 +86,6 @@ import './index.css';
         var col = beginCol;
         while (col < beginCol+3){
           newGrid[row].splice(col,1,arrEntries[indexing]);
-          /*
-          if (this.checkConditions(arrEntries[indexing],row,col,newGrid)){
-            newGrid[row].splice(col,1,arrEntries[indexing]);
-          } else {
-            var entryToAdd = arrEntries[indexing];
-            var indexOfEntry = arrEntries[indexing].indexOf(entryToAdd);
-            arrEntries.splice(indexOfEntry,1);
-            arrEntries.push(entryToAdd);
-            continue;
-          }*/
-
           col+=1;
           indexing += 1;
         }
