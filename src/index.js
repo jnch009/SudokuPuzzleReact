@@ -64,13 +64,14 @@ import './index.css';
 
       //var indexArr = 0;
       for (var row = 0; row < 1; row += 1){
-        for (var col = 0; col <= 3; col += 3){
+        for (var col = 0; col <= 6; col += 3){
           if (row === 0 && col === 0){
             this.generateBox(row,col,arr,newGrid);
           } else {
-            this.generateValidEntries(boxGrid,entries,row,col,newGrid);
+            arr = this.generateValidEntries(boxGrid,entries,row,col,newGrid);
+            this.generateBox(row,col,arr,newGrid);
           }
-          //indexArr+=1;
+          boxGrid = Array(9).fill(null).map(x=>[]);
         }
       }
 
@@ -84,7 +85,8 @@ import './index.css';
         
         var col = beginCol;
         while (col < beginCol+3){
-
+          newGrid[row].splice(col,1,arrEntries[indexing]);
+          /*
           if (this.checkConditions(arrEntries[indexing],row,col,newGrid)){
             newGrid[row].splice(col,1,arrEntries[indexing]);
           } else {
@@ -93,7 +95,7 @@ import './index.css';
             arrEntries.splice(indexOfEntry,1);
             arrEntries.push(entryToAdd);
             continue;
-          }
+          }*/
 
           col+=1;
           indexing += 1;
@@ -111,7 +113,6 @@ import './index.css';
       return concat;
     }
 
-
     generateValidEntries(boxGrid, entries, beginRow, beginCol, newGrid){
       var entryIndex;
       var boxIndex = 0;
@@ -128,12 +129,19 @@ import './index.css';
         }
       }
 
-      var row1Entries = this.intersectArrays(boxGrid[0],boxGrid[3]);
-      var row2Entries = this.intersectArrays(boxGrid[3],boxGrid[6]);
-      var concatRows = row1Entries.concat(row2Entries);
-      var row3Entries = entries.filter(x=>!concatRows.includes(x));
-
-      return boxGrid;
+      // Want to refactor this, looks ugly
+      var concatResult;
+      if (this.intersectArrays(boxGrid[0],boxGrid[3]).length !== 0){
+        var row1Entries = this.intersectArrays(boxGrid[0],boxGrid[3]);
+        var row2Entries = this.intersectArrays(boxGrid[3],boxGrid[6]);
+        var concatRows = row1Entries.concat(row2Entries);
+        var row3Entries = entries.filter(x=>!concatRows.includes(x));
+        concatResult = row1Entries.concat(row2Entries);
+        concatResult = concatResult.concat(row3Entries);
+      } else {
+        concatResult = boxGrid[0].concat(boxGrid[3]).concat(boxGrid[6]);
+      }
+      return concatResult;
     }
 
     randomlyGeneratedArrayValue(min,max,arr){
