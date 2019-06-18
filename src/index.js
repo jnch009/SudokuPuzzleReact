@@ -57,7 +57,7 @@ import './index.css';
         targetGrid+=1;
       }
       var newGrid = Array(9).fill(null).map(x=>Array(9).fill(null));
-      var boxGrid = Array(3).fill(null).map(x=>Array(3).fill(null));
+      var boxGrid = Array(9).fill(null).map(x=>[]);
 
       var indexArr = 0;
       for (var row = 0; row < 1; row += 1){
@@ -96,8 +96,24 @@ import './index.css';
       return newGrid;
     }
 
-    generateValidEntries(){
+    // intersecting two sets
+    //concat = concat.filter((item, index) => concat.indexOf(item) !== index);
 
+    generateValidEntries(boxGrid, entries, beginRow, beginCol, newGrid){
+      var entryIndex;
+      var boxIndex = 0;
+      for (var row = beginRow; row < beginRow+3; row++){
+        for (var col = beginCol; col < beginCol+3; col++){
+          entryIndex = 0;
+          while (entryIndex < 9) {
+            if (this.checkConditions(entries[entryIndex],row,col,newGrid)){
+                boxGrid[boxIndex].push(entries[entryIndex]);
+            }
+            entryIndex+=1;
+          }
+          boxIndex += 1;
+        }
+      }
     }
 
     randomlyGeneratedArrayValue(min,max,arr){
@@ -283,4 +299,6 @@ import './index.css';
     <Game />,
     document.getElementById('root')
   );
+
+  module.exports = generateValidEntries;
   
