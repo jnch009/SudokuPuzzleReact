@@ -45,7 +45,8 @@ import './index.css';
       while (targetGrid < 9) {
         var entryCopy = entries.slice();
         i = 0;
-        var cellsToFill = this.randomlyGeneratedValue(1,10);
+        //var cellsToFill = this.randomlyGeneratedValue(1,10);
+        var cellsToFill = 9;
         while (i < cellsToFill){
           var toAdd = this.randomlyGeneratedArrayValue(0,entryCopy.length,entryCopy);
           arr[targetGrid].splice(i,1,toAdd);
@@ -57,9 +58,9 @@ import './index.css';
 
       var newGrid = Array(9).fill(null).map(x=>Array(9).fill(null));
       var indexArr = 0;
-      for (var row = 0; row <= 6; row += 3){
+      for (var row = 0; row < 1; row += 1){
         for (var col = 0; col <= 6; col += 3){
-          this.generateBox(row,col,arr,newGrid,indexArr);
+          this.generateBox(row,col,arr[indexArr],newGrid);
           indexArr+=1;
         }
       }
@@ -67,13 +68,25 @@ import './index.css';
       this.setState(() => ({grid: newGrid}));
     }
 
-    generateBox(beginRow,beginCol,arrEntries, newGrid, arrIndex){
+    generateBox(beginRow,beginCol,arrEntries, newGrid){
+      var arrToAdd = Array(9).fill(null);
       var indexing = 0;
       for (var row = beginRow; row < beginRow+3; row++){
-        for (var col = beginCol; col < beginCol+3; col++){
-          if (this.checkConditions(arrEntries[arrIndex][indexing],row,col,newGrid)){
-              newGrid[row].splice(col,1,arrEntries[arrIndex][indexing]);
+        
+        var col = beginCol;
+        while (col < beginCol+3){
+          
+          if (this.checkConditions(arrEntries[indexing],row,col,newGrid)){
+            newGrid[row].splice(col,1,arrEntries[indexing]);
+          } else {
+            var entryToAdd = arrEntries[indexing];
+            var indexOfEntry = arrEntries.indexOf(entryToAdd);
+            arrEntries.splice(indexOfEntry,1);
+            arrEntries.push(entryToAdd);
+            continue;
           }
+
+          col+=1;
           indexing += 1;
         }
       }
