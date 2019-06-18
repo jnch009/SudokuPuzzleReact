@@ -43,21 +43,24 @@ import './index.css';
       var targetGrid = 0;
       var i = 0;
 
-      while (targetGrid < 9) {
+      //while (targetGrid < 9) {
         var entryCopy = entries.slice();
         i = 0;
         //var cellsToFill = this.randomlyGeneratedValue(1,10);
         var cellsToFill = 9;
         while (i < cellsToFill){
           var toAdd = this.randomlyGeneratedArrayValue(0,entryCopy.length,entryCopy);
-          arr[targetGrid].splice(i,1,toAdd);
+          arr[i] = toAdd;
           entryCopy.splice(entryCopy.indexOf(toAdd),1);
           i++;
         }
-        targetGrid+=1;
-      }
+        //targetGrid+=1;
+      //}
+      
       var newGrid = Array(9).fill(null).map(x=>Array(9).fill(null));
       var boxGrid = Array(9).fill(null).map(x=>[]);
+
+      this.generateValidEntries(boxGrid,entries,0,0,newGrid);
 
       var indexArr = 0;
       for (var row = 0; row < 1; row += 1){
@@ -114,6 +117,8 @@ import './index.css';
           boxIndex += 1;
         }
       }
+
+      return boxGrid;
     }
 
     randomlyGeneratedArrayValue(min,max,arr){
@@ -299,6 +304,4 @@ import './index.css';
     <Game />,
     document.getElementById('root')
   );
-
-  module.exports = generateValidEntries;
   
