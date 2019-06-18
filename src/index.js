@@ -36,7 +36,8 @@ import './index.css';
     }
 
     componentDidMount(){
-      var arr = Array(9).fill(null).map(x=>Array(9).fill(null));
+      //var arr = Array(9).fill(null).map(x=>Array(9).fill(null));
+      var arr = Array(9).fill(null);
       var entries = [1,2,3,4,5,6,7,8,9];
       
       var targetGrid = 0;
@@ -55,8 +56,9 @@ import './index.css';
         }
         targetGrid+=1;
       }
-
       var newGrid = Array(9).fill(null).map(x=>Array(9).fill(null));
+      var boxGrid = Array(3).fill(null).map(x=>Array(3).fill(null));
+
       var indexArr = 0;
       for (var row = 0; row < 1; row += 1){
         for (var col = 0; col <= 6; col += 3){
@@ -75,7 +77,7 @@ import './index.css';
         
         var col = beginCol;
         while (col < beginCol+3){
-          
+
           if (this.checkConditions(arrEntries[indexing],row,col,newGrid)){
             newGrid[row].splice(col,1,arrEntries[indexing]);
           } else {
@@ -92,6 +94,10 @@ import './index.css';
       }
 
       return newGrid;
+    }
+
+    generateValidEntries(){
+
     }
 
     randomlyGeneratedArrayValue(min,max,arr){
