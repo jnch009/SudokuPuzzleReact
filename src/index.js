@@ -63,8 +63,8 @@ import './index.css';
       //this.generateValidEntries(boxGrid,entries,0,0,newGrid);
 
       //var indexArr = 0;
-      for (var row = 0; row < 1; row += 1){
-        for (var col = 0; col <= 6; col += 3){
+      for (var row = 0; row <= 3; row += 3){
+        for (var col = 0; col < 1; col += 1){
           if (row === 0 && col === 0){
             this.generateBox(row,col,arr,newGrid);
           } else {
@@ -130,6 +130,9 @@ import './index.css';
       }
 
       // Want to refactor this, looks ugly
+      // TODO: after you intersect, you need to remove the entries
+      // boxGrid[0],boxGrid[3],boxGrid[6] is for row boxes
+      // boxGrid[0],boxGrid[1],boxGrid[2] is for col boxes
       var concatResult;
       if (this.intersectArrays(boxGrid[0],boxGrid[3]).length !== 0){
         var row1Entries = this.intersectArrays(boxGrid[0],boxGrid[3]);
