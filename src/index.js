@@ -62,11 +62,15 @@ import './index.css';
 
       //this.generateValidEntries(boxGrid,entries,0,0,newGrid);
 
-      var indexArr = 0;
+      //var indexArr = 0;
       for (var row = 0; row < 1; row += 1){
-        for (var col = 0; col < 3; col += 3){
-          this.generateBox(row,col,arr,newGrid);
-          indexArr+=1;
+        for (var col = 0; col <= 3; col += 3){
+          if (row === 0 && col === 0){
+            this.generateBox(row,col,arr,newGrid);
+          } else {
+            this.generateValidEntries(boxGrid,entries,row,col,newGrid);
+          }
+          //indexArr+=1;
         }
       }
 
