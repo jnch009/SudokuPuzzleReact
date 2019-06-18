@@ -114,6 +114,14 @@ import './index.css';
     }
 
     generateValidEntries(boxGrid, entries, beginRow, beginCol, newGrid){
+      var columnInsert = false;
+
+      if (newGrid[beginRow].every(function(x){
+        return x === null;
+      })) {
+        columnInsert = true;
+      }
+
       var entryIndex;
       var boxIndex = 0;
       for (var row = beginRow; row < beginRow+3; row++){
@@ -130,20 +138,39 @@ import './index.css';
       }
 
       // Want to refactor this, looks ugly
-      // TODO: after you intersect, you need to remove the entries
       // boxGrid[0],boxGrid[3],boxGrid[6] is for row boxes
       // boxGrid[0],boxGrid[1],boxGrid[2] is for col boxes
-      var concatResult;
-      if (this.intersectArrays(boxGrid[0],boxGrid[3]).length !== 0){
-        var row1Entries = this.intersectArrays(boxGrid[0],boxGrid[3]);
-        var row2Entries = this.intersectArrays(boxGrid[3],boxGrid[6]);
+
+      // 3 scenarios:
+      // 1) restricted by row, DONE
+      // 2) restricted by column, DONE
+      // 3) restricted by both
+
+      var concatResult = [];
+      
+      if (!columnInsert) {
+        if (this.intersectArrays(boxGrid[0],boxGrid[3]).length !== 0){
+          var row1Entries = this.intersectArrays(boxGrid[0],boxGrid[3]);
+          var row2Entries = this.intersectArrays(boxGrid[3],boxGrid[6]);
+          var concatRows = row1Entries.concat(row2Entries);
+          var row3Entries = entries.filter(x=>!concatRows.includes(x));
+          concatResult = row1Entries.concat(row2Entries);
+          concatResult = concatResult.concat(row3Entries);
+        } else {
+          concatResult = boxGrid[0].concat(boxGrid[3]).concat(boxGrid[6]);
+        }
+      } else {
+        var row1Entries = this.intersectArrays(boxGrid[0],boxGrid[1]);
+        var row2Entries = this.intersectArrays(boxGrid[1],boxGrid[2]);
         var concatRows = row1Entries.concat(row2Entries);
         var row3Entries = entries.filter(x=>!concatRows.includes(x));
-        concatResult = row1Entries.concat(row2Entries);
-        concatResult = concatResult.concat(row3Entries);
-      } else {
-        concatResult = boxGrid[0].concat(boxGrid[3]).concat(boxGrid[6]);
+        for (var i = 0; i < 3; i++){
+          concatResult.push(row1Entries[i]);
+          concatResult.push(row2Entries[i]);
+          concatResult.push(row3Entries[i]);
+        }
       }
+      
       return concatResult;
     }
 
