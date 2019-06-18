@@ -105,6 +105,12 @@ import './index.css';
 
     // intersecting two sets
     //concat = concat.filter((item, index) => concat.indexOf(item) !== index);
+    intersectArrays(arr1,arr2){
+      var concat = arr1.concat(arr2);
+      concat = concat.filter((item, index) => concat.indexOf(item) !== index);
+      return concat;
+    }
+
 
     generateValidEntries(boxGrid, entries, beginRow, beginCol, newGrid){
       var entryIndex;
@@ -121,6 +127,11 @@ import './index.css';
           boxIndex += 1;
         }
       }
+
+      var row1Entries = this.intersectArrays(boxGrid[0],boxGrid[3]);
+      var row2Entries = this.intersectArrays(boxGrid[3],boxGrid[6]);
+      var concatRows = row1Entries.concat(row2Entries);
+      var row3Entries = entries.filter(x=>!concatRows.includes(x));
 
       return boxGrid;
     }
