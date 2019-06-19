@@ -129,7 +129,7 @@ import './index.css';
         return x === null;
       })) {
         columnInsert = true;
-      } else if (this.checkColElementsExist(newGrid,beginCol,beginRow)){
+      } else if (this.checkColElementsExist(newGrid,beginCol)){
         bothColumnRowInsert = true;
       }
 
@@ -159,6 +159,15 @@ import './index.css';
 
       var concatResult = [];
       
+      if (bothColumnRowInsert){
+        for (var col = 0; col < 3; col+=1){
+          var row1Entries = this.intersectArrays(boxGrid[col],boxGrid[3]);
+          var row2Entries = this.intersectArrays(boxGrid[3],boxGrid[6]);
+        }
+
+        // do 2 checks
+        // if singleton (1 element)
+      }
       if (!columnInsert) {
         // this check is for the last box in the row
         if (this.intersectArrays(boxGrid[0],boxGrid[3]).length !== 0){
