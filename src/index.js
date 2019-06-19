@@ -64,7 +64,7 @@ import './index.css';
 
       //var indexArr = 0;
       for (var row = 0; row <= 3; row += 3){
-        for (var col = 0; col < 1; col += 1){
+        for (var col = 0; col <= 3; col += 3){
           if (row === 0 && col === 0){
             this.generateBox(row,col,arr,newGrid);
           } else {
@@ -100,6 +100,16 @@ import './index.css';
       var concat = arr1.concat(arr2);
       concat = concat.filter((item, index) => concat.indexOf(item) !== index);
       return concat;
+    }
+
+    updateBoxGrid(boxGrid, valuetoInsert) {
+      for (var i = 0; i < boxGrid.length; i++){
+        let box = boxGrid[i];
+        if (box.indexOf(valuetoInsert) !== -1){
+          box.splice(box.indexOf(valuetoInsert),1);
+        }
+        boxGrid[i] = box;
+      }
     }
 
     generateValidEntries(boxGrid, entries, beginRow, beginCol, newGrid){
