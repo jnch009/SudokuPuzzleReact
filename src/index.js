@@ -173,12 +173,19 @@ import './index.css';
         var sortedIntersect = rowIntersected.sort(function(a,b) {
           return a.length - b.length;
         });
+        var indexOfIntersect;
+        var insertValue;
 
         for (var intersect = 0; intersect < rowIntersected.length; intersect++){
-          if (sortedIntersect[intersect].length == 1){
-              var indexOfIntersect = rowIntersected.indexOf(sortedIntersect[intersect]);
-              rowResult.splice(indexOfIntersect,1,sortedIntersect[intersect][0]);
-              this.updateBoxGrid(rowIntersected,sortedIntersect[intersect][0]);
+          indexOfIntersect = rowIntersected.indexOf(sortedIntersect[intersect]);
+          if (sortedIntersect[intersect].length == 1) {
+            insertValue = sortedIntersect[intersect][0];
+            this.updatingRowResultAndGrid(indexOfIntersect,rowIntersected, boxGrid, insertValue);
+          } 
+          else if (sortedIntersect[intersect].length == 2) {
+            var valueToChoose = this.randomlyGeneratedValue(0,1);
+            insertValue = sortedIntersect[intersect][valueToChoose];
+            this.updatingRowResultAndGrid(indexOfIntersect, rowIntersected, boxGrid, insertValue);
           }
         }
         
@@ -211,6 +218,13 @@ import './index.css';
       }
       
       return concatResult;
+    }
+
+    updatingRowResultAndGrid(indexOfIntersect,rowIntersected,boxGrid,toInsert){
+      //toInsert = sortedIntersect[intersect][0];
+      rowResult.splice(indexOfIntersect, 1, toInsert);
+      this.updateBoxGrid(rowIntersected, toInsert);
+      this.updateBoxGrid(boxGrid, toInsert);
     }
 
     randomlyGeneratedArrayValue(min,max,arr){
