@@ -112,13 +112,25 @@ import './index.css';
       }
     }
 
+    checkColElementsExist(grid,col){
+      for (var row = 0; row < 9; row += 1) {
+        if (grid[row][col] !== null) {
+          return true;
+        }
+      }
+      return false;
+    }
+
     generateValidEntries(boxGrid, entries, beginRow, beginCol, newGrid){
       var columnInsert = false;
+      var bothColumnRowInsert = false;
 
       if (newGrid[beginRow].every(function(x){
         return x === null;
       })) {
         columnInsert = true;
+      } else if (this.checkColElementsExist(newGrid,beginCol,beginRow)){
+        bothColumnRowInsert = true;
       }
 
       var entryIndex;
@@ -148,6 +160,7 @@ import './index.css';
       var concatResult = [];
       
       if (!columnInsert) {
+        // this check is for the last box in the row
         if (this.intersectArrays(boxGrid[0],boxGrid[3]).length !== 0){
           var row1Entries = this.intersectArrays(boxGrid[0],boxGrid[3]);
           var row2Entries = this.intersectArrays(boxGrid[3],boxGrid[6]);
