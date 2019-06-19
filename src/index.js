@@ -160,13 +160,31 @@ import './index.css';
       var concatResult = [];
       
       if (bothColumnRowInsert){
+        var row = 0; // while row < 2
+        var rowIntersected = [];
         for (var col = 0; col < 3; col+=1){
-          var row1Entries = this.intersectArrays(boxGrid[col],boxGrid[3]);
-          var row2Entries = this.intersectArrays(boxGrid[3],boxGrid[6]);
+          var row1Entries = this.intersectArrays(boxGrid[col],boxGrid[col+3]);
+          rowIntersected.push(row1Entries);
+
+          //var row2Entries = this.intersectArrays(boxGrid[3],boxGrid[6]);
         }
 
+        var rowResult = Array(3).fill(null);
+        var sortedIntersect = rowIntersected.sort(function(a,b) {
+          return a.length - b.length;
+        });
+
+        for (var intersect = 0; intersect < rowIntersected.length; intersect++){
+          if (sortedIntersect[intersect].length == 1){
+              var indexOfIntersect = rowIntersected.indexOf(sortedIntersect[intersect]);
+              rowResult.splice(indexOfIntersect,1,sortedIntersect[intersect][0]);
+              this.updateBoxGrid(rowIntersected,sortedIntersect[intersect][0]);
+          }
+        }
+        
         // do 2 checks
-        // if singleton (1 element)
+        // if singleton (1 element) then assign to that box and update accordingly
+        // if two elements then randomly choose a number between 0 and 1 and update accordingly
       }
       if (!columnInsert) {
         // this check is for the last box in the row
