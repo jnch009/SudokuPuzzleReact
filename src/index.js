@@ -180,20 +180,24 @@ import './index.css';
           indexOfIntersect = rowIntersected.indexOf(sortedIntersect[intersect]);
           if (sortedIntersect[intersect].length == 1) {
             insertValue = sortedIntersect[intersect][0];
-            this.updatingRowResultAndGrid(indexOfIntersect,rowIntersected, boxGrid, insertValue);
+            this.updatingRowResultAndGrid(indexOfIntersect,rowIntersected, boxGrid, insertValue, rowResult);
           } 
           else if (sortedIntersect[intersect].length == 2) {
             var valueToChoose = this.randomlyGeneratedValue(0,1);
             insertValue = sortedIntersect[intersect][valueToChoose];
-            this.updatingRowResultAndGrid(indexOfIntersect, rowIntersected, boxGrid, insertValue);
+            this.updatingRowResultAndGrid(indexOfIntersect, rowIntersected, boxGrid, insertValue, rowResult);
           }
         }
+
+        rowResult.forEach(function(x){
+          concatResult.push(x);
+        });
         
         // do 2 checks
         // if singleton (1 element) then assign to that box and update accordingly
         // if two elements then randomly choose a number between 0 and 1 and update accordingly
       }
-      if (!columnInsert) {
+      else if (!columnInsert) {
         // this check is for the last box in the row
         if (this.intersectArrays(boxGrid[0],boxGrid[3]).length !== 0){
           var row1Entries = this.intersectArrays(boxGrid[0],boxGrid[3]);
@@ -220,8 +224,7 @@ import './index.css';
       return concatResult;
     }
 
-    updatingRowResultAndGrid(indexOfIntersect,rowIntersected,boxGrid,toInsert){
-      //toInsert = sortedIntersect[intersect][0];
+    updatingRowResultAndGrid(indexOfIntersect,rowIntersected,boxGrid,toInsert,rowResult){
       rowResult.splice(indexOfIntersect, 1, toInsert);
       this.updateBoxGrid(rowIntersected, toInsert);
       this.updateBoxGrid(boxGrid, toInsert);
