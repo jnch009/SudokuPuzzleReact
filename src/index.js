@@ -164,9 +164,9 @@ import './index.css';
 
           var rowIntersected = [];
           if (row === 0){
-            this.intersectRowEntries(0);
+            this.intersectRowEntries(0,boxGrid,rowIntersected);
           } else {
-            this.intersectRowEntries(3);
+            this.intersectRowEntries(3,boxGrid,rowIntersected);
           }
           
           // on first iteration we intersect row 1 and row 2
@@ -230,7 +230,7 @@ import './index.css';
       return concatResult;
     }
 
-    intersectRowEntries(startIndex) {
+    intersectRowEntries(startIndex, boxGrid, rowIntersected) {
       for (var index = startIndex; index < 3; index += 1){
         var row1Entries = this.intersectArrays(boxGrid[index],boxGrid[index+3]);
         rowIntersected.push(row1Entries);
