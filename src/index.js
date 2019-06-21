@@ -160,20 +160,20 @@ import './index.css';
       var concatResult = [];
       if (bothColumnRowInsert){
         var row = 0; // while row < 2
-        while (row < 2) {
+        while (row < 1) {
 
           var rowIntersected = [];
           if (row === 0){
             this.intersectRowEntries(0,boxGrid,rowIntersected);
-          } else {
+          } /*else {
             this.intersectRowEntries(3,boxGrid,rowIntersected);
-          }
+          }*/
           
           // on first iteration we intersect row 1 and row 2
           // on second iteration we intersect row 2 and 3
 
           var rowResult = Array(3).fill(null);
-          var sortedIntersect = rowIntersected.sort(function(a,b) {
+          var sortedIntersect = rowIntersected.slice(0).sort(function(a,b) {
             return a.length - b.length;
           });
           var indexOfIntersect;
@@ -231,7 +231,7 @@ import './index.css';
     }
 
     intersectRowEntries(startIndex, boxGrid, rowIntersected) {
-      for (var index = startIndex; index < 3; index += 1){
+      for (var index = startIndex; index < startIndex+3; index += 1){
         var row1Entries = this.intersectArrays(boxGrid[index],boxGrid[index+3]);
         rowIntersected.push(row1Entries);
       }
