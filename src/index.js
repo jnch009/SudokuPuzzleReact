@@ -158,40 +158,46 @@ import './index.css';
       // 3) restricted by both
 
       var concatResult = [];
-      
       if (bothColumnRowInsert){
         var row = 0; // while row < 2
-        var rowIntersected = [];
-        for (var col = 0; col < 3; col+=1){
-          var row1Entries = this.intersectArrays(boxGrid[col],boxGrid[col+3]);
-          rowIntersected.push(row1Entries);
+        while (row < 2) {
 
-          //var row2Entries = this.intersectArrays(boxGrid[3],boxGrid[6]);
-        }
-
-        var rowResult = Array(3).fill(null);
-        var sortedIntersect = rowIntersected.sort(function(a,b) {
-          return a.length - b.length;
-        });
-        var indexOfIntersect;
-        var insertValue;
-
-        for (var intersect = 0; intersect < rowIntersected.length; intersect++){
-          indexOfIntersect = rowIntersected.indexOf(sortedIntersect[intersect]);
-          if (sortedIntersect[intersect].length == 1) {
-            insertValue = sortedIntersect[intersect][0];
-            this.updatingRowResultAndGrid(indexOfIntersect,rowIntersected, boxGrid, insertValue, rowResult);
-          } 
-          else if (sortedIntersect[intersect].length == 2) {
-            var valueToChoose = this.randomlyGeneratedValue(0,1);
-            insertValue = sortedIntersect[intersect][valueToChoose];
-            this.updatingRowResultAndGrid(indexOfIntersect, rowIntersected, boxGrid, insertValue, rowResult);
+          var rowIntersected = [];
+          if (row === 0){
+            intersectRowEntries(0);
+          } else {
+            intersectRowEntries(3);
           }
-        }
+          
+          // on first iteration we intersect row 1 and row 2
+          // on second iteration we intersect row 2 and 3
 
-        rowResult.forEach(function(x){
-          concatResult.push(x);
-        });
+          var rowResult = Array(3).fill(null);
+          var sortedIntersect = rowIntersected.sort(function(a,b) {
+            return a.length - b.length;
+          });
+          var indexOfIntersect;
+          var insertValue;
+
+          for (var intersect = 0; intersect < rowIntersected.length; intersect++){
+            indexOfIntersect = rowIntersected.indexOf(sortedIntersect[intersect]);
+            if (sortedIntersect[intersect].length == 1) {
+             insertValue = sortedIntersect[intersect][0];
+              this.updatingRowResultAndGrid(indexOfIntersect,rowIntersected, boxGrid, insertValue, rowResult);
+            }  
+            else if (sortedIntersect[intersect].length == 2) {
+              var valueToChoose = this.randomlyGeneratedValue(0,1);
+              insertValue = sortedIntersect[intersect][valueToChoose];
+              this.updatingRowResultAndGrid(indexOfIntersect, rowIntersected, boxGrid, insertValue, rowResult);
+            }
+          }
+
+          rowResult.forEach(function(x){
+            concatResult.push(x);
+          });
+
+          row += 1;
+        }
         
         // do 2 checks
         // if singleton (1 element) then assign to that box and update accordingly
@@ -222,6 +228,13 @@ import './index.css';
       }
       
       return concatResult;
+    }
+
+    intersectRowEntries(startIndex) {
+      for (var index = startIndex; index < 3; index += 1){
+        var row1Entries = this.intersectArrays(boxGrid[index],boxGrid[index+3]);
+        rowIntersected.push(row1Entries);
+      }
     }
 
     updatingRowResultAndGrid(indexOfIntersect,rowIntersected,boxGrid,toInsert,rowResult){
