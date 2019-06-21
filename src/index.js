@@ -139,6 +139,7 @@ import './index.css';
         for (var col = beginCol; col < beginCol+3; col++){
           entryIndex = 0;
           while (entryIndex < 9) {
+            //IMPORTANT NOTE: I am getting undefined values somehow...
             if (this.checkConditions(entries[entryIndex],row,col,newGrid)){
                 boxGrid[boxIndex].push(entries[entryIndex]);
             }
@@ -184,6 +185,7 @@ import './index.css';
           var sortedIntersect = rowIntersected.slice(0).sort(this.sortAscending);
           var indexOfIntersect;
           var insertValue;
+          var valueToChoose;
 
           // technically if you fill in a box, you should clear it out
           for (var intersect = 0; intersect < rowIntersected.length; intersect++){
@@ -192,7 +194,7 @@ import './index.css';
               insertValue = sortedIntersect[intersect][0];
             }  
             else if (sortedIntersect[intersect].length == 2) {
-              var valueToChoose = this.randomlyGeneratedValue(0,1);
+              valueToChoose = this.randomlyGeneratedValue(0,1);
               insertValue = sortedIntersect[intersect][valueToChoose];
             }
             this.updatingRowResultAndGrid(indexOfIntersect, rowIntersected, boxGrid, insertValue, rowResult);
