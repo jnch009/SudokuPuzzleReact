@@ -164,9 +164,9 @@ import './index.css';
 
           var rowIntersected = [];
           if (row === 0){
-            intersectRowEntries(0);
+            this.intersectRowEntries(0);
           } else {
-            intersectRowEntries(3);
+            this.intersectRowEntries(3);
           }
           
           // on first iteration we intersect row 1 and row 2
