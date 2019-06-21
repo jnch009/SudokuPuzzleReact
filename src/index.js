@@ -92,34 +92,7 @@ import './index.css';
       }
 
       return newGrid;
-    }
-
-    // intersecting two sets
-    //concat = concat.filter((item, index) => concat.indexOf(item) !== index);
-    intersectArrays(arr1,arr2){
-      var concat = arr1.concat(arr2);
-      concat = concat.filter((item, index) => concat.indexOf(item) !== index);
-      return concat;
-    }
-
-    updateBoxGrid(boxGrid, valuetoInsert) {
-      for (var i = 0; i < boxGrid.length; i++){
-        let box = boxGrid[i];
-        if (box.indexOf(valuetoInsert) !== -1){
-          box.splice(box.indexOf(valuetoInsert),1);
-        }
-        boxGrid[i] = box;
-      }
-    }
-
-    checkColElementsExist(grid,col){
-      for (var row = 0; row < 9; row += 1) {
-        if (grid[row][col] !== null) {
-          return true;
-        }
-      }
-      return false;
-    }
+    }    
 
     generateValidEntries(boxGrid, entries, beginRow, beginCol, newGrid){
       var columnInsert = false;
@@ -139,7 +112,6 @@ import './index.css';
         for (var col = beginCol; col < beginCol+3; col++){
           entryIndex = 0;
           while (entryIndex < 9) {
-            //IMPORTANT NOTE: I am getting undefined values somehow...
             if (this.checkConditions(entries[entryIndex],row,col,newGrid)){
                 boxGrid[boxIndex].push(entries[entryIndex]);
             }
@@ -165,14 +137,26 @@ import './index.css';
         var row2 = [];
         var row3 = [];
         var fillRow2 = false;
-        // need a condition to check first two rows are completed
-        // if first row intersect contains an empty array
-        // then do second row first
+        
+        //TODO: if intersection returns an empty array, need a new strategy to solve
+        //Solving with intersection will not work in this case
+        //NEW STRATEGY:
+        //for the case where intersecting gives an empty array:
+        //this means there is at least 3 boxes with 3 of the same values ie. (6,7,8)
+        //find three boxes that share this triplet and insert values any way you want
+        //adjust the boxGrid accordingly
+        //scan for any boxes that have only 2 values which means you can choose either one
+        //or scan for singletons in which you can just add the value remaining
+        //adjust the boxGrid again
+        //continue scanning for singletons or boxes with 2 choices until filled
+        //if done correctly I believe this should solve it
+
         while (iterations < 2) {
 
           var rowIntersected = [];
           this.intersectRowEntries(0,boxGrid,rowIntersected);
           if (rowIntersected.some(this.emptyArrays)) {
+            // if you are filling in row 2, you have to remember to change the 2nd row not the first
             fillRow2 = true;
             rowIntersected = [];
             this.intersectRowEntries(3,boxGrid,rowIntersected);
@@ -247,6 +231,33 @@ import './index.css';
       }
       
       return concatResult;
+    }
+
+    // intersecting two sets
+    //concat = concat.filter((item, index) => concat.indexOf(item) !== index);
+    intersectArrays(arr1,arr2){
+      var concat = arr1.concat(arr2);
+      concat = concat.filter((item, index) => concat.indexOf(item) !== index);
+      return concat;
+    }
+
+    updateBoxGrid(boxGrid, valuetoInsert) {
+      for (var i = 0; i < boxGrid.length; i++){
+        let box = boxGrid[i];
+        if (box.indexOf(valuetoInsert) !== -1){
+          box.splice(box.indexOf(valuetoInsert),1);
+        }
+        boxGrid[i] = box;
+      }
+    }
+
+    checkColElementsExist(grid,col){
+      for (var row = 0; row < 9; row += 1) {
+        if (grid[row][col] !== null) {
+          return true;
+        }
+      }
+      return false;
     }
 
     emptyArrays(x){
