@@ -159,7 +159,10 @@ import './index.css';
 
       var concatResult = [];
       if (bothColumnRowInsert){
-        var row = 0; // while row < 2
+        var row = 0; 
+        // need a condition to check first two rows are completed
+        // if first row intersect contains an empty array
+        // then do second row first
         while (row < 1) {
 
           var rowIntersected = [];
@@ -177,18 +180,18 @@ import './index.css';
           var indexOfIntersect;
           var insertValue;
 
+          // technically if you fill in a box, you should clear it out
           for (var intersect = 0; intersect < rowIntersected.length; intersect++){
             indexOfIntersect = rowIntersected.indexOf(sortedIntersect[intersect]);
             if (sortedIntersect[intersect].length == 1) {
               insertValue = sortedIntersect[intersect][0];
-              this.updatingRowResultAndGrid(indexOfIntersect,rowIntersected, boxGrid, insertValue, rowResult);
             }  
             else if (sortedIntersect[intersect].length == 2) {
               var valueToChoose = this.randomlyGeneratedValue(0,1);
               insertValue = sortedIntersect[intersect][valueToChoose];
-              this.updatingRowResultAndGrid(indexOfIntersect, rowIntersected, boxGrid, insertValue, rowResult);
-              sortedIntersect = rowIntersected.slice(0).sort(this.sortAscending);
             }
+            this.updatingRowResultAndGrid(indexOfIntersect, rowIntersected, boxGrid, insertValue, rowResult);
+            sortedIntersect = rowIntersected.slice(0).sort(this.sortAscending);
           }
 
           rowResult.forEach(function(x){
@@ -242,6 +245,7 @@ import './index.css';
 
     updatingRowResultAndGrid(indexOfIntersect,rowIntersected,boxGrid,toInsert,rowResult){
       rowResult.splice(indexOfIntersect, 1, toInsert);
+      rowIntersected[indexOfIntersect] = [];
       this.updateBoxGrid(rowIntersected, toInsert);
       this.updateBoxGrid(boxGrid, toInsert);
     }
