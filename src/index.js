@@ -159,16 +159,21 @@ import './index.css';
 
       var concatResult = [];
       if (bothColumnRowInsert){
-        var row = 0; 
+        var iterations = 0;
+        var row1 = [];
+        var row2 = [];
+        var row3 = [];
+        var fillRow2 = false;
         // need a condition to check first two rows are completed
         // if first row intersect contains an empty array
         // then do second row first
-        while (row < 1) {
+        while (iterations < 2) {
 
           var rowIntersected = [];
-          if (row === 0){
-            this.intersectRowEntries(0,boxGrid,rowIntersected);
-          } else {
+          this.intersectRowEntries(0,boxGrid,rowIntersected);
+          if (rowIntersected.some(this.emptyArrays)) {
+            fillRow2 = true;
+            rowIntersected = [];
             this.intersectRowEntries(3,boxGrid,rowIntersected);
           }
           
@@ -194,12 +199,22 @@ import './index.css';
             sortedIntersect = rowIntersected.slice(0).sort(this.sortAscending);
           }
 
-          rowResult.forEach(function(x){
-            concatResult.push(x);
-          });
+          if (!fillRow2){
+            rowResult.forEach(function(x){
+              row1.push(x);
+            });
+          } else {
+            rowResult.forEach(function(x){
+              row2.push(x);
+            });
+            fillRow2 = false;
+          }
 
-          row += 1;
+          iterations += 1;
         }
+
+        concatResult.push(row1.concat(row2));
+        concatResult = concatResult.flat();
         
         // do 2 checks
         // if singleton (1 element) then assign to that box and update accordingly
@@ -230,6 +245,10 @@ import './index.css';
       }
       
       return concatResult;
+    }
+
+    emptyArrays(x){
+      return x.length === 0;
     }
 
     sortAscending(a,b){
