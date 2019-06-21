@@ -165,30 +165,29 @@ import './index.css';
           var rowIntersected = [];
           if (row === 0){
             this.intersectRowEntries(0,boxGrid,rowIntersected);
-          } /*else {
+          } else {
             this.intersectRowEntries(3,boxGrid,rowIntersected);
-          }*/
+          }
           
           // on first iteration we intersect row 1 and row 2
           // on second iteration we intersect row 2 and 3
 
           var rowResult = Array(3).fill(null);
-          var sortedIntersect = rowIntersected.slice(0).sort(function(a,b) {
-            return a.length - b.length;
-          });
+          var sortedIntersect = rowIntersected.slice(0).sort(this.sortAscending);
           var indexOfIntersect;
           var insertValue;
 
           for (var intersect = 0; intersect < rowIntersected.length; intersect++){
             indexOfIntersect = rowIntersected.indexOf(sortedIntersect[intersect]);
             if (sortedIntersect[intersect].length == 1) {
-             insertValue = sortedIntersect[intersect][0];
+              insertValue = sortedIntersect[intersect][0];
               this.updatingRowResultAndGrid(indexOfIntersect,rowIntersected, boxGrid, insertValue, rowResult);
             }  
             else if (sortedIntersect[intersect].length == 2) {
               var valueToChoose = this.randomlyGeneratedValue(0,1);
               insertValue = sortedIntersect[intersect][valueToChoose];
               this.updatingRowResultAndGrid(indexOfIntersect, rowIntersected, boxGrid, insertValue, rowResult);
+              sortedIntersect = rowIntersected.slice(0).sort(this.sortAscending);
             }
           }
 
@@ -228,6 +227,10 @@ import './index.css';
       }
       
       return concatResult;
+    }
+
+    sortAscending(a,b){
+      return a.length - b.length; 
     }
 
     intersectRowEntries(startIndex, boxGrid, rowIntersected) {
