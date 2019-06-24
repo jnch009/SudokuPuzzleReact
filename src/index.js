@@ -7,15 +7,11 @@ import "shards-ui/dist/css/shards.min.css"
 import './index.css';
 
  function Square(props) {
-    /*constructor(props){
-
-    }*/
-
-      return (
-        <Button disabled theme="dark" active="true" className="square">
-          {props.number}
-        </Button>
-      );
+    return (
+      <Button disabled theme="dark" active="true" className="square">
+        {props.number}
+      </Button>
+    );
   }
 
   function ActiveSquare(props) {
@@ -453,7 +449,7 @@ import './index.css';
           </div>
           <div className="game-info">
             <div>{/* status */}</div>
-            <ol>{/* TODO */}</ol>
+            <ol></ol>
           </div>
         </div>
       );
@@ -466,4 +462,5 @@ import './index.css';
     <Game />,
     document.getElementById('root')
   );
-  
+
+  export const add = (x,y) => x+y;
