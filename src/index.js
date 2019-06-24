@@ -121,10 +121,6 @@ import './index.css';
         }
       }
 
-      // Want to refactor this, looks ugly
-      // boxGrid[0],boxGrid[3],boxGrid[6] is for row boxes
-      // boxGrid[0],boxGrid[1],boxGrid[2] is for col boxes
-
       // 3 scenarios:
       // 1) restricted by row, DONE
       // 2) restricted by column, DONE
@@ -155,15 +151,18 @@ import './index.css';
 
           var rowIntersected = [];
           this.intersectRowEntries(0,boxGrid,rowIntersected);
+
           if (rowIntersected.some(this.emptyArrays)) {
-            // if you are filling in row 2, you have to remember to change the 2nd row not the first
-            fillRow2 = true;
-            rowIntersected = [];
-            this.intersectRowEntries(3,boxGrid,rowIntersected);
+            var tempGrid = Array(boxGrid.length).fill(null);
+            var tripletArr = this.identifyingTriplets(boxGrid,tempGrid);
+            var tripletIndex = 0;
+            tempGrid.forEach((v,i) => {
+              if (v !== null){
+                tempGrid[i] = tripletArr[tripletIndex];
+                tripletIndex += 1;
+              }
+            })
           }
-          
-          // on first iteration we intersect row 1 and row 2
-          // on second iteration we intersect row 2 and 3
 
           var rowResult = Array(3).fill(null);
           var sortedIntersect = rowIntersected.slice(0).sort(this.sortAscending);
@@ -181,9 +180,11 @@ import './index.css';
               valueToChoose = this.randomlyGeneratedValue(0,1);
               insertValue = sortedIntersect[intersect][valueToChoose];
             }
-            this.updatingRowResultAndGrid(indexOfIntersect, rowIntersected, boxGrid, insertValue, rowResult);
+            this.updatingRowResultAndGrid(indexOfIntersect,rowIntersected, boxGrid, insertValue, rowResult);
             sortedIntersect = rowIntersected.slice(0).sort(this.sortAscending);
           }
+
+          boxGrid = boxGrid.slice(3);
 
           if (!fillRow2){
             rowResult.forEach(function(x){
@@ -206,6 +207,9 @@ import './index.css';
         // if singleton (1 element) then assign to that box and update accordingly
         // if two elements then randomly choose a number between 0 and 1 and update accordingly
       }
+      // Want to refactor this, looks ugly
+      // boxGrid[0],boxGrid[3],boxGrid[6] is for row boxes
+      // boxGrid[0],boxGrid[1],boxGrid[2] is for col boxes
       else if (!columnInsert) {
         // this check is for the last box in the row
         if (this.intersectArrays(boxGrid[0],boxGrid[3]).length !== 0){
@@ -231,6 +235,34 @@ import './index.css';
       }
       
       return concatResult;
+    }
+
+    identifyingTriplets(boxGrid, tempGrid){
+      var tripleToMatch = [];
+      for (var box = 0; box < 8; box += 1){
+        for (var innerBox = box+1; innerBox < 9; innerBox+=1) {
+          var intersect = this.intersectArrays(boxGrid[box],boxGrid[innerBox]);
+          if (intersect.length == 3){
+            if (tempGrid.indexOf(boxGrid[box]) === -1 && tempGrid.indexOf(boxGrid[innerBox]) === -1){
+                tempGrid.splice(box,1,boxGrid[box]);
+                tempGrid.splice(innerBox,1,boxGrid[innerBox]);
+                
+                if (tripleToMatch === []){
+                  tripleToMatch = intersect;
+                }
+
+            } else if (tempGrid.indexOf(boxGrid[box]) === -1) {
+                tempGrid.splice(box,1,boxGrid[box]);
+            } else if (tempGrid.indexOf(boxGrid[innerBox]) === -1) {
+                tempGrid.splice(box,1,boxGrid[innerBox]);
+            }
+          }
+
+          if (tempGrid.filter(x=>x!==null).length === 3){
+              return tripleToMatch;
+          }
+        }
+      }
     }
 
     // intersecting two sets
