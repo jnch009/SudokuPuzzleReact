@@ -76,12 +76,12 @@ import './index.css';
     }
 
     removingEntries(box){
-      var entriesToRemove = this.randomlyGeneratedValue(4,9);
+      var entriesToRemove = this.randomlyGeneratedValue(2,10);
       var entriesRemoved = 0;
       var indexEntries = [0,1,2,3,4,5,6,7,8];
 
       while (entriesRemoved < entriesToRemove){
-        var entryRemoved = this.randomlyGeneratedValue(0,9);
+        var entryRemoved = this.randomlyGeneratedValue(0,10);
         box.splice(indexEntries[entryRemoved],1,null);
         indexEntries.splice(entryRemoved,1);
         entriesRemoved+=1;
