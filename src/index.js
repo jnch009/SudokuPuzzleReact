@@ -150,7 +150,11 @@ import './index.css';
         while (iterations < 2) {
 
           var tempGrid = Array(9).fill(null);
-          var rowIntersected = [];
+          this.scanGrid(boxGrid,tempGrid);
+
+          concatResult = tempGrid;
+          
+          //var rowIntersected = [];
           
           
           /*this.intersectRowEntries(0,boxGrid,rowIntersected);
@@ -241,9 +245,43 @@ import './index.css';
       return concatResult;
     }
 
-    identifyingDoubles(boxGrid, tempGrid){
-      var tripleToMatch = [];
-      
+    arrayLengths(arr) {
+      var arrResult = [];
+      arr.forEach((v,i)=>{
+        arrResult.push(v.length);
+      });
+      return arrResult;
+    }
+
+    scanGrid(boxGrid, tempGrid){
+      var arrOfLengths = this.arrayLengths(boxGrid);
+      var valueToChoose;
+      var index;
+      var boxOfInterest;
+
+      while (tempGrid.filter(x=>x !== null).length < 9) {
+        index = arrOfLengths.findIndex(function(x){
+          var tmp = arrOfLengths.filter(x=>x !== undefined);
+          return x === Math.min(...tmp);
+        });
+
+        boxOfInterest = boxGrid[index];
+        if (boxOfInterest.length <= 3){
+          if (boxOfInterest.length === 1){
+            tempGrid[index] = boxOfInterest[0];
+          } else if (boxOfInterest.length === 2){
+            valueToChoose = this.randomlyGeneratedValue(0,1);
+            tempGrid[index] = boxOfInterest[valueToChoose];
+          } else if (boxOfInterest.length === 3){
+            valueToChoose = this.randomlyGeneratedValue(0,2);
+            tempGrid[index] = boxOfInterest[valueToChoose];
+          }
+          this.updateBoxGrid(boxGrid,tempGrid[index],index);
+          arrOfLengths = this.arrayLengths(boxGrid);
+        }
+      }
+
+      return tempGrid;
     }
 
     // intersecting two sets
@@ -254,13 +292,18 @@ import './index.css';
       return concat;
     }
 
-    updateBoxGrid(boxGrid, valuetoInsert) {
+    updateBoxGrid(boxGrid, valuetoInsert, indexToInsert) {
+      boxGrid[indexToInsert] = valuetoInsert;
       for (var i = 0; i < boxGrid.length; i++){
         let box = boxGrid[i];
-        if (box.indexOf(valuetoInsert) !== -1){
-          box.splice(box.indexOf(valuetoInsert),1);
+        if (box === null || box.length === undefined){
+          continue;
+        } else {
+          if (box.indexOf(valuetoInsert) !== -1){
+            box.splice(box.indexOf(valuetoInsert),1);
+          }
+          boxGrid[i] = box;
         }
-        boxGrid[i] = box;
       }
     }
 
