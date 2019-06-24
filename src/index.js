@@ -164,7 +164,7 @@ import './index.css';
             })
           }
 
-          var rowResult = Array(3).fill(null);
+          /*var rowResult = Array(3).fill(null);
           var sortedIntersect = rowIntersected.slice(0).sort(this.sortAscending);
           var indexOfIntersect;
           var insertValue;
@@ -201,11 +201,12 @@ import './index.css';
         }
 
         concatResult.push(row1.concat(row2));
-        concatResult = concatResult.flat();
+        concatResult = concatResult.flat();*/
         
         // do 2 checks
         // if singleton (1 element) then assign to that box and update accordingly
         // if two elements then randomly choose a number between 0 and 1 and update accordingly
+        }
       }
       // Want to refactor this, looks ugly
       // boxGrid[0],boxGrid[3],boxGrid[6] is for row boxes
