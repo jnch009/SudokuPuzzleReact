@@ -105,7 +105,7 @@ import fn from './helperFn/boardFunctions';
         return x === null;
       })) {
         columnInsert = true;
-      } else if (this.checkColElementsExist(newGrid,beginCol)){
+      } else if (fn.checkColElementsExist(newGrid,beginCol)){
         bothColumnRowInsert = true;
       }
 
@@ -148,8 +148,8 @@ import fn from './helperFn/boardFunctions';
             this.scanGrid(boxGrid,tempGrid);
             concatResult = tempGrid;
         } else {
-            row1Entries = this.intersectArrays(boxGrid[0],boxGrid[3]);
-            row2Entries = this.intersectArrays(boxGrid[3],boxGrid[6]);
+            row1Entries = fn.intersectArrays(boxGrid[0],boxGrid[3]);
+            row2Entries = fn.intersectArrays(boxGrid[3],boxGrid[6]);
             concatRows = row1Entries.concat(row2Entries);
             row3Entries = entries.filter(x=>!concatRows.includes(x));
             concatResult = row1Entries.concat(row2Entries);
@@ -164,8 +164,8 @@ import fn from './helperFn/boardFunctions';
           this.scanGrid(boxGrid,tempGrid);
           concatResult = tempGrid;
         } else {
-          row1Entries = this.intersectArrays(boxGrid[0],boxGrid[1]);
-          row2Entries = this.intersectArrays(boxGrid[1],boxGrid[2]);
+          row1Entries = fn.intersectArrays(boxGrid[0],boxGrid[1]);
+          row2Entries = fn.intersectArrays(boxGrid[1],boxGrid[2]);
           concatRows = row1Entries.concat(row2Entries);
           row3Entries = entries.filter(x=>!concatRows.includes(x));
           for (var i = 0; i < 3; i++){
@@ -204,58 +204,11 @@ import fn from './helperFn/boardFunctions';
 
         boxOfInterest = boxGrid[index];
         tempGrid[index] = boxOfInterest[0];
-        this.updateBoxGrid(boxGrid,tempGrid[index],index);
+        fn.updateBoxGrid(boxGrid,tempGrid[index],index);
         arrOfLengths = this.arrayLengths(boxGrid);
       }
 
       return tempGrid;
-    }
-
-    // intersecting two sets
-    //concat = concat.filter((item, index) => concat.indexOf(item) !== index);
-    intersectArrays(arr1,arr2){
-      var concat = arr1.concat(arr2);
-      concat = concat.filter((item, index) => concat.indexOf(item) !== index);
-      return concat;
-    }
-
-    updateBoxGrid(boxGrid, valuetoInsert, indexToInsert) {
-      boxGrid[indexToInsert] = valuetoInsert;
-      for (var i = 0; i < boxGrid.length; i++){
-        let box = boxGrid[i];
-        if (box === null || box.length === undefined){
-          continue;
-        } else {
-          if (box.indexOf(valuetoInsert) !== -1){
-            box.splice(box.indexOf(valuetoInsert),1);
-          }
-          boxGrid[i] = box;
-        }
-      }
-    }
-
-    checkColElementsExist(grid,col){
-      for (var row = 0; row < 9; row += 1) {
-        if (grid[row][col] !== null) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    emptyArrays(x){
-      return x.length === 0;
-    }
-
-    sortAscending(a,b){
-      return a.length - b.length; 
-    }
-
-    intersectRowEntries(startIndex, boxGrid, rowIntersected) {
-      for (var index = startIndex; index < startIndex+3; index += 1){
-        var row1Entries = this.intersectArrays(boxGrid[index],boxGrid[index+3]);
-        rowIntersected.push(row1Entries);
-      }
     }
 
     renderSquare(i,j){
