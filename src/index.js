@@ -39,8 +39,6 @@ import './index.css';
       //var arr = Array(9).fill(null).map(x=>Array(9).fill(null));
       var arr = Array(9).fill(null);
       var entries = [1,2,3,4,5,6,7,8,9];
-      
-      var targetGrid = 0;
       var i = 0;
 
       //while (targetGrid < 9) {
@@ -64,7 +62,7 @@ import './index.css';
 
       //var indexArr = 0;
       for (var row = 0; row <= 3; row += 3){
-        for (var col = 0; col <= 3; col += 3){
+        for (var col = 0; col <= 6; col += 3){
           if (row === 0 && col === 0){
             this.generateBox(row,col,arr,newGrid);
           } else {
@@ -79,7 +77,6 @@ import './index.css';
     }
 
     generateBox(beginRow,beginCol,arrEntries, newGrid){
-      var arrToAdd = Array(9).fill(null);
       var indexing = 0;
       for (var row = beginRow; row < beginRow+3; row++){
         
@@ -121,99 +118,11 @@ import './index.css';
         }
       }
 
-      // 3 scenarios:
-      // 1) restricted by row, DONE
-      // 2) restricted by column, DONE
-      // 3) restricted by both
-
       var concatResult = [];
       if (bothColumnRowInsert){
-        var iterations = 0;
-        var row1 = [];
-        var row2 = [];
-        var row3 = [];
-        var fillRow2 = false;
-        
-        //TODO: if intersection returns an empty array, need a new strategy to solve
-        //Solving with intersection will not work in this case
-        //NEW STRATEGY:
-        //for the case where intersecting gives an empty array:
-        //this means there is at least 3 boxes with 3 of the same values ie. (6,7,8)
-        //find three boxes that share this triplet and insert values any way you want
-        //adjust the boxGrid accordingly
-        //scan for any boxes that have only 2 values which means you can choose either one
-        //or scan for singletons in which you can just add the value remaining
-        //adjust the boxGrid again
-        //continue scanning for singletons or boxes with 2 choices until filled
-        //if done correctly I believe this should solve it
-
-        while (iterations < 2) {
-
           var tempGrid = Array(9).fill(null);
           this.scanGrid(boxGrid,tempGrid);
-
           concatResult = tempGrid;
-          
-          //var rowIntersected = [];
-          
-          
-          /*this.intersectRowEntries(0,boxGrid,rowIntersected);
-
-          if (rowIntersected.some(this.emptyArrays)) {
-            
-            var tripletArr = this.identifyingTriplets(boxGrid,tempGrid);
-            var tripletIndex = 0;
-            tempGrid.forEach((v,i) => {
-              if (v !== null){
-                tempGrid[i] = tripletArr[tripletIndex];
-                tripletIndex += 1;
-              }
-            })
-          }*/
-
-          /*var rowResult = Array(3).fill(null);
-          var sortedIntersect = rowIntersected.slice(0).sort(this.sortAscending);
-          var indexOfIntersect;
-          var insertValue;
-          var valueToChoose;
-
-          // technically if you fill in a box, you should clear it out
-          for (var intersect = 0; intersect < rowIntersected.length; intersect++){
-            indexOfIntersect = rowIntersected.indexOf(sortedIntersect[intersect]);
-            if (sortedIntersect[intersect].length == 1) {
-              insertValue = sortedIntersect[intersect][0];
-            }  
-            else if (sortedIntersect[intersect].length == 2) {
-              valueToChoose = this.randomlyGeneratedValue(0,1);
-              insertValue = sortedIntersect[intersect][valueToChoose];
-            }
-            this.updatingRowResultAndGrid(indexOfIntersect,rowIntersected, boxGrid, insertValue, rowResult);
-            sortedIntersect = rowIntersected.slice(0).sort(this.sortAscending);
-          }
-
-          boxGrid = boxGrid.slice(3);
-
-          if (!fillRow2){
-            rowResult.forEach(function(x){
-              row1.push(x);
-            });
-          } else {
-            rowResult.forEach(function(x){
-              row2.push(x);
-            });
-            fillRow2 = false;
-          }
-
-          iterations += 1;
-        }
-
-        concatResult.push(row1.concat(row2));
-        concatResult = concatResult.flat();*/
-        
-        // do 2 checks
-        // if singleton (1 element) then assign to that box and update accordingly
-        // if two elements then randomly choose a number between 0 and 1 and update accordingly
-        }
       }
       // Want to refactor this, looks ugly
       // boxGrid[0],boxGrid[3],boxGrid[6] is for row boxes
@@ -231,10 +140,10 @@ import './index.css';
           concatResult = boxGrid[0].concat(boxGrid[3]).concat(boxGrid[6]);
         }
       } else {
-        var row1Entries = this.intersectArrays(boxGrid[0],boxGrid[1]);
-        var row2Entries = this.intersectArrays(boxGrid[1],boxGrid[2]);
-        var concatRows = row1Entries.concat(row2Entries);
-        var row3Entries = entries.filter(x=>!concatRows.includes(x));
+        row1Entries = this.intersectArrays(boxGrid[0],boxGrid[1]);
+        row2Entries = this.intersectArrays(boxGrid[1],boxGrid[2]);
+        concatRows = row1Entries.concat(row2Entries);
+        row3Entries = entries.filter(x=>!concatRows.includes(x));
         for (var i = 0; i < 3; i++){
           concatResult.push(row1Entries[i]);
           concatResult.push(row2Entries[i]);
