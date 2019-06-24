@@ -1,26 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 //import Button from 'react-bootstrap/Button';
-import { Button } from "shards-react";
+//import { Button } from "shards-react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css"
 import './index.css';
-
- function Square(props) {
-    return (
-      <Button disabled theme="dark" active="true" className="square">
-        {props.number}
-      </Button>
-    );
-  }
-
-  function ActiveSquare(props) {
-    return (
-      <Button theme="light" active="true" className="square">
-        {props.number}
-      </Button>
-    );
-  }
+import {Square,ActiveSquare} from './Components/square';
   
   class Board extends React.Component {
     constructor(props){
