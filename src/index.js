@@ -20,7 +20,7 @@ import './index.css';
 
   function ActiveSquare(props) {
     return (
-      <Button theme="dark" active="true" className="square">
+      <Button theme="light" active="true" className="square">
         {props.number}
       </Button>
     );
@@ -67,7 +67,25 @@ import './index.css';
         row += 3;
         col = 0;
       }
+
+      for (var box = 0; box < newGrid.length; box+=1){
+          this.removingEntries(newGrid[box]);
+      }
+
       this.setState(() => ({grid: newGrid}));
+    }
+
+    removingEntries(box){
+      var entriesToRemove = this.randomlyGeneratedValue(4,9);
+      var entriesRemoved = 0;
+      var indexEntries = [0,1,2,3,4,5,6,7,8];
+
+      while (entriesRemoved < entriesToRemove){
+        var entryRemoved = this.randomlyGeneratedValue(0,9);
+        box.splice(indexEntries[entryRemoved],1,null);
+        indexEntries.splice(entryRemoved,1);
+        entriesRemoved+=1;
+      }
     }
 
     generateInitialBox(arr,entries) {
