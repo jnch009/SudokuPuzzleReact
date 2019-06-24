@@ -1,6 +1,7 @@
-import {add} from './index';
+import {randomlyGeneratedValue} from './helperFn/boardFunctions';
 
-test('add', () =>{
-    const value = add(1,2);
-    expect(value).ToBe(3);
+test('Random Value', () =>{
+    const value = randomlyGeneratedValue(0,10);
+    expect(value).toBeGreaterThanOrEqual(0);
+    expect(value).toBeLessThan(10);
 });

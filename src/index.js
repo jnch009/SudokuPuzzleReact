@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css"
 import './index.css';
 import {Square,ActiveSquare} from './Components/square';
+import {randomlyGeneratedValue} from './helperFn/boardFunctions';
   
   class Board extends React.Component {
     constructor(props){
@@ -57,7 +58,7 @@ import {Square,ActiveSquare} from './Components/square';
     }
 
     removingEntries(box){
-      var entriesToRemove = this.randomlyGeneratedValue(2,10);
+      var entriesToRemove = randomlyGeneratedValue(2,10);
       var entriesRemoved = 0;
       var indexEntries = [0,1,2,3,4,5,6,7,8];
 
@@ -266,10 +267,6 @@ import {Square,ActiveSquare} from './Components/square';
 
     randomlyGeneratedArrayValue(min,max,arr){
       return arr[Math.floor(Math.random() * (max - min)) + min];
-    }
-    
-    randomlyGeneratedValue(min,max){
-        return Math.floor(Math.random() * (max - min)) + min;
     }
 
     checkConditions(valueToAdd,rowNumber,colNumber,grid){
