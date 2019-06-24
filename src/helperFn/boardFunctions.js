@@ -11,7 +11,23 @@ function checkCol(grid, colNumber, valueToAdd){
     return true;
 }
 
+function checkRow(grid, rowNumber, valueToAdd){
+    if (grid[rowNumber].indexOf(valueToAdd) !== -1) {
+      return false;
+    }
+    return true;
+}
+
+function checkConditions(valueToAdd,rowNumber,colNumber,grid){
+    if (!checkRow(grid,rowNumber,valueToAdd) || !checkCol(grid,colNumber,valueToAdd)){
+      return false;
+    }
+    return true;
+  }
+
 export default {
     randomlyGeneratedValue,
-    checkCol
+    checkCol,
+    checkRow,
+    checkConditions
 }

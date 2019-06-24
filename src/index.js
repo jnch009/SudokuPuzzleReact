@@ -115,7 +115,7 @@ import fn from './helperFn/boardFunctions';
         for (var col = beginCol; col < beginCol+3; col++){
           entryIndex = 0;
           while (entryIndex < 9) {
-            if (this.checkConditions(entries[entryIndex],row,col,newGrid)){
+            if (fn.checkConditions(entries[entryIndex],row,col,newGrid)){
                 boxGrid[boxIndex].push(entries[entryIndex]);
             }
             entryIndex+=1;
@@ -256,27 +256,6 @@ import fn from './helperFn/boardFunctions';
         var row1Entries = this.intersectArrays(boxGrid[index],boxGrid[index+3]);
         rowIntersected.push(row1Entries);
       }
-    }
-
-    updatingRowResultAndGrid(indexOfIntersect,rowIntersected,boxGrid,toInsert,rowResult){
-      rowResult.splice(indexOfIntersect, 1, toInsert);
-      rowIntersected[indexOfIntersect] = [];
-      this.updateBoxGrid(rowIntersected, toInsert);
-      this.updateBoxGrid(boxGrid, toInsert);
-    }
-
-    checkConditions(valueToAdd,rowNumber,colNumber,grid){
-      if (!this.checkRow(grid,rowNumber,valueToAdd) || !fn.checkCol(grid,colNumber,valueToAdd)){
-        return false;
-      }
-      return true;
-    }
-    
-    checkRow(grid, rowNumber, valueToAdd){
-      if (grid[rowNumber].indexOf(valueToAdd) !== -1) {
-        return false;
-      }
-      return true;
     }
 
     renderSquare(i,j){
