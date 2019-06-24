@@ -63,7 +63,7 @@ import {randomlyGeneratedValue} from './helperFn/boardFunctions';
       var indexEntries = [0,1,2,3,4,5,6,7,8];
 
       while (entriesRemoved < entriesToRemove){
-        var entryRemoved = this.randomlyGeneratedValue(0,10);
+        var entryRemoved = randomlyGeneratedValue(0,10);
         box.splice(indexEntries[entryRemoved],1,null);
         indexEntries.splice(entryRemoved,1);
         entriesRemoved+=1;
@@ -75,7 +75,7 @@ import {randomlyGeneratedValue} from './helperFn/boardFunctions';
       var i = 0;
       var cellsToFill = 9;
       while (i < cellsToFill){
-        var toAdd = this.randomlyGeneratedArrayValue(0,entryCopy.length,entryCopy);
+        var toAdd = entryCopy[randomlyGeneratedValue(0,entryCopy.length)];
         arr[i] = toAdd;
         entryCopy.splice(entryCopy.indexOf(toAdd),1);
         i++;
@@ -263,10 +263,6 @@ import {randomlyGeneratedValue} from './helperFn/boardFunctions';
       rowIntersected[indexOfIntersect] = [];
       this.updateBoxGrid(rowIntersected, toInsert);
       this.updateBoxGrid(boxGrid, toInsert);
-    }
-
-    randomlyGeneratedArrayValue(min,max,arr){
-      return arr[Math.floor(Math.random() * (max - min)) + min];
     }
 
     checkConditions(valueToAdd,rowNumber,colNumber,grid){
