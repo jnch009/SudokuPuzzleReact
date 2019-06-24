@@ -149,11 +149,14 @@ import './index.css';
 
         while (iterations < 2) {
 
+          var tempGrid = Array(9).fill(null);
           var rowIntersected = [];
-          this.intersectRowEntries(0,boxGrid,rowIntersected);
+          
+          
+          /*this.intersectRowEntries(0,boxGrid,rowIntersected);
 
           if (rowIntersected.some(this.emptyArrays)) {
-            var tempGrid = Array(boxGrid.length).fill(null);
+            
             var tripletArr = this.identifyingTriplets(boxGrid,tempGrid);
             var tripletIndex = 0;
             tempGrid.forEach((v,i) => {
@@ -162,7 +165,7 @@ import './index.css';
                 tripletIndex += 1;
               }
             })
-          }
+          }*/
 
           /*var rowResult = Array(3).fill(null);
           var sortedIntersect = rowIntersected.slice(0).sort(this.sortAscending);
@@ -238,32 +241,9 @@ import './index.css';
       return concatResult;
     }
 
-    identifyingTriplets(boxGrid, tempGrid){
+    identifyingDoubles(boxGrid, tempGrid){
       var tripleToMatch = [];
-      for (var box = 0; box < 8; box += 1){
-        for (var innerBox = box+1; innerBox < 9; innerBox+=1) {
-          var intersect = this.intersectArrays(boxGrid[box],boxGrid[innerBox]);
-          if (intersect.length == 3){
-            if (tempGrid.indexOf(boxGrid[box]) === -1 && tempGrid.indexOf(boxGrid[innerBox]) === -1){
-                tempGrid.splice(box,1,boxGrid[box]);
-                tempGrid.splice(innerBox,1,boxGrid[innerBox]);
-                
-                if (tripleToMatch === []){
-                  tripleToMatch = intersect;
-                }
-
-            } else if (tempGrid.indexOf(boxGrid[box]) === -1) {
-                tempGrid.splice(box,1,boxGrid[box]);
-            } else if (tempGrid.indexOf(boxGrid[innerBox]) === -1) {
-                tempGrid.splice(box,1,boxGrid[innerBox]);
-            }
-          }
-
-          if (tempGrid.filter(x=>x!==null).length === 3){
-              return tripleToMatch;
-          }
-        }
-      }
+      
     }
 
     // intersecting two sets
