@@ -444,5 +444,3 @@ import {randomlyGeneratedValue} from './helperFn/boardFunctions';
     <Game />,
     document.getElementById('root')
   );
-
-  export const add = (x,y) => x+y;
