@@ -39,21 +39,16 @@ import './index.css';
       //var arr = Array(9).fill(null).map(x=>Array(9).fill(null));
       var arr = Array(9).fill(null);
       var entries = [1,2,3,4,5,6,7,8,9];
-      var i = 0;
-
-      //while (targetGrid < 9) {
-        var entryCopy = entries.slice();
+      this.generateInitialBox(arr,entries);
+        /*var entryCopy = entries.slice();
         i = 0;
-        //var cellsToFill = this.randomlyGeneratedValue(1,10);
         var cellsToFill = 9;
         while (i < cellsToFill){
           var toAdd = this.randomlyGeneratedArrayValue(0,entryCopy.length,entryCopy);
           arr[i] = toAdd;
           entryCopy.splice(entryCopy.indexOf(toAdd),1);
           i++;
-        }
-        //targetGrid+=1;
-      //}
+        }*/
 
       var newGrid = Array(9).fill(null).map(x=>Array(9).fill(null));
       var boxGrid = Array(9).fill(null).map(x=>[]);
@@ -61,6 +56,30 @@ import './index.css';
       //this.generateValidEntries(boxGrid,entries,0,0,newGrid);
 
       //var indexArr = 0;
+      var row = 0;
+      var col = 0;
+      while (row <= 6){
+        while (col <= 6){
+          if (row === 0 && col === 0){
+            this.generateBox(row,col,arr,newGrid);
+          } else {
+            arr = this.generateValidEntries(boxGrid,entries,row,col,newGrid);
+            if (arr.length === 0){
+              row = 0;
+              col = 0;
+              this.generateInitialBox(arr,entries);
+              newGrid = Array(9).fill(null).map(x=>Array(9).fill(null));
+              continue;
+            }
+            this.generateBox(row,col,arr,newGrid);
+          }
+          boxGrid = Array(9).fill(null).map(x=>[]);
+          col += 3;
+        }
+        row += 3;
+        col = 0;
+      }
+      /*
       for (var row = 0; row <= 6; row += 3){
         for (var col = 0; col <= 6; col += 3){
           if (row === 0 && col === 0){
@@ -71,9 +90,21 @@ import './index.css';
           }
           boxGrid = Array(9).fill(null).map(x=>[]);
         }
-      }
+      }*/
 
       this.setState(() => ({grid: newGrid}));
+    }
+
+    generateInitialBox(arr,entries) {
+      var entryCopy = entries.slice();
+      var i = 0;
+      var cellsToFill = 9;
+      while (i < cellsToFill){
+        var toAdd = this.randomlyGeneratedArrayValue(0,entryCopy.length,entryCopy);
+        arr[i] = toAdd;
+        entryCopy.splice(entryCopy.indexOf(toAdd),1);
+        i++;
+      }
     }
 
     generateBox(beginRow,beginCol,arrEntries, newGrid){
@@ -114,11 +145,18 @@ import './index.css';
             }
             entryIndex+=1;
           }
+          if (boxGrid[boxIndex].length === 0){
+            return [];
+          }
           boxIndex += 1;
         }
       }
 
       var concatResult = [];
+      var row1Entries;
+      var row2Entries;
+      var row3Entries;
+      var concatRows;
       if (bothColumnRowInsert){
           var tempGrid = Array(9).fill(null);
           this.scanGrid(boxGrid,tempGrid);
@@ -129,16 +167,30 @@ import './index.css';
       // boxGrid[0],boxGrid[1],boxGrid[2] is for col boxes
       else if (!columnInsert) {
         // this check is for the last box in the row
-        if (this.intersectArrays(boxGrid[0],boxGrid[3]).length !== 0){
+        /*if (this.intersectArrays(boxGrid[0],boxGrid[3]).length !== 0){
           var row1Entries = this.intersectArrays(boxGrid[0],boxGrid[3]);
           var row2Entries = this.intersectArrays(boxGrid[3],boxGrid[6]);
           var concatRows = row1Entries.concat(row2Entries);
           var row3Entries = entries.filter(x=>!concatRows.includes(x));
           concatResult = row1Entries.concat(row2Entries);
           concatResult = concatResult.concat(row3Entries);
+        } else {*/
+        if (boxGrid.every(function(x){
+            return x.length === 3;
+        })){
+            tempGrid = Array(9).fill(null);
+            this.scanGrid(boxGrid,tempGrid);
+            concatResult = tempGrid;
         } else {
-          concatResult = boxGrid[0].concat(boxGrid[3]).concat(boxGrid[6]);
+            row1Entries = this.intersectArrays(boxGrid[0],boxGrid[3]);
+            row2Entries = this.intersectArrays(boxGrid[3],boxGrid[6]);
+            concatRows = row1Entries.concat(row2Entries);
+            row3Entries = entries.filter(x=>!concatRows.includes(x));
+            concatResult = row1Entries.concat(row2Entries);
+            concatResult = concatResult.concat(row3Entries);
+          //concatResult = boxGrid[0].concat(boxGrid[3]).concat(boxGrid[6]);
         }
+        //}
       } 
       else {
         if (boxGrid.every(function(x){
@@ -166,7 +218,11 @@ import './index.css';
     arrayLengths(arr) {
       var arrResult = [];
       arr.forEach((v,i)=>{
-        arrResult.push(v.length);
+        if (v === null){
+          arrResult.push(0);
+        } else {
+          arrResult.push(v.length);
+        }
       });
       return arrResult;
     }
@@ -184,7 +240,7 @@ import './index.css';
         });
 
         boxOfInterest = boxGrid[index];
-        if (boxOfInterest.length <= 3){
+        /*if (boxOfInterest.length <= 3){
           if (boxOfInterest.length === 1){
             tempGrid[index] = boxOfInterest[0];
           } else if (boxOfInterest.length === 2){
@@ -194,9 +250,12 @@ import './index.css';
             valueToChoose = this.randomlyGeneratedValue(0,2);
             tempGrid[index] = boxOfInterest[valueToChoose];
           }
-          this.updateBoxGrid(boxGrid,tempGrid[index],index);
-          arrOfLengths = this.arrayLengths(boxGrid);
-        }
+        } else {
+          tempGrid[index] = boxOfInterest[0];
+        }*/
+        tempGrid[index] = boxOfInterest[0];
+        this.updateBoxGrid(boxGrid,tempGrid[index],index);
+        arrOfLengths = this.arrayLengths(boxGrid);
       }
 
       return tempGrid;
