@@ -5,8 +5,8 @@ import ReactDOM from 'react-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css"
 import './index.css';
-import {Square,ActiveSquare} from './Components/square';
-import {randomlyGeneratedValue} from './helperFn/boardFunctions';
+import {Square, ActiveSquare} from './Components/square';
+import fn from './helperFn/boardFunctions';
   
   class Board extends React.Component {
     constructor(props){
@@ -58,12 +58,12 @@ import {randomlyGeneratedValue} from './helperFn/boardFunctions';
     }
 
     removingEntries(box){
-      var entriesToRemove = randomlyGeneratedValue(2,10);
+      var entriesToRemove = fn.randomlyGeneratedValue(2,10);
       var entriesRemoved = 0;
       var indexEntries = [0,1,2,3,4,5,6,7,8];
 
       while (entriesRemoved < entriesToRemove){
-        var entryRemoved = randomlyGeneratedValue(0,10);
+        var entryRemoved = fn.randomlyGeneratedValue(0,10);
         box.splice(indexEntries[entryRemoved],1,null);
         indexEntries.splice(entryRemoved,1);
         entriesRemoved+=1;
@@ -75,7 +75,7 @@ import {randomlyGeneratedValue} from './helperFn/boardFunctions';
       var i = 0;
       var cellsToFill = 9;
       while (i < cellsToFill){
-        var toAdd = entryCopy[randomlyGeneratedValue(0,entryCopy.length)];
+        var toAdd = entryCopy[fn.randomlyGeneratedValue(0,entryCopy.length)];
         arr[i] = toAdd;
         entryCopy.splice(entryCopy.indexOf(toAdd),1);
         i++;
@@ -266,7 +266,7 @@ import {randomlyGeneratedValue} from './helperFn/boardFunctions';
     }
 
     checkConditions(valueToAdd,rowNumber,colNumber,grid){
-      if (!this.checkRow(grid,rowNumber,valueToAdd) || !this.checkCol(grid,colNumber,valueToAdd)){
+      if (!this.checkRow(grid,rowNumber,valueToAdd) || !fn.checkCol(grid,colNumber,valueToAdd)){
         return false;
       }
       return true;
@@ -276,16 +276,6 @@ import {randomlyGeneratedValue} from './helperFn/boardFunctions';
       if (grid[rowNumber].indexOf(valueToAdd) !== -1) {
         return false;
       }
-      return true;
-    }
-
-    checkCol(grid, colNumber, valueToAdd){
-      for (var row = 0; row < 9; row += 1) {
-        if (grid[row][colNumber] === valueToAdd) {
-          return false;
-        }
-      }
-
       return true;
     }
 
