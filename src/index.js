@@ -82,6 +82,7 @@ import fn from './helperFn/boardFunctions';
       }
     }
 
+    // this function satisfies box constraint
     generateBox(beginRow,beginCol,arrEntries, newGrid){
       var indexing = 0;
       for (var row = beginRow; row < beginRow+3; row++){
