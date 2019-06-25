@@ -175,9 +175,9 @@ function generateValidEntries(boxGrid, entries, beginRow, beginCol, newGrid){
 
 export default {
     randomlyGeneratedValue,
-    checkCol,
-    checkRow,
-    checkConditions,
+    insertIntoCol,
+    insertIntoRow,
+    insertConstraint,
     checkColElementsExist,
     updateBoxGrid,
     intersectArrays,
