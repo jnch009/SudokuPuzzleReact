@@ -2,7 +2,7 @@ function randomlyGeneratedValue(min,max){
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function checkCol(grid, colNumber, valueToAdd){
+function insertIntoCol(grid, colNumber, valueToAdd){
     for (var row = 0; row < 9; row += 1) {
       if (grid[row][colNumber] === valueToAdd) {
         return false;
@@ -11,7 +11,7 @@ function checkCol(grid, colNumber, valueToAdd){
     return true;
 }
 
-function checkRow(grid, rowNumber, valueToAdd){
+function insertIntoRow(grid, rowNumber, valueToAdd){
     if (grid[rowNumber].indexOf(valueToAdd) !== -1) {
       return false;
     }
@@ -29,8 +29,8 @@ function verifyRow(grid, rowNumber){
     return rowCopy.length === grid[rowNumber].length;
 }
 
-function checkConditions(grid,rowNumber,colNumber,valueToAdd){
-    if (!checkRow(grid,rowNumber,valueToAdd) || !checkCol(grid,colNumber,valueToAdd)){
+function insertConstraint(grid,rowNumber,colNumber,valueToAdd){
+    if (!insertIntoRow(grid,rowNumber,valueToAdd) || !insertIntoCol(grid,colNumber,valueToAdd)){
       return false;
     }
     return true;
@@ -111,7 +111,7 @@ function generateValidEntries(boxGrid, entries, beginRow, beginCol, newGrid){
       for (var col = beginCol; col < beginCol+3; col++){
         entryIndex = 0;
         while (entryIndex < 9) {
-          if (checkConditions(newGrid,row,col,entries[entryIndex])){
+          if (insertConstraint(newGrid,row,col,entries[entryIndex])){
               boxGrid[boxIndex].push(entries[entryIndex]);
           }
           entryIndex+=1;
