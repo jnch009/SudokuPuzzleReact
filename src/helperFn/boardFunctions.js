@@ -1,3 +1,5 @@
+import { cpus } from "os";
+
 function randomlyGeneratedValue(min,max){
     return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -16,6 +18,13 @@ function insertIntoRow(grid, rowNumber, valueToAdd){
       return false;
     }
     return true;
+}
+
+function insertConstraint(grid,rowNumber,colNumber,valueToAdd){
+  if (!insertIntoRow(grid,rowNumber,valueToAdd) || !insertIntoCol(grid,colNumber,valueToAdd)){
+    return false;
+  }
+  return true;
 }
 
 //new function ensureGridSatisfied
@@ -42,11 +51,17 @@ function verifyColumn(grid, colNumber){
   return columnCopy.length === columnEntries.length;
 }
 
-function insertConstraint(grid,rowNumber,colNumber,valueToAdd){
-    if (!insertIntoRow(grid,rowNumber,valueToAdd) || !insertIntoCol(grid,colNumber,valueToAdd)){
-      return false;
+function verifyBox(grid,rowNumber,colNumber){
+  var boxEntries = [];
+  for (var row = rowNumber; row <= rowNumber+3; row+=1){
+    for (var col = colNumber; col <= colNumber+3; col+=1){
+      if (boxEntries.indexOf(grid[row][col]) === -1) {
+        boxEntries.push(grid[row][col]);
+      }
     }
-    return true;
+  }
+
+  return boxEntries.length === 9;
 }
 
 function checkColElementsExist(grid,col){
@@ -198,5 +213,6 @@ export default {
     arrayLengths,
     generateValidEntries,
     verifyRow,
-    verifyColumn
+    verifyColumn,
+    verifyBox
 }

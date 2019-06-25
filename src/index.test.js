@@ -17,9 +17,9 @@ describe('Testing grid conditions', ()=>{
                   [null,null,null,null,null,null,null,null,null],
                   [null,null,null,null,null,null,null,null,null]];
     
-    const gridViolated = [[null,8,null,null,null,null,null,null,null],
-                  [null,1,null,null,null,null,null,null,null],
-                  [null,1,null,null,null,null,null,null,null],
+    const gridViolated = [[null,8,null,null,null,null,8,8,1],
+                  [null,1,null,null,null,null,4,3,2],
+                  [null,1,null,null,null,null,5,6,9],
                   [null,5,null,null,null,null,null,null,null],
                   [null,7,null,2,3,5,null,5,null],
                   [null,9,null,null,null,null,null,null,null],
@@ -41,6 +41,10 @@ describe('Testing grid conditions', ()=>{
         expect(fn.insertIntoRow(grid,4,5)).toBe(false);
     });
 
+    it('Entry is allowed to be inserted into the box', ()=>{
+        expect(fn.insertConstraint(grid,4,0,9)).toBe(true);
+    });
+
     it('Entry is not allowed to be considered for the sub-box',()=>{
         expect(fn.insertConstraint(grid,4,0,2)).toBe(false);
     });
@@ -51,5 +55,9 @@ describe('Testing grid conditions', ()=>{
 
     it('Grid violates col condition',() => {
         expect(fn.verifyColumn(gridViolated,1)).toBe(false);
+    });
+
+    it('Grid violates box condition',() => {
+        expect(fn.verifyBox(gridViolated,2,6)).toBe(false);
     });
 });
