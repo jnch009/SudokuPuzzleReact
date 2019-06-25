@@ -17,15 +17,15 @@ describe('Testing grid conditions', ()=>{
                   [null,null,null,null,null,null,null,null,null],
                   [null,null,null,null,null,null,null,null,null]];
     
-    const gridRowViolated = [[null,null,null,null,null,null,null,null,null],
-                  [null,null,null,null,null,null,null,null,null],
-                  [null,null,null,null,null,null,null,null,null],
-                  [null,null,null,null,null,null,null,null,null],
-                  [null,null,null,2,3,5,null,5,null],
-                  [null,null,null,null,null,null,null,null,null],
-                  [null,null,null,null,null,null,null,null,null],
-                  [null,null,null,null,null,null,null,null,null],
-                  [null,null,null,null,null,null,null,null,null]];
+    const gridViolated = [[null,8,null,null,null,null,null,null,null],
+                  [null,1,null,null,null,null,null,null,null],
+                  [null,1,null,null,null,null,null,null,null],
+                  [null,5,null,null,null,null,null,null,null],
+                  [null,7,null,2,3,5,null,5,null],
+                  [null,9,null,null,null,null,null,null,null],
+                  [null,3,null,null,null,null,null,null,null],
+                  [null,2,null,null,null,null,null,null,null],
+                  [null,4,null,null,null,null,null,null,null]];
 
     /*const colNumber = 4;
     const rowNumber = 4;
@@ -46,6 +46,10 @@ describe('Testing grid conditions', ()=>{
     });
 
     it('Grid violates row condition',() => {
-        expect(fn.verifyRow(gridRowViolated,4)).toBe(false);
+        expect(fn.verifyRow(gridViolated,4)).toBe(false);
+    });
+
+    it('Grid violates col condition',() => {
+        expect(fn.verifyColumn(gridViolated,1)).toBe(false);
     });
 });

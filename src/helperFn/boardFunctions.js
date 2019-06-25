@@ -19,7 +19,7 @@ function insertIntoRow(grid, rowNumber, valueToAdd){
 }
 
 //new function ensureGridSatisfied
-//new functions: verifyRow, verifyColumn, verifyBox
+//new functions: verifyRow, verifyColumn, verifyBox (generateBox function)
 
 function verifyRow(grid, rowNumber){
     var rowCopy = grid[rowNumber].filter(function(val,i){
@@ -27,6 +27,19 @@ function verifyRow(grid, rowNumber){
     });
 
     return rowCopy.length === grid[rowNumber].length;
+}
+
+function verifyColumn(grid, colNumber){
+  var columnEntries = [];
+  var columnCopy = [];
+  for (var row = 0; row < 9; row+=1){
+    if (columnCopy.indexOf(grid[row][colNumber]) === -1){
+      columnCopy.push(grid[row][colNumber]);
+    }
+    columnEntries.push(grid[row][colNumber]);
+  }
+
+  return columnCopy.length === columnEntries.length;
 }
 
 function insertConstraint(grid,rowNumber,colNumber,valueToAdd){
@@ -184,5 +197,6 @@ export default {
     scanGrid,
     arrayLengths,
     generateValidEntries,
-    verifyRow
+    verifyRow,
+    verifyColumn
 }
