@@ -18,7 +18,18 @@ function checkRow(grid, rowNumber, valueToAdd){
     return true;
 }
 
-function checkConditions(valueToAdd,rowNumber,colNumber,grid){
+//new function ensureGridSatisfied
+//new functions: verifyRow, verifyColumn, verifyBox
+
+function verifyRow(grid, rowNumber){
+    var rowCopy = grid[rowNumber].filter(function(val,i){
+        return grid[rowNumber].indexOf(val) >= i;
+    });
+
+    return rowCopy.length === grid[rowNumber].length;
+}
+
+function checkConditions(grid,rowNumber,colNumber,valueToAdd){
     if (!checkRow(grid,rowNumber,valueToAdd) || !checkCol(grid,colNumber,valueToAdd)){
       return false;
     }
@@ -100,7 +111,7 @@ function generateValidEntries(boxGrid, entries, beginRow, beginCol, newGrid){
       for (var col = beginCol; col < beginCol+3; col++){
         entryIndex = 0;
         while (entryIndex < 9) {
-          if (checkConditions(entries[entryIndex],row,col,newGrid)){
+          if (checkConditions(newGrid,row,col,entries[entryIndex])){
               boxGrid[boxIndex].push(entries[entryIndex]);
           }
           entryIndex+=1;
@@ -172,5 +183,6 @@ export default {
     intersectArrays,
     scanGrid,
     arrayLengths,
-    generateValidEntries
+    generateValidEntries,
+    verifyRow
 }

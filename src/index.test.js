@@ -7,18 +7,32 @@ test('Random Value', () =>{
 });
 
 describe('Testing grid conditions', ()=>{
-    const grid = [[2,3,5,null,null,null,null,null,null],
+    const grid = [[null,null,null,null,null,null,null,null,null],
                   [null,null,null,null,null,null,null,null,null],
                   [null,null,null,null,null,null,null,null,null],
                   [null,null,null,null,null,null,null,null,null],
-                  [null,null,null,null,null,null,null,null,null],
+                  [null,null,null,2,3,5,null,null,null],
                   [null,null,null,null,null,null,null,null,null],
                   [null,null,null,null,null,null,null,null,null],
                   [null,null,null,null,null,null,null,null,null],
                   [null,null,null,null,null,null,null,null,null]];
-    const colNumber = 1;
-    const rowNumber = 0;
+    
+    const gridRowViolated = [[null,null,null,null,null,null,null,null,null],
+                  [null,null,null,null,null,null,null,null,null],
+                  [null,null,null,null,null,null,null,null,null],
+                  [null,null,null,null,null,null,null,null,null],
+                  [null,null,null,2,3,5,null,5,null],
+                  [null,null,null,null,null,null,null,null,null],
+                  [null,null,null,null,null,null,null,null,null],
+                  [null,null,null,null,null,null,null,null,null],
+                  [null,null,null,null,null,null,null,null,null]];
+
+    const colNumber = 4;
+    const rowNumber = 4;
+
     const valToAdd = 3;
+    const successValRow = 7;
+    const successValCol = 5;
 
     it('Error inserting same value into same column',()=>{
         expect(fn.checkCol(grid,colNumber,valToAdd)).toBe(false);
@@ -26,5 +40,13 @@ describe('Testing grid conditions', ()=>{
 
     it('Error inserting same value into same row',()=>{
         expect(fn.checkRow(grid,rowNumber,valToAdd)).toBe(false);
-    })
+    });
+
+    it('Grid violates row and column condition',()=>{
+        expect(fn.checkConditions(grid,rowNumber,colNumber,valToAdd)).toBe(false);
+    });
+
+    it('Grid violates row condition',() => {
+        expect(fn.verifyRow(gridRowViolated,rowNumber)).toBe(false);
+    });
 });
