@@ -33,7 +33,7 @@ import fn from './helperFn/boardFunctions';
           if (row === 0 && col === 0){
             this.generateBox(row,col,arr,newGrid);
           } else {
-            arr = this.generateValidEntries(boxGrid,entries,row,col,newGrid);
+            arr = fn.generateValidEntries(boxGrid,entries,row,col,newGrid);
             if (arr.length === 0){
               row = 0;
               col = 0;
@@ -95,134 +95,16 @@ import fn from './helperFn/boardFunctions';
       }
 
       return newGrid;
-    }    
-
-    generateValidEntries(boxGrid, entries, beginRow, beginCol, newGrid){
-      var columnInsert = false;
-      var bothColumnRowInsert = false;
-
-      if (newGrid[beginRow].every(function(x){
-        return x === null;
-      })) {
-        columnInsert = true;
-      } else if (fn.checkColElementsExist(newGrid,beginCol)){
-        bothColumnRowInsert = true;
-      }
-
-      var entryIndex;
-      var boxIndex = 0;
-      for (var row = beginRow; row < beginRow+3; row++){
-        for (var col = beginCol; col < beginCol+3; col++){
-          entryIndex = 0;
-          while (entryIndex < 9) {
-            if (fn.checkConditions(entries[entryIndex],row,col,newGrid)){
-                boxGrid[boxIndex].push(entries[entryIndex]);
-            }
-            entryIndex+=1;
-          }
-          if (boxGrid[boxIndex].length === 0){
-            return [];
-          }
-          boxIndex += 1;
-        }
-      }
-
-      var concatResult = [];
-      var row1Entries;
-      var row2Entries;
-      var row3Entries;
-      var concatRows;
-      if (bothColumnRowInsert){
-          var tempGrid = Array(9).fill(null);
-          this.scanGrid(boxGrid,tempGrid);
-          concatResult = tempGrid;
-      }
-      // Want to refactor this, looks ugly
-      // boxGrid[0],boxGrid[3],boxGrid[6] is for row boxes
-      // boxGrid[0],boxGrid[1],boxGrid[2] is for col boxes
-      else if (!columnInsert) {
-        if (boxGrid.every(function(x){
-            return x.length === 3;
-        })){
-            tempGrid = Array(9).fill(null);
-            this.scanGrid(boxGrid,tempGrid);
-            concatResult = tempGrid;
-        } else {
-            row1Entries = fn.intersectArrays(boxGrid[0],boxGrid[3]);
-            row2Entries = fn.intersectArrays(boxGrid[3],boxGrid[6]);
-            concatRows = row1Entries.concat(row2Entries);
-            row3Entries = entries.filter(x=>!concatRows.includes(x));
-            concatResult = row1Entries.concat(row2Entries);
-            concatResult = concatResult.concat(row3Entries);
-        }
-      } 
-      else {
-        if (boxGrid.every(function(x){
-          return x.length === 3;
-        })){
-          tempGrid = Array(9).fill(null);
-          this.scanGrid(boxGrid,tempGrid);
-          concatResult = tempGrid;
-        } else {
-          row1Entries = fn.intersectArrays(boxGrid[0],boxGrid[1]);
-          row2Entries = fn.intersectArrays(boxGrid[1],boxGrid[2]);
-          concatRows = row1Entries.concat(row2Entries);
-          row3Entries = entries.filter(x=>!concatRows.includes(x));
-          for (var i = 0; i < 3; i++){
-            concatResult.push(row1Entries[i]);
-            concatResult.push(row2Entries[i]);
-            concatResult.push(row3Entries[i]);
-          }
-        }
-      }
-      
-      return concatResult;
-    }
-
-    arrayLengths(arr) {
-      var arrResult = [];
-      arr.forEach((v,i)=>{
-        if (v === null){
-          arrResult.push(0);
-        } else {
-          arrResult.push(v.length);
-        }
-      });
-      return arrResult;
-    }
-
-    scanGrid(boxGrid, tempGrid){
-      var arrOfLengths = this.arrayLengths(boxGrid);
-      var index;
-      var boxOfInterest;
-
-      while (tempGrid.filter(x=>x !== null).length < 9) {
-        index = arrOfLengths.findIndex(function(x){
-          var tmp = arrOfLengths.filter(x=>x !== undefined);
-          return x === Math.min(...tmp);
-        });
-
-        boxOfInterest = boxGrid[index];
-        tempGrid[index] = boxOfInterest[0];
-        fn.updateBoxGrid(boxGrid,tempGrid[index],index);
-        arrOfLengths = this.arrayLengths(boxGrid);
-      }
-
-      return tempGrid;
     }
 
     renderSquare(i,j){
       if (this.state.grid[i][j] !== null){
         return (
-          <Square
-            number = {this.state.grid[i][j]}
-          />
+          <Square number = {this.state.grid[i][j]}/>
         );
       } else {
         return (
-          <ActiveSquare
-            number = {this.state.grid[i][j]}
-          />
+          <ActiveSquare number = {this.state.grid[i][j]}/>
         )
       }
     }
