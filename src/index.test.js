@@ -35,15 +35,15 @@ describe('Testing grid conditions', ()=>{
     const successValCol = 5;
 
     it('Error inserting same value into same column',()=>{
-        expect(fn.checkCol(grid,colNumber,valToAdd)).toBe(false);
+        expect(fn.insertIntoCol(grid,colNumber,valToAdd)).toBe(false);
     });
 
     it('Error inserting same value into same row',()=>{
-        expect(fn.checkRow(grid,rowNumber,valToAdd)).toBe(false);
+        expect(fn.insertIntoRow(grid,rowNumber,valToAdd)).toBe(false);
     });
 
     it('Grid violates row and column condition',()=>{
-        expect(fn.checkConditions(grid,rowNumber,colNumber,valToAdd)).toBe(false);
+        expect(fn.insertConstraint(grid,rowNumber,colNumber,valToAdd)).toBe(false);
     });
 
     it('Grid violates row condition',() => {
