@@ -18,7 +18,6 @@ import fn from './helperFn/boardFunctions';
     }
 
     componentDidMount(){
-      //var arr = Array(9).fill(null).map(x=>Array(9).fill(null));
       var arr = Array(9).fill(null);
       var entries = [1,2,3,4,5,6,7,8,9];
       this.generateInitialBox(arr,entries);
@@ -34,50 +33,47 @@ import fn from './helperFn/boardFunctions';
             fn.generateBox(row,col,arr,newGrid);
           } else {
             arr = fn.generateValidEntries(boxGrid,entries,row,col,newGrid);
-            /*if (arr.length === 0){
+            fn.generateBox(row,col,arr,newGrid);
+          }
+
+          if (row === 6 && col === 6){
+            if (!fn.ensureGridSatisfied(newGrid)) {
               row = 0;
               col = 0;
               this.generateInitialBox(arr,entries);
               newGrid = Array(9).fill(null).map(x=>Array(9).fill(null));
               continue;
-            }*/
-            fn.generateBox(row,col,arr,newGrid);
+            }
           }
+
           boxGrid = Array(9).fill(null).map(x=>[]);
           col += 3;
-        }
-
-        if (row === 6 && col === 6){
-          if (!fn.ensureGridSatisfied(newGrid)) {
-            row = 0;
-            col = 0;
-            this.generateInitialBox(arr,entries);
-            newGrid = Array(9).fill(null).map(x=>Array(9).fill(null));
-            continue;
-          }
         }
 
         row += 3;
         col = 0;
       }
 
-      for (var box = 0; box < newGrid.length; box+=1){
+      this.removingEntries(newGrid);
+      /*for (var box = 0; box < newGrid.length; box+=1){
           this.removingEntries(newGrid[box]);
-      }
+      }*/
 
       this.setState(() => ({grid: newGrid}));
     }
 
-    removingEntries(box){
-      var entriesToRemove = fn.randomlyGeneratedValue(2,10);
-      var entriesRemoved = 0;
-      var indexEntries = [0,1,2,3,4,5,6,7,8];
+    removingEntries(newGrid){
+      for (var box = 0; box < newGrid.length; box += 1){
+        var entriesToRemove = fn.randomlyGeneratedValue(1,5);
+        var entriesRemoved = 0;
+        var indexEntries = [0,1,2,3,4,5,6,7,8];
 
-      while (entriesRemoved < entriesToRemove){
-        var entryRemoved = fn.randomlyGeneratedValue(0,10);
-        box.splice(indexEntries[entryRemoved],1,null);
-        indexEntries.splice(entryRemoved,1);
-        entriesRemoved+=1;
+        while (entriesRemoved < entriesToRemove){
+          var entryRemoved = fn.randomlyGeneratedValue(0,10);
+          newGrid[box].splice(indexEntries[entryRemoved],1,null);
+          indexEntries.splice(entryRemoved,1);
+          entriesRemoved+=1;
+        }
       }
     }
 
