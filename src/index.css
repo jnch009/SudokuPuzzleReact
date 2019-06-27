@@ -1,7 +1,5 @@
 body {
     font: 25px "Century Gothic", Futura, sans-serif;
-    margin-top: 15%;
-    margin-left: 40%;
   }
 
   ol, ul {
@@ -16,8 +14,8 @@ body {
 
   .sudoku-grid {
     float: left;
-    width: 102px;
-    height: 102px;
+    width: 150px;
+    height: 150px;
   }
 
   .sudoku-row {
@@ -26,8 +24,13 @@ body {
   }
 
  .sudoku {
-    height: 306px;
-    width: 306px;
+    height: 450px;
+    width: 450px;
+ }
+
+ .game-board {
+    margin-top: 12%;
+    margin-left: 38%;
  }
 
   .square {
@@ -37,10 +40,10 @@ body {
     font-size: 24px;
     font-weight: bold;
     line-height: 34px;
-    height: 34px;
     margin-right: -1px;
     margin-top: -1px;
     padding: 0;
     text-align: center;
-    width: 34px;
+    height: 50px;
+    width: 50px;
   }

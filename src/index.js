@@ -1,7 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-//import Button from 'react-bootstrap/Button';
-//import { Button } from "shards-react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css"
 import './index.css';
@@ -20,7 +18,7 @@ import fn from './helperFn/boardFunctions';
     componentDidMount(){
       var arr = Array(9).fill(null);
       var entries = [1,2,3,4,5,6,7,8,9];
-      this.generateInitialBox(arr,entries);
+      fn.generateInitialBox(arr,entries);
 
       var newGrid = Array(9).fill(null).map(x=>Array(9).fill(null));
       var boxGrid = Array(9).fill(null).map(x=>[]);
@@ -40,7 +38,7 @@ import fn from './helperFn/boardFunctions';
             if (!fn.ensureGridSatisfied(newGrid)) {
               row = 0;
               col = 0;
-              this.generateInitialBox(arr,entries);
+              fn.generateInitialBox(arr,entries);
               newGrid = Array(9).fill(null).map(x=>Array(9).fill(null));
               continue;
             }
@@ -54,39 +52,8 @@ import fn from './helperFn/boardFunctions';
         col = 0;
       }
 
-      this.removingEntries(newGrid);
-      /*for (var box = 0; box < newGrid.length; box+=1){
-          this.removingEntries(newGrid[box]);
-      }*/
-
+      fn.removingEntries(newGrid);
       this.setState(() => ({grid: newGrid}));
-    }
-
-    removingEntries(newGrid){
-      for (var box = 0; box < newGrid.length; box += 1){
-        var entriesToRemove = fn.randomlyGeneratedValue(1,5);
-        var entriesRemoved = 0;
-        var indexEntries = [0,1,2,3,4,5,6,7,8];
-
-        while (entriesRemoved < entriesToRemove){
-          var entryRemoved = fn.randomlyGeneratedValue(0,10);
-          newGrid[box].splice(indexEntries[entryRemoved],1,null);
-          indexEntries.splice(entryRemoved,1);
-          entriesRemoved+=1;
-        }
-      }
-    }
-
-    generateInitialBox(arr,entries) {
-      var entryCopy = entries.slice();
-      var i = 0;
-      var cellsToFill = 9;
-      while (i < cellsToFill){
-        var toAdd = entryCopy[fn.randomlyGeneratedValue(0,entryCopy.length)];
-        arr[i] = toAdd;
-        entryCopy.splice(entryCopy.indexOf(toAdd),1);
-        i++;
-      }
     }
 
     renderSquare(i,j){
