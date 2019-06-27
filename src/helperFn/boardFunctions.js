@@ -28,7 +28,33 @@ function insertConstraint(grid,rowNumber,colNumber,valueToAdd){
 }
 
 //new function ensureGridSatisfied
-//new functions: verifyRow, verifyColumn, verifyBox (generateBox function)
+//new functions: verifyRow (done), verifyColumn (done), verifyBox (done) (generateBox function)
+
+function ensureGridSatisfied(grid){
+  // row
+  for (var row = 0; row < 9; row += 1){
+    if (verifyRow(grid, row) === false){
+      return false;
+    }
+  }
+
+  // col
+  for (var col = 0; col < 9; col += 1){
+    if (verifyColumn(grid,col) === false){
+      return false;
+    }
+  }
+
+  // box
+  for (var row = 0; row <= 6; row += 3){
+    for (var col = 0; col <= 6; col += 3){
+      if (verifyBox(grid,row,col) === false){
+        return false;
+      }
+    }
+  }
+  return true;
+}
 
 function verifyRow(grid, rowNumber){
     var rowCopy = grid[rowNumber].filter(function(val,i){
@@ -53,8 +79,8 @@ function verifyColumn(grid, colNumber){
 
 function verifyBox(grid,rowNumber,colNumber){
   var boxEntries = [];
-  for (var row = rowNumber; row <= rowNumber+3; row+=1){
-    for (var col = colNumber; col <= colNumber+3; col+=1){
+  for (var row = rowNumber; row < rowNumber+3; row+=1){
+    for (var col = colNumber; col < colNumber+3; col+=1){
       if (boxEntries.indexOf(grid[row][col]) === -1) {
         boxEntries.push(grid[row][col]);
       }
@@ -214,5 +240,6 @@ export default {
     generateValidEntries,
     verifyRow,
     verifyColumn,
-    verifyBox
+    verifyBox,
+    ensureGridSatisfied
 }
