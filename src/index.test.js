@@ -7,7 +7,7 @@ test('Random Value', () =>{
 });
 
 describe('Testing grid conditions', ()=>{
-    const grid = [[null,null,null,null,null,null,null,null,null],
+    const insertIntoGrid = [[null,null,null,null,null,null,null,null,null],
                   [null,null,null,null,null,null,null,null,null],
                   [null,null,null,null,null,null,null,null,null],
                   [null,null,null,null,null,null,null,null,null],
@@ -44,19 +44,19 @@ describe('Testing grid conditions', ()=>{
     const successValCol = 5;*/
 
     it('Error inserting same value into same column',()=>{
-        expect(fn.insertIntoCol(grid,4,3)).toBe(false);
+        expect(fn.insertIntoCol(insertIntoGrid,4,3)).toBe(false);
     });
 
     it('Error inserting same value into same row',()=>{
-        expect(fn.insertIntoRow(grid,4,5)).toBe(false);
+        expect(fn.insertIntoRow(insertIntoGrid,4,5)).toBe(false);
     });
 
     it('Entry is allowed to be inserted into the box', ()=>{
-        expect(fn.insertConstraint(grid,4,0,9)).toBe(true);
+        expect(fn.insertConstraint(insertIntoGrid,4,0,9)).toBe(true);
     });
 
     it('Entry is not allowed to be considered for the sub-box',()=>{
-        expect(fn.insertConstraint(grid,4,0,2)).toBe(false);
+        expect(fn.insertConstraint(insertIntoGrid,4,0,2)).toBe(false);
     });
 
     it('Grid satisfies all conditions',() => {

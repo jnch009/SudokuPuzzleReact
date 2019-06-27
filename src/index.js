@@ -31,21 +31,32 @@ import fn from './helperFn/boardFunctions';
       while (row <= 6){
         while (col <= 6){
           if (row === 0 && col === 0){
-            this.generateBox(row,col,arr,newGrid);
+            fn.generateBox(row,col,arr,newGrid);
           } else {
             arr = fn.generateValidEntries(boxGrid,entries,row,col,newGrid);
-            if (arr.length === 0){
+            /*if (arr.length === 0){
               row = 0;
               col = 0;
               this.generateInitialBox(arr,entries);
               newGrid = Array(9).fill(null).map(x=>Array(9).fill(null));
               continue;
-            }
-            this.generateBox(row,col,arr,newGrid);
+            }*/
+            fn.generateBox(row,col,arr,newGrid);
           }
           boxGrid = Array(9).fill(null).map(x=>[]);
           col += 3;
         }
+
+        if (row === 6 && col === 6){
+          if (!fn.ensureGridSatisfied(newGrid)) {
+            row = 0;
+            col = 0;
+            this.generateInitialBox(arr,entries);
+            newGrid = Array(9).fill(null).map(x=>Array(9).fill(null));
+            continue;
+          }
+        }
+
         row += 3;
         col = 0;
       }
@@ -80,22 +91,6 @@ import fn from './helperFn/boardFunctions';
         entryCopy.splice(entryCopy.indexOf(toAdd),1);
         i++;
       }
-    }
-
-    // this function satisfies box constraint
-    generateBox(beginRow,beginCol,arrEntries, newGrid){
-      var indexing = 0;
-      for (var row = beginRow; row < beginRow+3; row++){
-        
-        var col = beginCol;
-        while (col < beginCol+3){
-          newGrid[row].splice(col,1,arrEntries[indexing]);
-          col+=1;
-          indexing += 1;
-        }
-      }
-
-      return newGrid;
     }
 
     renderSquare(i,j){

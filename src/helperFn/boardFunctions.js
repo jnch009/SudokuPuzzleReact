@@ -1,5 +1,3 @@
-import { cpus } from "os";
-
 function randomlyGeneratedValue(min,max){
     return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -129,22 +127,28 @@ function arrayLengths(arr) {
 }
 
 function scanGrid(boxGrid, tempGrid){
-    var arrOfLengths = arrayLengths(boxGrid);
-    var index;
-    var boxOfInterest;
-
-    while (tempGrid.filter(x=>x !== null).length < 9) {
-      index = arrOfLengths.findIndex(function(x){
-        var tmp = arrOfLengths.filter(x=>x !== undefined);
-        return x === Math.min(...tmp);
-      });
-      boxOfInterest = boxGrid[index];
-      tempGrid[index] = boxOfInterest[0];
-      updateBoxGrid(boxGrid,tempGrid[index],index);
-      arrOfLengths = arrayLengths(boxGrid);
-    }
-
+  var boxEntries = boxGrid.filter(x=>x.length !== 0).length;
+  if (boxEntries !== 9) {
+    tempGrid = [];
     return tempGrid;
+  }
+
+  var arrOfLengths = arrayLengths(boxGrid);
+  var index;
+  var boxOfInterest;
+
+  while (tempGrid.filter(x=>x !== null).length < 9) {
+    index = arrOfLengths.findIndex(function(x){
+      var tmp = arrOfLengths.filter(x=>x !== undefined);
+      return x === Math.min(...tmp);
+    });
+    boxOfInterest = boxGrid[index];
+    tempGrid[index] = boxOfInterest[0];
+    updateBoxGrid(boxGrid,tempGrid[index],index);
+    arrOfLengths = arrayLengths(boxGrid);
+  }
+
+  return tempGrid;
 }
 
 function generateValidEntries(boxGrid, entries, beginRow, beginCol, newGrid){
@@ -169,9 +173,6 @@ function generateValidEntries(boxGrid, entries, beginRow, beginCol, newGrid){
               boxGrid[boxIndex].push(entries[entryIndex]);
           }
           entryIndex+=1;
-        }
-        if (boxGrid[boxIndex].length === 0){
-          return [];
         }
         boxIndex += 1;
       }
@@ -225,7 +226,22 @@ function generateValidEntries(boxGrid, entries, beginRow, beginCol, newGrid){
     }
     
     return concatResult;
+}
+
+// this function satisfies box constraint
+function generateBox(beginRow,beginCol,arrEntries, newGrid){
+  var indexing = 0;
+  for (var row = beginRow; row < beginRow+3; row++){
+    var col = beginCol;
+    while (col < beginCol+3){
+      newGrid[row].splice(col,1,arrEntries[indexing]);
+      col+=1;
+      indexing += 1;
+    }
   }
+
+  return newGrid;
+}
 
 export default {
     randomlyGeneratedValue,
@@ -241,5 +257,6 @@ export default {
     verifyRow,
     verifyColumn,
     verifyBox,
-    ensureGridSatisfied
+    ensureGridSatisfied,
+    generateBox
 }
