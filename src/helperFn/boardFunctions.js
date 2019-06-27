@@ -29,23 +29,25 @@ function insertConstraint(grid,rowNumber,colNumber,valueToAdd){
 //new functions: verifyRow (done), verifyColumn (done), verifyBox (done) (generateBox function)
 
 function ensureGridSatisfied(grid){
+  var row;
+  var col;
   // row
-  for (var row = 0; row < 9; row += 1){
+  for (row = 0; row < 9; row += 1){
     if (verifyRow(grid, row) === false){
       return false;
     }
   }
 
   // col
-  for (var col = 0; col < 9; col += 1){
+  for (col = 0; col < 9; col += 1){
     if (verifyColumn(grid,col) === false){
       return false;
     }
   }
 
   // box
-  for (var row = 0; row <= 6; row += 3){
-    for (var col = 0; col <= 6; col += 3){
+  for (row = 0; row <= 6; row += 3){
+    for (col = 0; col <= 6; col += 3){
       if (verifyBox(grid,row,col) === false){
         return false;
       }
