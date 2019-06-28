@@ -8,6 +8,12 @@ class Game extends React.Component {
     this.state = {showAlert: false};
   }
 
+  setAlert() {
+    this.setState({
+      showAlert: !this.state.showAlert
+    });
+  }
+
   render() {
       return (
         <div className="game">

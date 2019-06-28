@@ -52,6 +52,10 @@ class Board extends React.Component {
       this.setState(() => ({grid: newGrid}));
     }
 
+    handleKeyPress(i,j) {
+      const gridCopy = this.state.grid.slice();
+    }
+
     renderSquare(i,j){
         if (this.state.grid[i][j] !== null){
           return (
@@ -59,7 +63,7 @@ class Board extends React.Component {
           );
         } else {
           return (
-            <ActiveSquare number = {this.state.grid[i][j]}/>
+            <ActiveSquare number={this.state.grid[i][j]} onKeyDown={this.handleKeyPress(i,j)}/>
           )
         }
       }
@@ -67,7 +71,7 @@ class Board extends React.Component {
       render() {
         return (
           <div className="sudoku">
-              <div className="sudoku-row">
+          <div className="sudoku-row">
                   <div className="sudoku-grid">
                       {this.renderSquare(8,0)}
                       {this.renderSquare(8,1)}
