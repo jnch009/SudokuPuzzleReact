@@ -15,8 +15,8 @@ class Square extends React.Component{
 class ActiveSquare extends React.Component{
   constructor(props) {
     super(props);
-    
     this.state = {value: ''};
+
     // This binding is necessary to make `this` work in the callback
     this.handleClick = this.handleClick.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -38,12 +38,14 @@ class ActiveSquare extends React.Component{
   
   render(){
     return(
-      <FormInput className="square" 
+      <div>
+        <FormInput className="square"
                  value={this.state.value} 
                  onBlur={this.handleClick} 
                  onKeyDown={this.handleKeyPress}>
-        {this.props.number}
-      </FormInput>
+          {this.props.number}
+        </FormInput>
+      </div>
     );
   }
 }

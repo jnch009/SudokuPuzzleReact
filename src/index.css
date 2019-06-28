@@ -28,6 +28,10 @@ body {
     width: 450px;
  }
 
+ .alert{
+    width: 450px;
+ }
+
  .game-board {
     margin-top: 12%;
     margin-left: 38%;
