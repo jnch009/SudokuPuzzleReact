@@ -29,8 +29,10 @@ class ActiveSquare extends React.Component{
   handleInput(e){
     e.preventDefault();
     var digits = [1,2,3,4,5,6,7,8,9];
-    if (digits.indexOf(parseInt(e.target.value)) !== -1){
-      this.setState({value: e.target.value});
+    if (digits.indexOf(parseInt(e.key)) !== -1){
+      this.setState({value: e.key});
+    } else if (e.key === "Backspace") {
+      this.setState({value: ''});
     }
   }
   
@@ -39,7 +41,7 @@ class ActiveSquare extends React.Component{
       /*<Button theme="light" active="true" className="square" onClick={this.handleClick}>
         {this.props.number}
       </Button>*/
-      <input className="square" onBlur={this.handleClick} onChange={this.handleInput}>
+      <input className="square" value={this.state.value} onBlur={this.handleClick} onKeyDown={this.handleInput}>
         {this.props.number}
       </input>
     );
