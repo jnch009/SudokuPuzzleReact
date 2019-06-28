@@ -9,6 +9,8 @@ class Board extends React.Component {
         // https://stackoverflow.com/questions/966225/how-can-i-create-a-two-dimensional-array-in-javascript
         grid: Array(9).fill(null).map(x=>Array(9).fill(null)),
       };
+
+      this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     componentDidMount(){
@@ -52,8 +54,10 @@ class Board extends React.Component {
       this.setState(() => ({grid: newGrid}));
     }
 
-    handleKeyPress(i,j) {
+    handleKeyPress(key,row,col) {
       const gridCopy = this.state.grid.slice();
+      gridCopy[row][col] = key;
+      this.setState(() => ({grid: gridCopy}));
     }
 
     renderSquare(i,j){
@@ -63,7 +67,10 @@ class Board extends React.Component {
           );
         } else {
           return (
-            <ActiveSquare number={this.state.grid[i][j]} onKeyDown={this.handleKeyPress(i,j)}/>
+            <ActiveSquare number={this.state.grid[i][j]} 
+                          pressKey={this.handleKeyPress}
+                          row={i}
+                          col={j}/>
           )
         }
       }

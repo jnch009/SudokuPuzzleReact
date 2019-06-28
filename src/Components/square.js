@@ -20,20 +20,26 @@ class ActiveSquare extends React.Component{
 
   handleKeyPress(e){
     console.log(e);
-    /*e.preventDefault();
+    //e.preventDefault();
+    const rowNumber = this.props.row;
+    const colNumber = this.props.col;
+    const keyPressed = parseInt(e.key);
     var digits = [1,2,3,4,5,6,7,8,9];
-    if (digits.indexOf(parseInt(e.key)) !== -1){
-      this.setState({value: e.key});
-    } else if (e.key === "Backspace" || e.key === "Delete") {
+    if (digits.indexOf(keyPressed) !== -1 || e.key === "Backspace" || e.key === "Delete"){
+      //this.setState({value: e.key});
+      this.props.pressKey(keyPressed,rowNumber,colNumber);
+    }/* else if (e.key === "Backspace" || e.key === "Delete") {
       this.setState({value: ''});
     }*/
   }
   
   render(){
+    //const rowNumber = this.props.row;
+    //const colNumber = this.props.col;
     return(
         <FormInput className="square"
-                   onKeyDown={this.handleKeyPress}>
-          {this.props.number}
+                   onKeyDown={(e)=>this.handleKeyPress(e)}>
+            {this.props.number}
         </FormInput>
     );
   }
