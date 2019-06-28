@@ -20,7 +20,7 @@ class ActiveSquare extends React.Component{
 
   handleKeyPress(e){
     console.log(e);
-    //e.preventDefault();
+    e.preventDefault();
     const rowNumber = this.props.row;
     const colNumber = this.props.col;
     const keyPressed = parseInt(e.key);
