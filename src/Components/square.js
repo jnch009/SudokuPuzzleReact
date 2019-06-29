@@ -5,7 +5,7 @@ import {FormInput, Button } from "shards-react";
 class Square extends React.Component{
   render(){
     return(
-      <Button disabled theme="dark" active="true" className="square">
+      <Button disabled theme="dark" className="square">
         {this.props.number}
       </Button>
     );
@@ -19,18 +19,14 @@ class ActiveSquare extends React.Component{
   }
 
   handleKeyPress(e){
-    console.log(e);
     e.preventDefault();
     const rowNumber = this.props.row;
     const colNumber = this.props.col;
     const keyPressed = parseInt(e.key);
     var digits = [1,2,3,4,5,6,7,8,9];
     if (digits.indexOf(keyPressed) !== -1 || e.key === "Backspace" || e.key === "Delete"){
-      //this.setState({value: e.key});
-      this.props.pressKey(keyPressed,rowNumber,colNumber);
-    }/* else if (e.key === "Backspace" || e.key === "Delete") {
-      this.setState({value: ''});
-    }*/
+      this.props.pressKey(e.key,rowNumber,colNumber);
+    }
   }
   
   render(){
