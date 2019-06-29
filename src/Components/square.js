@@ -3,15 +3,40 @@ import React from 'react';
 import {FormInput, Button } from "shards-react";
 
 class Square extends React.Component{
+  constructor(props){
+    super(props);
+
+    this.state = {
+      edit: false
+    };
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(){
+    this.setState(()=>({edit: !this.state.edit}));
+  }
+  
   render(){
+    let btn;
+
+    if (this.props.modify === false){
+      btn = <Button disabled theme="dark" className="square">{this.props.number}</Button>;
+    } else {
+      if (!this.state.edit) {
+        btn = <Button onClick={this.handleClick} theme="light" className="square">{this.props.number}</Button>;
+      } else {
+        btn = <FormInput onBlur={this.handleClick} className="squareSelected"></FormInput>
+      }
+    }
+
     return(
-      <Button disabled theme="dark" className="square">
-        {this.props.number}
-      </Button>
+      btn
     );
   }
 }
 
+/*
 class ActiveSquare extends React.Component{
   constructor(props) {
     super(props);
@@ -30,8 +55,6 @@ class ActiveSquare extends React.Component{
   }
   
   render(){
-    //const rowNumber = this.props.row;
-    //const colNumber = this.props.col;
     return(
         <FormInput className="square"
                    onKeyDown={(e)=>this.handleKeyPress(e)}>
@@ -40,5 +63,6 @@ class ActiveSquare extends React.Component{
     );
   }
 }
+*/
 
-export {Square,ActiveSquare};
+export {Square};

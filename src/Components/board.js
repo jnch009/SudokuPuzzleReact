@@ -57,21 +57,36 @@ class Board extends React.Component {
     handleKeyPress(key,row,col) {
       const gridCopy = this.state.grid.slice();
       // TODO: why is it when I splice an integer it works fine, but if I use a string it doesn't.
-      gridCopy[row].splice(col,1,parseInt(key));
-      this.setState({grid: gridCopy});
+      gridCopy[row].splice(col,1,key);
+      this.setState(() => ({grid: gridCopy}));
     }
 
     renderSquare(i,j){
       const gridEntry = this.state.grid[i][j];
-      if (gridEntry !== null && typeof(gridEntry) !== "string"){
+      
+      if (gridEntry === null) {
         return (
-          <Square number = {this.state.grid[i][j]}/>
+          //<ActiveSquare number={this.state.grid[i][j]} pressKey={this.handleKeyPress} row={i} col={j}/>
+          <Square number={this.state.grid[i][j]} pressKey={this.handleKeyPress} row={i} col={j} modify={true}/>
         );
       } else {
         return (
-          <ActiveSquare number={this.state.grid[i][j]} pressKey={this.handleKeyPress} row={i} col={j}/>
+          <Square number = {this.state.grid[i][j]} modify = {false}/>
         );
       }
+      
+      /*
+      if (gridEntry !== null && typeof(gridEntry) !== "string"){
+        return (
+          <Square number = {this.state.grid[i][j]} modify = {false}/>
+        );
+      } else {
+        //const intValue = parseInt(this.state.grid[i][j]);
+        return (
+          <ActiveSquare number={1} pressKey={this.handleKeyPress} row={i} col={j}/>
+          //<ActiveSquare number={intValue} pressKey={this.handleKeyPress} row={i} col={j}/>
+        );
+      }*/
     }
     
       render() {
