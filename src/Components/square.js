@@ -26,7 +26,7 @@ class Square extends React.Component{
       if (!this.state.edit) {
         btn = <Button onClick={this.handleClick} theme="light" className="square">{this.props.number}</Button>;
       } else {
-        btn = <FormInput onBlur={this.handleClick} className="squareSelected"></FormInput>
+        btn = <FormInput autoFocus={true} onBlur={this.handleClick} className="squareSelected"></FormInput>
       }
     }
 
