@@ -11,6 +11,18 @@ class Square extends React.Component{
     };
 
     this.handleClick = this.handleClick.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+  }
+
+  handleKeyPress(e){
+    //e.preventDefault();
+    const rowNumber = this.props.row;
+    const colNumber = this.props.col;
+    const keyPressed = parseInt(e.key);
+    var digits = [1,2,3,4,5,6,7,8,9];
+    if (digits.indexOf(keyPressed) !== -1){
+      this.props.pressKey(e.key,rowNumber,colNumber);
+    }
   }
 
   handleClick(){
@@ -26,7 +38,9 @@ class Square extends React.Component{
       if (!this.state.edit) {
         btn = <Button onClick={this.handleClick} theme="light" className="square">{this.props.number}</Button>;
       } else {
-        btn = <FormInput autoFocus={true} onBlur={this.handleClick} className="squareSelected"></FormInput>
+        btn = <FormInput autoFocus={true} onBlur={this.handleClick}  
+           onKeyDown={(e)=>this.handleKeyPress(e)}
+           className="square"></FormInput>
       }
     }
 
