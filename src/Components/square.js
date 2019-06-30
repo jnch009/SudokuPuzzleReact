@@ -1,13 +1,15 @@
 import React from 'react';
 //import Button from 'react-bootstrap/Button';
 import {FormInput, Button } from "shards-react";
+import fn from '../helperFn/boardFunctions';
 
 class Square extends React.Component{
   constructor(props){
     super(props);
 
     this.state = {
-      edit: false
+      edit: false,
+      valid: true
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -18,8 +20,15 @@ class Square extends React.Component{
     //e.preventDefault();
     const rowNumber = this.props.row;
     const colNumber = this.props.col;
+    const grid = this.props.grid;
     const keyPressed = parseInt(e.key);
     var digits = [1,2,3,4,5,6,7,8,9];
+
+    if (!fn.insertConstraint(grid,rowNumber,colNumber,keyPressed)){
+      this.setState({valid: false});
+    } else {
+      this.setState({valid: true});
+    }
 
     if (e.key === "Backspace" || e.key === "Delete") {
       this.props.pressKey(null,rowNumber,colNumber);
@@ -37,13 +46,19 @@ class Square extends React.Component{
   }
   
   render(){
-    let btn;
 
+    
+
+    let btn;
     if (this.props.modify === false){
       btn = <Button disabled theme="dark" className="square">{this.props.number}</Button>;
     } else {
       if (!this.state.edit) {
-        btn = <Button onClick={this.handleClick} theme="light" className="square">{this.props.number}</Button>;
+        if (!this.state.valid){
+          btn = <Button onClick={this.handleClick} theme="danger" active="true" className="square">{this.props.number}</Button>;
+        } else {
+          btn = <Button onClick={this.handleClick} theme="light" className="square">{this.props.number}</Button>;
+        }
       } else {
         btn = <FormInput autoFocus={true} onBlur={this.handleClick}  
            onKeyDown={(e)=>this.handleKeyPress(e)}

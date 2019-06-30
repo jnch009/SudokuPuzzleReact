@@ -66,7 +66,10 @@ class Board extends React.Component {
       
       if (gridEntry === null || typeof(gridEntry) === "string") {
         return (
-          <Square number={this.state.grid[i][j]} pressKey={this.handleKeyPress} row={i} col={j} modify={true}/>
+          <Square number={this.state.grid[i][j]} 
+                  pressKey={this.handleKeyPress} 
+                  row={i} col={j} grid={this.state.grid}
+                  modify={true}/>
         );
       } else {
         return (
