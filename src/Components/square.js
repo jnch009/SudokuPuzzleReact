@@ -20,10 +20,16 @@ class Square extends React.Component{
     const colNumber = this.props.col;
     const keyPressed = parseInt(e.key);
     var digits = [1,2,3,4,5,6,7,8,9];
-    if (digits.indexOf(keyPressed) !== -1){
-      this.props.pressKey(e.key,rowNumber,colNumber);
+
+    if (e.key === "Backspace" || e.key === "Delete") {
+      this.props.pressKey(null,rowNumber,colNumber);
+    }
+    else {
+      if (digits.indexOf(keyPressed) !== -1){
+        this.props.pressKey(e.key,rowNumber,colNumber);
+      }
+      this.handleClick(); 
     } 
-    this.handleClick();
   }
 
   handleClick(){
