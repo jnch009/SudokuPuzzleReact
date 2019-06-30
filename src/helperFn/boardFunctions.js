@@ -3,19 +3,30 @@ function randomlyGeneratedValue(min,max){
 }
 
 function insertIntoCol(grid, colNumber, valueToAdd){
-    for (var row = 0; row < 9; row += 1) {
-      if (grid[row][colNumber] === valueToAdd) {
-        return false;
-      }
+  for (var row = 0; row < 9; row += 1) {
+    if (grid[row][colNumber] === valueToAdd) {
+      return false;
     }
-    return true;
+  }
+  return true;
 }
 
 function insertIntoRow(grid, rowNumber, valueToAdd){
-    if (grid[rowNumber].indexOf(valueToAdd) !== -1) {
-      return false;
+  if (grid[rowNumber].indexOf(valueToAdd) !== -1) {
+    return false;
+  }
+  return true;
+}
+
+function insertIntoBox(grid, rowNumber, colNumber, valueToAdd){
+  for (var row = rowNumber; row < rowNumber+3; row+=1) {
+    for (var col = colNumber; col < colNumber+3; col+=1){
+      if (grid[row][col] === valueToAdd){
+        return false;
+      }
     }
-    return true;
+  }
+  return true;
 }
 
 function insertConstraint(grid,rowNumber,colNumber,valueToAdd){
@@ -277,6 +288,7 @@ export default {
     randomlyGeneratedValue,
     insertIntoCol,
     insertIntoRow,
+    insertIntoBox,
     insertConstraint,
     checkColElementsExist,
     updateBoxGrid,

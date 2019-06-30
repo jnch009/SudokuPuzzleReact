@@ -16,15 +16,58 @@ class Square extends React.Component{
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
+  selectRow(boxNumber){
+    switch (boxNumber){
+      case 1:
+      case 2:
+      case 3:
+        return 0;
+      case 4:
+      case 5:
+      case 6:
+        return 3;
+      case 7:
+      case 8:
+      case 9:
+        return 6;
+      default:
+        break;
+    }
+  }
+
+  selectCol(boxNumber){
+    switch (boxNumber){
+      case 1:
+      case 4:
+      case 7:
+        return 0;
+      case 2:
+      case 5:
+      case 8:
+        return 3;
+      case 3:
+      case 6:
+      case 9:
+        return 6;
+      default:
+        break;
+    }
+  }
+
   handleKeyPress(e){
     //e.preventDefault();
     const rowNumber = this.props.row;
     const colNumber = this.props.col;
     const grid = this.props.grid;
+    const box = this.props.boxNumber;
     const keyPressed = parseInt(e.key);
     var digits = [1,2,3,4,5,6,7,8,9];
 
-    if (!fn.insertConstraint(grid,rowNumber,colNumber,keyPressed)){
+    var beginRow = this.selectRow(box);
+    var beginCol = this.selectCol(box);
+
+    if (!fn.insertConstraint(grid,rowNumber,colNumber,keyPressed) 
+    || !fn.insertIntoBox(grid,beginRow,beginCol,keyPressed)){
       this.setState({valid: false});
     } else {
       this.setState({valid: true});
@@ -46,9 +89,6 @@ class Square extends React.Component{
   }
   
   render(){
-
-    
-
     let btn;
     if (this.props.modify === false){
       btn = <Button disabled theme="dark" className="square">{this.props.number}</Button>;
