@@ -22,7 +22,8 @@ class Square extends React.Component{
     var digits = [1,2,3,4,5,6,7,8,9];
     if (digits.indexOf(keyPressed) !== -1){
       this.props.pressKey(e.key,rowNumber,colNumber);
-    }
+    } 
+    this.handleClick();
   }
 
   handleClick(){
@@ -40,7 +41,7 @@ class Square extends React.Component{
       } else {
         btn = <FormInput autoFocus={true} onBlur={this.handleClick}  
            onKeyDown={(e)=>this.handleKeyPress(e)}
-           className="square"></FormInput>
+           className="square" value={this.props.number}></FormInput>
       }
     }
 

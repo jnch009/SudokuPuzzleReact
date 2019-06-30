@@ -1,5 +1,5 @@
 import React from 'react';
-import {Square, ActiveSquare} from './square';
+import {Square} from './square';
 import fn from '../helperFn/boardFunctions';
 
 class Board extends React.Component {
@@ -73,19 +73,6 @@ class Board extends React.Component {
           <Square number = {this.state.grid[i][j]} modify = {false}/>
         );
       }
-      
-      /*
-      if (gridEntry !== null && typeof(gridEntry) !== "string"){
-        return (
-          <Square number = {this.state.grid[i][j]} modify = {false}/>
-        );
-      } else {
-        //const intValue = parseInt(this.state.grid[i][j]);
-        return (
-          <ActiveSquare number={1} pressKey={this.handleKeyPress} row={i} col={j}/>
-          //<ActiveSquare number={intValue} pressKey={this.handleKeyPress} row={i} col={j}/>
-        );
-      }*/
     }
     
       render() {
