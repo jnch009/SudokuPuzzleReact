@@ -21,7 +21,7 @@ function insertIntoRow(grid, rowNumber, valueToAdd){
 function insertIntoBox(grid, rowNumber, colNumber, valueToAdd){
   for (var row = rowNumber; row < rowNumber+3; row+=1) {
     for (var col = colNumber; col < colNumber+3; col+=1){
-      if (grid[row][col] === valueToAdd){
+      if (parseInt(grid[row][col]) === valueToAdd){
         return false;
       }
     }
