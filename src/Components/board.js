@@ -6,13 +6,20 @@ import {Alert} from "shards-react";
 class Board extends React.Component {
     constructor(props){
       super(props);
+
+      this.interval = null;
       this.state = {
         // https://stackoverflow.com/questions/966225/how-can-i-create-a-two-dimensional-array-in-javascript
         grid: Array(9).fill(null).map(x=>Array(9).fill(null)),
-        displayError: false
+        displayError: false,
+        beginTimer: 0,
+        timeUntilDismissed: 3
       };
 
       this.handleKeyPress = this.handleKeyPress.bind(this);
+      this.showInvalidKeyPress = this.showInvalidKeyPress.bind(this);
+      this.handleTimeChange = this.handleTimeChange.bind(this);
+      this.clearInterval = this.clearInterval.bind(this);
     }
 
     componentDidMount(){
@@ -56,6 +63,30 @@ class Board extends React.Component {
       this.setState(() => ({grid: newGrid}));
     }
 
+    showInvalidKeyPress(){
+      this.clearInterval();
+      this.setState({displayError: true, beginTimer: 0, timeUntilDismissed: 3});
+      this.interval = setInterval(this.handleTimeChange, 1000);
+    }
+
+    handleTimeChange() {
+      if (this.state.beginTimer < this.state.timeUntilDismissed - 1) {
+        this.setState({
+          ...this.state,
+          ...{ beginTimer: this.state.beginTimer + 1 }
+        });
+        return;
+      }
+  
+      this.setState({ ...this.state, ...{ displayError: false } });
+      this.clearInterval();
+    }
+  
+    clearInterval() {
+      clearInterval(this.interval);
+      this.interval = null;
+    }
+
     handleKeyPress(key,row,col) {
       if (key === null) {
         const gridCopy = this.state.grid.slice();
@@ -66,7 +97,8 @@ class Board extends React.Component {
 
       var digits = [1,2,3,4,5,6,7,8,9];
       if (digits.indexOf(parseInt(key)) === -1){
-        this.setState(() => ({displayError: true}));
+        this.showInvalidKeyPress();
+        //this.setState(() => ({displayError: true}));
       } else {
         const gridCopy = this.state.grid.slice();
         gridCopy[row].splice(col,1,key);
