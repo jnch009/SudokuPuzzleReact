@@ -33,6 +33,11 @@
     margin-left: 38%;
  }
 
+ .alert {
+    padding: 1;
+    float: left;
+ }
+
   .square {
     background: #fff;
     border: 1px solid #999;

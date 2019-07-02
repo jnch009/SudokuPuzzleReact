@@ -77,10 +77,8 @@ class Square extends React.Component{
       this.props.pressKey(null,rowNumber,colNumber);
     }
     else {
-      if (digits.indexOf(keyPressed) !== -1){
-        this.props.pressKey(e.key,rowNumber,colNumber);
-      }
-      this.handleClick(); 
+      this.props.pressKey(e.key,rowNumber,colNumber);
+      this.handleClick();
     } 
   }
 

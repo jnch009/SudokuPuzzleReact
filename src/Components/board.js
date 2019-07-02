@@ -1,6 +1,7 @@
 import React from 'react';
 import {Square} from './square';
 import fn from '../helperFn/boardFunctions';
+import {Alert} from "shards-react";
 
 class Board extends React.Component {
     constructor(props){
@@ -8,6 +9,7 @@ class Board extends React.Component {
       this.state = {
         // https://stackoverflow.com/questions/966225/how-can-i-create-a-two-dimensional-array-in-javascript
         grid: Array(9).fill(null).map(x=>Array(9).fill(null)),
+        displayError: false
       };
 
       this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -55,9 +57,14 @@ class Board extends React.Component {
     }
 
     handleKeyPress(key,row,col) {
-      const gridCopy = this.state.grid.slice();
-      gridCopy[row].splice(col,1,key);
-      this.setState(() => ({grid: gridCopy}));
+      var digits = [1,2,3,4,5,6,7,8,9];
+      if (digits.indexOf(parseInt(key)) === -1){
+        this.setState(() => ({displayError: true}));
+      } else {
+        const gridCopy = this.state.grid.slice();
+        gridCopy[row].splice(col,1,key);
+        this.setState(() => ({grid: gridCopy}));
+      }
     }
 
     renderSquare(i,j,box){
@@ -80,7 +87,7 @@ class Board extends React.Component {
       render() {
         return (
           <div className="sudoku">
-          <div className="sudoku-row">
+            <div className="sudoku-row">
                   <div className="sudoku-grid">
                       {this.renderSquare(8,0,7)}
                       {this.renderSquare(8,1,7)}
@@ -185,6 +192,9 @@ class Board extends React.Component {
                       {this.renderSquare(0,8,3)}
                   </div>
               </div>
+            <div className="alert">
+              <Alert theme="danger" open={this.state.displayError}>Must type a number between 1 and 9</Alert>
+            </div>
           </div>
         );
       }

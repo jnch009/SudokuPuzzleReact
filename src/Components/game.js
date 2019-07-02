@@ -1,6 +1,5 @@
 import React from 'react';
 import Board from './board';
-//import {Alert} from "shards-react";
 
 class Game extends React.Component {
   render() {
