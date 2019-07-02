@@ -67,19 +67,31 @@ function ensureGridSatisfied(grid){
   return true;
 }
 
-function verifyRow(grid, rowNumber){
-    var rowCopy = grid[rowNumber].filter(function(val,i){
-        return grid[rowNumber].indexOf(val) >= i;
-    });
+function ensureGridFilled(grid){
+  for (var row = 0; row < 9; row += 1){
+    for (var col = 0; col < 9; col += 1){
+      if (grid[row][col] === null){
+        return false;
+      }
+    }
+  }
+  return true;
+}
 
-    return rowCopy.length === grid[rowNumber].length;
+function verifyRow(grid, rowNumber){
+  var row = grid[rowNumber].map(x=>parseInt(x));
+  var rowCopy = row.filter(function(val,i){
+      return row.indexOf(val) >= i;
+  });
+
+  return rowCopy.length === grid[rowNumber].length;
 }
 
 function verifyColumn(grid, colNumber){
   var columnEntries = [];
   var columnCopy = [];
   for (var row = 0; row < 9; row+=1){
-    if (columnCopy.indexOf(grid[row][colNumber]) === -1){
+    if (columnCopy.indexOf(parseInt(grid[row][colNumber])) === -1){
       columnCopy.push(grid[row][colNumber]);
     }
     columnEntries.push(grid[row][colNumber]);
@@ -271,7 +283,7 @@ function generateInitialBox(arr,entries) {
 function removingEntries(newGrid){
   for (var box = 0; box < newGrid.length; box += 1){
     // for the randomly generated value, can change this to set a difficulty
-    var entriesToRemove = randomlyGeneratedValue(1,10);
+    var entriesToRemove = randomlyGeneratedValue(1,1);
     var entriesRemoved = 0;
     var indexEntries = [0,1,2,3,4,5,6,7,8];
 
@@ -302,5 +314,6 @@ export default {
     ensureGridSatisfied,
     generateBox,
     generateInitialBox,
-    removingEntries
+    removingEntries,
+    ensureGridFilled
 }

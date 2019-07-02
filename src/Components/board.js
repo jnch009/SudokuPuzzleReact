@@ -57,6 +57,13 @@ class Board extends React.Component {
     }
 
     handleKeyPress(key,row,col) {
+      if (key === null) {
+        const gridCopy = this.state.grid.slice();
+        gridCopy[row].splice(col,1,key);
+        this.setState(() => ({grid: gridCopy}));
+        return;
+      }
+
       var digits = [1,2,3,4,5,6,7,8,9];
       if (digits.indexOf(parseInt(key)) === -1){
         this.setState(() => ({displayError: true}));
@@ -84,9 +91,18 @@ class Board extends React.Component {
       }
     }
     
-      render() {
-        return (
+    render() {
+      const finish = fn.ensureGridSatisfied(this.state.grid) && fn.ensureGridFilled(this.state.grid);
+      let winner;
+      if (finish){
+        winner = "You have successfully solved the sudoku!";
+      } else {
+        winner = "You are not done yet!";
+      }
+
+      return (
           <div className="sudoku">
+            <div className="winCondition">{winner}</div>
             <div className="sudoku-row">
                   <div className="sudoku-grid">
                       {this.renderSquare(8,0,7)}

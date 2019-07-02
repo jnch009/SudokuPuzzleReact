@@ -61,7 +61,6 @@ class Square extends React.Component{
     const grid = this.props.grid;
     const box = this.props.boxNumber;
     const keyPressed = parseInt(e.key);
-    var digits = [1,2,3,4,5,6,7,8,9];
 
     var beginRow = this.selectRow(box);
     var beginCol = this.selectCol(box);
