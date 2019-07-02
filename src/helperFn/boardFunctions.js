@@ -283,7 +283,7 @@ function generateInitialBox(arr,entries) {
 function removingEntries(newGrid){
   for (var box = 0; box < newGrid.length; box += 1){
     // for the randomly generated value, can change this to set a difficulty
-    var entriesToRemove = randomlyGeneratedValue(1,1);
+    var entriesToRemove = randomlyGeneratedValue(4,10);
     var entriesRemoved = 0;
     var indexEntries = [0,1,2,3,4,5,6,7,8];
 
