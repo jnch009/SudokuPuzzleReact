@@ -60,7 +60,7 @@ class Square extends React.Component{
     const colNumber = this.props.col;
     const grid = this.props.grid;
     const box = this.props.boxNumber;
-    const keyPressed = parseInt(e.key);
+    const keyPressed = parseInt(e.nativeEvent.data);
 
     var beginRow = this.selectRow(box);
     var beginCol = this.selectCol(box);
@@ -72,11 +72,11 @@ class Square extends React.Component{
       this.setState({valid: true});
     }
 
-    if (e.key === "Backspace" || e.key === "Delete") {
+    if (e.nativeEvent.data === "Backspace" || e.nativeEvent.data === "Delete") {
       this.props.pressKey(null,rowNumber,colNumber);
     }
     else {
-      this.props.pressKey(e.key,rowNumber,colNumber);
+      this.props.pressKey(e.nativeEvent.data,rowNumber,colNumber);
       this.handleClick();
     } 
   }
@@ -98,8 +98,8 @@ class Square extends React.Component{
         }
       } else {
         btn = <FormInput autoFocus={true} onBlur={this.handleClick}  
-           onKeyDown={(e)=>this.handleKeyPress(e)}
-           onTouchStart={(e)=>this.handleKeyPress(e)}
+           //onKeyDown={(e)=>this.handleKeyPress(e)}
+           onInput={(e)=>this.handleKeyPress(e)}
            className="square" value={this.props.number}></FormInput>
       }
     }
