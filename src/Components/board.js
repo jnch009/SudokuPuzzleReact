@@ -126,14 +126,22 @@ class Board extends React.Component {
     render() {
       const finish = fn.ensureGridSatisfied(this.state.grid) && fn.ensureGridFilled(this.state.grid);
       let winner;
+      let error;
       if (finish){
         winner = "You have successfully solved the sudoku!";
       } else {
         winner = "You are not done yet!";
       }
 
+      if (this.state.displayError){
+        error = <div className="alert">
+        <Alert theme="danger" open={this.state.displayError}>Must type a number between 1 and 9</Alert>
+      </div>;
+      }
+
       return (
           <div className="sudoku">
+            {error}
             <div className="winCondition">{winner}</div>
             <div className="sudoku-row">
                   <div className="sudoku-grid">
@@ -240,9 +248,6 @@ class Board extends React.Component {
                       {this.renderSquare(0,8,3)}
                   </div>
               </div>
-            <div className="alert">
-              <Alert theme="danger" open={this.state.displayError}>Must type a number between 1 and 9</Alert>
-            </div>
           </div>
         );
       }

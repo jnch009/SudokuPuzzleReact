@@ -9,9 +9,7 @@ class Game extends React.Component {
             <p className="title">SUDOKU!</p>
           </div>
           <div className="game-board">
-            <div className="sudoku">
-              <Board/>
-            </div>
+            <Board/>
           </div>
           <div className="creator-info">
             <p id="creatorName">Developed by: Jeremy Ng Cheng Hin</p>

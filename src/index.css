@@ -52,15 +52,27 @@
     left: 34%;
  }
 
- .alert {
-    padding: 1;
+ .alertHidden {
+    display: none;
     float: left;
  }
+
+ .alert {
+  display: block;
+  float: left;
+  z-index: 1;
+  position: absolute;
+  width: 101.5%;
+  top: 0;
+  left: -0.7%;
+  padding: 0;
+}
 
  .winCondition{
   color: black;
   text-align: center;
   padding-bottom: 15px;
+  z-index: 0;
  }
 
   .square {
