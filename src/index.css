@@ -79,19 +79,20 @@
   }
 
   @media(max-width: 425px){
-    .game{
-      display: flex;
-      flex-direction: column;
-    }
     .game-title {
       color: black;
-      font-size: 70px;
       font-weight: bolder;
       top: 0%;
       left: 0%;
-      height: 10%;
-      padding: 0 10px;
+      height: 11%;
       position: fixed;
+      margin: 0 auto;
+      width: 100%;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 70px;
     }
 
     .game-board {
@@ -100,12 +101,37 @@
       left: 0%;
       width: 100%;
       height: 80%;
+      margin: 0 auto;
     }
 
     .sudoku {
-      margin: auto;
-      width: 100px;
-      height: 100px;
+      position: absolute;
+      width: 315px;
+      height: 315px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .square {
+      background: #fff;
+      border: 1px solid #999;
+      float: left;
+      font-size: 24px;
+      font-weight: bold;
+      line-height: 34px;
+      margin-right: -1px;
+      margin-top: -1px;
+      padding: 0;
+      text-align: center;
+      height: 35px;
+      width: 35px;
+    }
+
+    .sudoku-grid {
+      float: left;
+      width: 105px;
+      height: 105px;
     }
 
     .creator-info {
