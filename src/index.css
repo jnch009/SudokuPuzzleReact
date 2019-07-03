@@ -164,7 +164,7 @@
     }
   }
 
-  @media(max-height: 425px){
+  @media(max-height: 550px){
     .game-title {
       color: black;
       font-weight: bolder;
