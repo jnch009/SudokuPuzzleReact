@@ -97,8 +97,8 @@ class Square extends React.Component{
           btn = <Button onClick={this.handleClick} theme="light" className="square">{this.props.number}</Button>;
         }
       } else {
-        btn = <FormInput autoFocus={true} onBlur={this.handleClick}  
-           //onKeyDown={(e)=>this.handleKeyPress(e)}
+        btn = <FormInput autoFocus={true} onBlur={this.handleClick}
+           type="text" pattern="[0-9]*" inputmode="numeric"
            onInput={(e)=>this.handleKeyPress(e)}
            className="square" value={this.props.number}></FormInput>
       }
