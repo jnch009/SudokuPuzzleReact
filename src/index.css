@@ -105,6 +105,23 @@
     width: 50px;
   }
 
+  .newGameText {
+    padding: 0.4em;
+  }
+  
+  .rulesText {
+    padding-bottom: 0.5em;
+  }
+
+  .flexButtons{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .flexButtons > .btn-primary {
+    width: 45%;
+  }
+
   @media(max-width: 425px){
     .game-title {
       color: black;
