@@ -4,7 +4,7 @@ function randomlyGeneratedValue(min,max){
 
 function insertIntoCol(grid, colNumber, valueToAdd){
   for (var row = 0; row < 9; row += 1) {
-    if (grid[row][colNumber] === valueToAdd) {
+    if (parseInt(grid[row][colNumber]) === valueToAdd) {
       return false;
     }
   }
@@ -12,7 +12,7 @@ function insertIntoCol(grid, colNumber, valueToAdd){
 }
 
 function insertIntoRow(grid, rowNumber, valueToAdd){
-  if (grid[rowNumber].indexOf(valueToAdd) !== -1) {
+  if (grid[rowNumber].map(x=>parseInt(x)).indexOf(valueToAdd) !== -1) {
     return false;
   }
   return true;
