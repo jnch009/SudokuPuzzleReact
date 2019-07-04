@@ -280,15 +280,30 @@ function generateInitialBox(arr,entries) {
   }
 }
 
-function removingEntries(newGrid){
+function removingEntries(newGrid, difficulty){
+  var minToRemove;
+  var maxToRemove;
+  if (difficulty === "Beginner"){
+    minToRemove = 1;
+    maxToRemove = 1;
+  } else if (difficulty === "Easy"){
+    minToRemove = 1;
+    maxToRemove = 3;
+  } else if (difficulty === "Normal"){
+    minToRemove = 4;
+    maxToRemove = 8;
+  } else if (difficulty === "Hard"){
+    minToRemove = 7;
+    maxToRemove = 10;
+  }
+
   for (var box = 0; box < newGrid.length; box += 1){
-    // for the randomly generated value, can change this to set a difficulty
-    var entriesToRemove = randomlyGeneratedValue(4,10);
+    var entriesToRemove = randomlyGeneratedValue(minToRemove,maxToRemove);
     var entriesRemoved = 0;
     var indexEntries = [0,1,2,3,4,5,6,7,8];
 
     while (entriesRemoved < entriesToRemove){
-      var entryRemoved = randomlyGeneratedValue(0,10);
+      var entryRemoved = randomlyGeneratedValue(0,indexEntries.length);
       newGrid[box].splice(indexEntries[entryRemoved],1,null);
       indexEntries.splice(entryRemoved,1);
       entriesRemoved+=1;

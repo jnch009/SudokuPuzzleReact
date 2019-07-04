@@ -59,8 +59,14 @@ class Board extends React.Component {
         col = 0;
       }
 
-      fn.removingEntries(newGrid);
+      fn.removingEntries(newGrid, this.props.difficulty);
       this.setState(() => ({grid: newGrid}));
+    }
+
+    componentDidUpdate(prevProps) {
+      if (prevProps.difficulty !== this.props.difficulty){
+        this.componentDidMount();
+      }
     }
 
     showInvalidKeyPress(){
