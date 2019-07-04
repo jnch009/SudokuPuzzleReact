@@ -22,7 +22,14 @@ class Game extends React.Component {
     this.handleRulesClick = this.handleRulesClick.bind(this);
     this.handleNewGameClick = this.handleNewGameClick.bind(this);
     this.changeDifficulty = this.changeDifficulty.bind(this);
+    this.newGameAccepted = this.newGameAccepted.bind(this);
   }
+
+  componentDidUpdate() {
+    if (this.state.newGame === true){
+      this.setState(() => ({newGame: false}));
+    }
+  } 
 
   changeDifficulty(diff){
     this.setState(() => ({difficulty: diff}));
@@ -30,6 +37,7 @@ class Game extends React.Component {
 
   newGameAccepted(){
     this.setState(() => ({newGame: true}));
+    this.handleNewGameClick();
   }
 
   handleDifficultyClick(){
@@ -107,7 +115,7 @@ class Game extends React.Component {
                 Are you sure?<br></br>
               </div>
               <div className="flexButtons">
-                <Button>Yes</Button>
+                <Button onClick={this.newGameAccepted}>Yes</Button>
                 <Button onClick={this.handleNewGameClick}>No</Button>
               </div>
             </ModalBody>

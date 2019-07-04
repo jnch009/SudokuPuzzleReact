@@ -64,7 +64,8 @@ class Board extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-      if (prevProps.difficulty !== this.props.difficulty){
+      if (prevProps.difficulty !== this.props.difficulty
+        || this.props.newGame === true){
         this.componentDidMount();
       }
     }
