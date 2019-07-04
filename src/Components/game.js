@@ -94,7 +94,7 @@ class Game extends React.Component {
             </ModalBody>
           </Modal>
 
-          <Modal open={this.state.openRules}>
+          <Modal open={this.state.openRules} toggle={this.handleRulesClick}>
             <ModalHeader>Welcome to Sudoku!</ModalHeader>
             <ModalBody>
               <div className="rulesText">
