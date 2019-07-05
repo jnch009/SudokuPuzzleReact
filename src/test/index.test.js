@@ -1,31 +1,38 @@
 import fn from '../helperFn/boardFunctions';
 
-test('Random Value', () =>{
-    const value = fn.randomlyGeneratedValue(0,10);
-    expect(value).toBeGreaterThanOrEqual(0);
-    expect(value).toBeLessThan(10);
+describe('Random Value Tests', () =>{
+    let value = fn.randomlyGeneratedValue(0,10);
+    it('Boundary test',()=>{
+        expect(value).toBeGreaterThanOrEqual(0);
+        expect(value).toBeLessThan(10);
+    });
+    
+    value = fn.randomlyGeneratedValue(1,1);
+    it('Same value test',()=>{
+        expect(value).toBe(1);
+    })
 });
 
 describe('Testing grid conditions', ()=>{
-    const insertIntoGrid = [[null,null,null,null,null,null,null,null,null],
-                  [null,null,null,null,null,null,null,null,null],
-                  [null,null,null,null,null,null,null,null,null],
-                  [null,null,null,null,null,null,null,null,null],
-                  [null,null,null,2,3,5,null,null,null],
-                  [null,null,null,null,null,null,null,null,null],
-                  [null,null,null,null,null,null,null,null,null],
-                  [null,null,null,null,null,null,null,null,null],
-                  [null,null,null,null,null,null,null,null,null]];
+    const insertIntoGrid = [["4",null,null,null,null,null,null,null,null],
+                            [null,null,null,null,null,null,null,null,null],
+                            [null,null,null,null,null,null,null,null,null],
+                            [null,null,null,null,null,null,null,null,null],
+                            [null,null,null,2,3,5,null,null,null],
+                            [null,null,null,null,null,null,null,null,null],
+                            [null,null,null,null,null,null,null,null,null],
+                            [null,null,null,null,null,null,null,null,null],
+                            [null,null,null,null,null,null,null,null,null]];
     
     const gridViolated = [[null,8,null,null,null,null,8,8,1],
-                  [null,1,null,null,null,null,4,3,2],
-                  [null,1,null,null,null,null,5,6,9],
-                  [null,5,null,null,null,null,null,null,null],
-                  [9,7,4,2,3,5,1,5,6],
-                  [null,9,null,null,null,null,null,null,null],
-                  [null,3,null,null,null,null,null,null,null],
-                  [null,2,null,null,null,null,null,null,null],
-                  [null,4,null,null,null,null,null,null,null]];
+                          [null,1,null,null,null,null,4,3,2],
+                          [null,1,null,null,null,null,5,6,9],
+                          [null,5,null,null,null,null,null,null,null],
+                          [9,   7,4,2,3,5,1,5,6],
+                          [null,9,null,null,null,null,null,null,null],
+                          [null,3,null,null,null,null,null,null,null],
+                          [null,2,null,null,null,null,null,null,null],
+                          [null,4,null,null,null,null,null,null,null]];
     
     const completedGrid = [[1,2,3,4,5,6,7,8,9],
                            [4,5,6,7,8,9,1,2,3],
@@ -37,19 +44,21 @@ describe('Testing grid conditions', ()=>{
                            [6,4,5,2,3,7,8,9,1],
                            [9,7,8,6,1,4,5,3,2]];
 
-    /*const colNumber = 4;
-    const rowNumber = 4;
-    const valToAdd = 3;
-    const successValRow = 7;
-    const successValCol = 5;*/
-
     it('Error inserting same value into same column',()=>{
         expect(fn.insertIntoCol(insertIntoGrid,4,3)).toBe(false);
     });
 
+    it('Error inserting into same column with string entry',()=>{
+        expect(fn.insertIntoCol(insertIntoGrid,0,4)).toBe(false);
+    })
+
     it('Error inserting same value into same row',()=>{
         expect(fn.insertIntoRow(insertIntoGrid,4,5)).toBe(false);
     });
+
+    it('Error inserting into same column with string entry',()=>{
+        expect(fn.insertIntoCol(insertIntoGrid,0,4)).toBe(false);
+    })
 
     it('Entry is allowed to be inserted into the box', ()=>{
         expect(fn.insertConstraint(insertIntoGrid,4,0,9)).toBe(true);
