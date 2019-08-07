@@ -7,3 +7,6 @@ This is my first attempt at creating an app in React. Utilizing several resource
 3) Only one number from 1-9 is allowed in each grid
 
 The goal of the game is to find the missing numbers in the grid such that all three of these conditions are satisfied and if they are then you have successfully completed the puzzle. If not, then you must backtrack and find out which numbers are inserted incorrectly. 
+
+
+Currently built on AWS Amplify: https://master.d2imw4rjllzaz4.amplifyapp.com/
