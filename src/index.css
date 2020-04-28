@@ -1,79 +1,71 @@
-  body {
-    font: 25px "Century Gothic", Futura, sans-serif;
-    background-color: darkcyan;
-  }
+body {
+  font: 25px "Century Gothic", Futura, sans-serif;
+  background-color: darkcyan;
+}
 
-  ol, ul {
-    padding-left: 30px;
-  }
+ol,
+ul {
+  padding-left: 30px;
+}
 
-  .game-title {
-    color: black;
-    font-size: 100px;
-    font-weight: bolder;
-    top: 0%;
-    left: 35%;
-    position: fixed;
-  }
+.game-title {
+  color: black;
+  font-size: 100px;
+  font-weight: bolder;
+}
 
- .creator-info {
-    color: black;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    padding-bottom: 1%;
-    width: 100%;
- }
+.creator-info {
+  color: black;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  padding-bottom: 1%;
+  width: 100%;
+}
 
- .container{
-   position: fixed;
-   padding: 0;
-   margin: 0;
-   bottom: 0;
-   left: 0;
-   width: 100%;
-   max-width: 100%;
- }
+.container {
+  position: fixed;
+  padding: 0;
+  margin: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-width: 100%;
+}
 
- .col {
-   padding: 0;
-   margin: 0;
- }
+.col {
+  padding: 0;
+  margin: 0;
+}
 
- .navBar{
-   width: 100%;
-   height: 100%;
- }
-  
- .board-row::after {
-    clear: both;
-    content: "";
-    display: table;
-  }
+.navBar {
+  width: 100%;
+  height: 100%;
+}
 
-  .sudoku-grid {
-    float: left;
-    width: 150px;
-    height: 150px;
-  }
+.board-row::after {
+  clear: both;
+  content: "";
+  display: table;
+}
 
-  .sudoku-row {
-    width: 100%;
-    height: 33%;
-  }
+.sudoku-grid {
+  float: left;
+  width: 150px;
+  height: 150px;
+}
 
- .game-board {
-    position: fixed;
-    top: 15%;
-    left: 34%;
- }
+.sudoku-row {
+  display: flex;
+  justify-content: center;
+}
 
- .alertHidden {
-    display: none;
-    float: left;
- }
+.alertHidden {
+  display: none;
+  float: left;
+}
 
- .alert {
+.alert {
   display: block;
   float: left;
   z-index: 1;
@@ -84,12 +76,85 @@
   padding: 0;
 }
 
- .winCondition{
+.winCondition {
   color: black;
   text-align: center;
   padding-bottom: 15px;
   z-index: 0;
- }
+}
+
+.square {
+  background: #fff;
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  height: 50px;
+  width: 50px;
+}
+
+.newGameText {
+  padding: 0.4em;
+}
+
+.rulesText {
+  padding-bottom: 0.5em;
+}
+
+.flexButtons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flexButtons > .btn-primary {
+  width: 45%;
+}
+
+/* source: https://stackoverflow.com/questions/10476632/how-to-scroll-the-page-when-a-modal-dialog-is-longer-than-the-screen */
+.modal-body {
+  max-height: calc(100vh - 210px);
+  overflow-y: auto;
+}
+
+@media (max-width: 425px) {
+  .game-title {
+    color: black;
+    font-weight: bolder;
+    top: 0%;
+    left: 0%;
+    height: 11%;
+    position: fixed;
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 70px;
+  }
+
+  .game-board {
+    position: fixed;
+    top: 10%;
+    left: 0%;
+    width: 100%;
+    height: 80%;
+    margin: 0 auto;
+  }
+
+  .sudoku {
+    position: absolute;
+    width: 315px;
+    height: 315px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
 
   .square {
     background: #fff;
@@ -102,192 +167,117 @@
     margin-top: -1px;
     padding: 0;
     text-align: center;
-    height: 50px;
-    width: 50px;
+    height: 35px;
+    width: 35px;
   }
 
-  .newGameText {
-    padding: 0.4em;
-  }
-  
-  .rulesText {
-    padding-bottom: 0.5em;
+  .sudoku-grid {
+    float: left;
+    width: 105px;
+    height: 105px;
   }
 
-  .flexButtons{
-    display: flex;
-    justify-content: space-between;
+  .creator-info {
+    color: black;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 10%;
+    padding-bottom: 1%;
   }
 
-  .flexButtons > .btn-primary {
-    width: 45%;
+  #creatorName {
+    position: relative;
+    font-size: 15px;
+    top: 20%;
+    padding: 1em;
+    margin: 0;
   }
 
-  /* source: https://stackoverflow.com/questions/10476632/how-to-scroll-the-page-when-a-modal-dialog-is-longer-than-the-screen */
-  .modal-body {
-    max-height: calc(100vh - 210px);
+  .navBar {
+    font-size: x-small;
+  }
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-height: 550px) {
+  .game-title {
+    color: black;
+    font-weight: bolder;
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 70px;
+    display: none;
+  }
+
+  .game-board {
+    margin: 0 auto;
     overflow-y: auto;
   }
 
-  @media(max-width: 425px){
-    .game-title {
-      color: black;
-      font-weight: bolder;
-      top: 0%;
-      left: 0%;
-      height: 11%;
-      position: fixed;
-      margin: 0 auto;
-      width: 100%;
-      text-align: center;
-    }
-
-    .title {
-      font-size: 70px;
-    }
-
-    .game-board {
-      position: fixed;
-      top: 10%;
-      left: 0%;
-      width: 100%;
-      height: 80%;
-      margin: 0 auto;
-    }
-
-    .sudoku {
-      position: absolute;
-      width: 315px;
-      height: 315px;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    .square {
-      background: #fff;
-      border: 1px solid #999;
-      float: left;
-      font-size: 24px;
-      font-weight: bold;
-      line-height: 34px;
-      margin-right: -1px;
-      margin-top: -1px;
-      padding: 0;
-      text-align: center;
-      height: 35px;
-      width: 35px;
-    }
-
-    .sudoku-grid {
-      float: left;
-      width: 105px;
-      height: 105px;
-    }
-
-    .creator-info {
-      color: black;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      height: 10%;
-      padding-bottom: 1%;
-    }
-
-    #creatorName {
-      position: relative;
-      font-size: 15px;
-      top: 20%;
-      padding: 1em;
-      margin: 0;
-    }
-
-    .navBar {
-      font-size: x-small;
-    }
+  .sudoku {
+    position: absolute;
+    width: 315px;
+    height: 315px;
+    left: 50%;
+    top: 65%;
+    transform: translate(-50%, -50%);
   }
 
-  @media(max-height: 550px){
-    .game-title {
-      color: black;
-      font-weight: bolder;
-      top: 0%;
-      left: 0%;
-      height: 11%;
-      position: fixed;
-      margin: 0 auto;
-      width: 100%;
-      text-align: center;
-    }
-
-    .title {
-      font-size: 70px;
-      display: none;
-    }
-
-    .game-board {
-      position: fixed;
-      top: 10%;
-      left: 0%;
-      width: 100%;
-      height: 80%;
-      margin: 0 auto;
-      overflow-y: auto;
-    }
-
-    .sudoku {
-      position: absolute;
-      width: 315px;
-      height: 315px;
-      left: 50%;
-      top: 65%;
-      transform: translate(-50%, -50%);
-    }
-
-    .square {
-      background: #fff;
-      border: 1px solid #999;
-      float: left;
-      font-size: 24px;
-      font-weight: bold;
-      line-height: 34px;
-      margin-right: -1px;
-      margin-top: -1px;
-      padding: 0;
-      text-align: center;
-      height: 35px;
-      width: 35px;
-    }
-
-    .sudoku-grid {
-      float: left;
-      width: 105px;
-      height: 105px;
-    }
-
-    .creator-info {
-      color: black;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      height: 10%;
-      padding-bottom: 1%;
-    }
-
-    #creatorName {
-      position: relative;
-      font-size: 15px;
-      top: 20%;
-      padding: 1em;
-      margin: 0;
-      display: none;
-    }
-
-    .winCondition{
-      display: none;
-    }
-
-    .navBar {
-      display: none;
-    }
+  .square {
+    background: #fff;
+    border: 1px solid #999;
+    float: left;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 34px;
+    margin-right: -1px;
+    margin-top: -1px;
+    padding: 0;
+    text-align: center;
+    height: 35px;
+    width: 35px;
   }
+
+  .sudoku-grid {
+    float: left;
+    width: 105px;
+    height: 105px;
+  }
+
+  .creator-info {
+    color: black;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 10%;
+    padding-bottom: 1%;
+  }
+
+  #creatorName {
+    position: relative;
+    font-size: 15px;
+    top: 20%;
+    padding: 1em;
+    margin: 0;
+    display: none;
+  }
+
+  .winCondition {
+    display: none;
+  }
+
+  .navBar {
+    display: none;
+  }
+}
