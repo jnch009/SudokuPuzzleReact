@@ -62,18 +62,12 @@ ul {
 
 .alertHidden {
   display: none;
-  float: left;
 }
 
-.alert {
-  display: block;
-  float: left;
-  z-index: 1;
-  position: absolute;
-  width: 101.5%;
+.alertConstraint {
+  position: fixed;
   top: 0;
-  left: -0.7%;
-  padding: 0;
+  z-index: 1;
 }
 
 .winCondition {
@@ -119,6 +113,13 @@ ul {
 .modal-body {
   max-height: calc(100vh - 210px);
   overflow-y: auto;
+}
+
+.sudoku {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 @media (max-width: 425px) {
