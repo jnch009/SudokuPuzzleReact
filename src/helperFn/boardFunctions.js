@@ -128,7 +128,7 @@ const solve = (grid, shuffled) => {
         shuffled.forEach(choice => {
           if (isValid(grid, row, col, choice)) {
             grid[row][col] = choice;
-            solve(grid, shuffle(shuffled));
+            solve(grid, shuffled);
             // this is something that I added to stop the recursion when a solution is found otherwise it finds every solution!
             if (!verifySudoku(grid)) {
               grid[row][col] = null;
