@@ -46,6 +46,9 @@ class Board extends React.Component {
         prevProps.difficulty !== this.props.difficulty ||
         this.props.newGame === true
       ) {
+        this.setState({
+          complete: false
+        })
         this.generateBoard();
         this.props.populateGameGrid(this.state.grid);
       } else if (this.props.solvedButton === true) {
