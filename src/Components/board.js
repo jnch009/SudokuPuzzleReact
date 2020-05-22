@@ -2,7 +2,6 @@ import React from 'react';
 import { Alert } from 'shards-react';
 
 import fn from '../helperFn/boardFunctions';
-import Square from './square';
 import Row from './row';
 import isEqual from 'lodash.isequal';
 import cloneDeep from 'lodash.clonedeep';
@@ -83,7 +82,6 @@ class Board extends React.Component {
   }
 
   handleKeyPress(key, row, col) {
-    //const gridCopy = this.state.grid.slice();
     const gridCopy = cloneDeep(this.state.grid);
     if (key === null) {
       gridCopy[row].splice(col, 1, key);
@@ -92,7 +90,6 @@ class Board extends React.Component {
       const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
       if (digits.indexOf(parseInt(key)) === -1) {
         this.showInvalidKeyPress();
-        //this.setState(() => ({displayError: true}));
       } else {
         gridCopy[row].splice(col, 1, key);
         this.setState({ grid: gridCopy });
@@ -101,41 +98,22 @@ class Board extends React.Component {
   }
 
   render() {
-    // const finish =
-    //   fn.ensureGridSatisfied(this.state.grid) &&
-    //   fn.ensureGridFilled(this.state.grid);
-    // let winner;
-    // let error;
-    // if (finish) {
-    //   winner = 'You have successfully solved the sudoku!';
-    // } else {
-    //   winner = 'You are not done yet!';
-    // }
+    let error;
 
-    // if (this.state.displayError) {
-    //   error = (
-    //     <div className='alertConstraint'>
-    //       <Alert theme='danger' open={this.state.displayError}>
-    //         Must type a number between 1 and 9
-    //       </Alert>
-    //     </div>
-    //   );
-    // }
-
-    // const generateGrid = (startRow, startCol, boxNumber) => {
-    //   let grid = [];
-    //   for (let row = startRow; row > startRow - 3; row--) {
-    //     for (let col = startCol; col < startCol + 3; col++) {
-    //       grid.push(this.renderSquare(row, col, boxNumber));
-    //     }
-    //   }
-    //   return grid;
-    // };
+    if (this.state.displayError) {
+      error = (
+        <div className='alertConstraint'>
+          <Alert theme='danger' open={this.state.displayError}>
+            Must type a number between 1 and 9
+          </Alert>
+        </div>
+      );
+    }
 
     const { grid, complete } = this.state;
     return (
       <div className='sudoku'>
-        {/* {error} */}
+        {error}
         <div className='winCondition'>
           {complete
             ? 'You have successfully solved the sudoku!'
