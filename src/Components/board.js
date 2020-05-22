@@ -4,6 +4,8 @@ import { Alert } from 'shards-react';
 import fn from '../helperFn/boardFunctions';
 import Square from './square';
 import Row from './row';
+import isEqual from 'lodash.isequal';
+import cloneDeep from 'lodash.clonedeep';
 
 class Board extends React.Component {
   constructor(props) {
@@ -16,6 +18,7 @@ class Board extends React.Component {
       displayError: false,
       beginTimer: 0,
       timeUntilDismissed: 3,
+      complete: false,
     };
 
     this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -24,27 +27,32 @@ class Board extends React.Component {
     this.clearInterval = this.clearInterval.bind(this);
   }
 
-  componentDidMount() {
+  generateBoard = () => {
     let gridNewly = fn.createGrid();
     fn.solve(gridNewly, fn.shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]));
     fn.removingEntries(gridNewly, this.props.difficulty);
 
-    this.setState(
-      {
-        grid: gridNewly,
-      },
-      () => {
-        console.log(this.state.grid);
-      },
-    );
+    this.setState({
+      grid: gridNewly,
+    });
+  };
+
+  componentDidMount() {
+    this.generateBoard();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (
       prevProps.difficulty !== this.props.difficulty ||
       this.props.newGame === true
     ) {
-      this.componentDidMount();
+      this.generateBoard();
+    }
+
+    if (!isEqual(prevState.grid, this.state.grid)) {
+      if (fn.verifyFilled(this.state.grid)) {
+        this.setState({ complete: true });
+      }
     }
   }
 
@@ -73,10 +81,11 @@ class Board extends React.Component {
   }
 
   handleKeyPress(key, row, col) {
-    const gridCopy = this.state.grid.slice();
+    //const gridCopy = this.state.grid.slice();
+    const gridCopy = cloneDeep(this.state.grid);
     if (key === null) {
       gridCopy[row].splice(col, 1, key);
-      this.setState(() => ({ grid: gridCopy }))
+      this.setState({ grid: gridCopy });
     } else {
       const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
       if (digits.indexOf(parseInt(key)) === -1) {
@@ -84,8 +93,8 @@ class Board extends React.Component {
         //this.setState(() => ({displayError: true}));
       } else {
         gridCopy[row].splice(col, 1, key);
-        this.setState(() => ({ grid: gridCopy }));
-      } 
+        this.setState({ grid: gridCopy });
+      }
     }
   }
 
@@ -121,11 +130,15 @@ class Board extends React.Component {
     //   return grid;
     // };
 
-    const { grid } = this.state;
+    const { grid, complete } = this.state;
     return (
       <div className='sudoku'>
         {/* {error} */}
-        {/* <div className='winCondition'>{winner}</div> */}
+        <div className='winCondition'>
+          {complete
+            ? 'You have successfully solved the sudoku!'
+            : 'You are not done yet!'}
+        </div>
 
         {grid.map((row, rowNum) => (
           <Row

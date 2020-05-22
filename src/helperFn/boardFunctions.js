@@ -289,7 +289,7 @@ const removingEntries = (newGrid, difficulty) => {
   let maxToRemove;
   if (difficulty === 'Beginner') {
     minToRemove = 1;
-    maxToRemove = 2;
+    maxToRemove = 1;
   } else if (difficulty === 'Easy') {
     minToRemove = 3;
     maxToRemove = 3;
@@ -313,7 +313,7 @@ const removingEntries = (newGrid, difficulty) => {
       entriesRemoved += 1;
     }
   }
-}
+};
 
 function selectRow(boxNumber) {
   switch (boxNumber) {
@@ -409,7 +409,7 @@ const isValid = (grid, row, col, num) => {
   return false;
 };
 
-const verifySudoku = grid => {
+const verifyFilled = grid => {
   for (let row = 0; row < 9; row++) {
     for (let col = 0; col < 9; col++) {
       if (grid[row][col] === null) {
@@ -436,9 +436,9 @@ const solve = (grid, shuffled) => {
         shuffled.forEach(choice => {
           if (isValid(grid, row, col, choice)) {
             grid[row][col] = choice;
-            solve(grid, shuffle(shuffled));
+            solve(grid, shuffled);
             // this is something that I added to stop the recursion when a solution is found otherwise it finds every solution!
-            if (!verifySudoku(grid)) {
+            if (!verifyFilled(grid)) {
               grid[row][col] = null;
             }
           }
@@ -474,7 +474,7 @@ export default {
   selectCol,
   createGrid,
   isValid,
-  verifySudoku,
+  verifyFilled,
   shuffle,
   solve,
 };
