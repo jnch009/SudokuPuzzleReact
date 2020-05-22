@@ -1,5 +1,5 @@
-import React from "react";
-import Board from "./board";
+import React from 'react';
+import Board from './board';
 import {
   Container,
   Row,
@@ -9,8 +9,10 @@ import {
   ModalBody,
   ModalHeader,
   FormRadio,
-} from "shards-react";
+} from 'shards-react';
+import fn from '../helperFn/boardFunctions';
 
+const shuffled = [1,2,3,4,5,6,7,8,9];
 class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -20,16 +22,10 @@ class Game extends React.Component {
       openDifficulty: false,
       openRules: false,
       openNewGame: false,
-      difficulty: "Normal",
+      difficulty: 'Normal',
       newGame: false,
+      grid: []
     };
-
-    this.handleCreditsClick = this.handleCreditsClick.bind(this);
-    this.handleDifficultyClick = this.handleDifficultyClick.bind(this);
-    this.handleRulesClick = this.handleRulesClick.bind(this);
-    this.handleNewGameClick = this.handleNewGameClick.bind(this);
-    this.changeDifficulty = this.changeDifficulty.bind(this);
-    this.newGameAccepted = this.newGameAccepted.bind(this);
   }
 
   componentDidUpdate() {
@@ -38,62 +34,76 @@ class Game extends React.Component {
     }
   }
 
-  changeDifficulty(diff) {
+  changeDifficulty = diff => {
     this.setState(() => ({ difficulty: diff }));
-  }
+  };
 
-  newGameAccepted() {
+  newGameAccepted = () => {
     this.setState(() => ({ newGame: true }));
     this.handleNewGameClick();
-  }
+  };
 
-  handleDifficultyClick() {
+  handleDifficultyClick = () => {
     this.setState(() => ({ openDifficulty: !this.state.openDifficulty }));
-  }
+  };
 
-  handleCreditsClick() {
+  handleCreditsClick = () => {
     this.setState(() => ({ openCredits: !this.state.openCredits }));
-  }
+  };
 
-  handleRulesClick() {
+  handleRulesClick = () => {
     this.setState(() => ({ openRules: !this.state.openRules }));
-  }
+  };
 
-  handleNewGameClick() {
+  handleNewGameClick = () => {
     this.setState(() => ({ openNewGame: !this.state.openNewGame }));
+  };
+
+  handleSudokuSolver = () => {
+    fn.solve(this.state.grid, shuffled);
+  };
+  
+  populateGameGrid = (grid) => {
+    this.setState({grid: grid})
   }
 
   render() {
     return (
-      <div className="game">
-        <div className="game-title">
-          <p className="title">SUDOKU!</p>
+      <div className='game'>
+        <div className='game-title'>
+          <p className='title'>SUDOKU!</p>
         </div>
-        <div className="game-board">
+        <div className='game-board'>
           <Board
             difficulty={this.state.difficulty}
             newGame={this.state.newGame}
+            populateGameGrid={this.populateGameGrid}
           />
         </div>
-        <Container className="dr-example-container">
+        <Container className='dr-example-container'>
           <Row>
             <Col>
-              <Button onClick={this.handleCreditsClick} className="navBar">
+              <Button onClick={this.handleCreditsClick} className='navBar'>
                 Credits
               </Button>
             </Col>
             <Col>
-              <Button onClick={this.handleDifficultyClick} className="navBar">
+              <Button onClick={this.handleDifficultyClick} className='navBar'>
                 Difficulty
               </Button>
             </Col>
             <Col>
-              <Button onClick={this.handleRulesClick} className="navBar">
+              <Button onClick={this.handleSudokuSolver} className='navBar'>
+                Solve
+              </Button>
+            </Col>
+            <Col>
+              <Button onClick={this.handleRulesClick} className='navBar'>
                 How To Play
               </Button>
             </Col>
             <Col>
-              <Button onClick={this.handleNewGameClick} className="navBar">
+              <Button onClick={this.handleNewGameClick} className='navBar'>
                 New Game
               </Button>
             </Col>
@@ -109,33 +119,33 @@ class Game extends React.Component {
           <ModalHeader>Change Difficulty</ModalHeader>
           <ModalBody>
             <FormRadio
-              checked={this.state.difficulty === "Beginner"}
+              checked={this.state.difficulty === 'Beginner'}
               onChange={() => {
-                this.changeDifficulty("Beginner");
+                this.changeDifficulty('Beginner');
               }}
             >
               Beginner
             </FormRadio>
             <FormRadio
-              checked={this.state.difficulty === "Easy"}
+              checked={this.state.difficulty === 'Easy'}
               onChange={() => {
-                this.changeDifficulty("Easy");
+                this.changeDifficulty('Easy');
               }}
             >
               Easy
             </FormRadio>
             <FormRadio
-              checked={this.state.difficulty === "Normal"}
+              checked={this.state.difficulty === 'Normal'}
               onChange={() => {
-                this.changeDifficulty("Normal");
+                this.changeDifficulty('Normal');
               }}
             >
               Normal
             </FormRadio>
             <FormRadio
-              checked={this.state.difficulty === "Hard"}
+              checked={this.state.difficulty === 'Hard'}
               onChange={() => {
-                this.changeDifficulty("Hard");
+                this.changeDifficulty('Hard');
               }}
             >
               Hard
@@ -147,7 +157,7 @@ class Game extends React.Component {
         <Modal open={this.state.openRules} toggle={this.handleRulesClick}>
           <ModalHeader>Welcome to Sudoku!</ModalHeader>
           <ModalBody>
-            <div className="rulesText">
+            <div className='rulesText'>
               1. Only one number from 1-9 is allowed on each row<br></br>
               2. Only one number from 1-9 is allowed on each column<br></br>
               3. Only one number from 1-9 is allowed in each grid<br></br>
@@ -165,10 +175,10 @@ class Game extends React.Component {
 
         <Modal open={this.state.openNewGame}>
           <ModalBody>
-            <div className="newGameText">
+            <div className='newGameText'>
               Are you sure?<br></br>
             </div>
-            <div className="flexButtons">
+            <div className='flexButtons'>
               <Button onClick={this.newGameAccepted}>Yes</Button>
               <Button onClick={this.handleNewGameClick}>No</Button>
             </div>

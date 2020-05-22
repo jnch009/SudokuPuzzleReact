@@ -12,7 +12,6 @@ class Board extends React.Component {
 
     this.interval = null;
     this.state = {
-      // https://stackoverflow.com/questions/966225/how-can-i-create-a-two-dimensional-array-in-javascript
       grid: [],
       displayError: false,
       beginTimer: 0,
@@ -38,6 +37,7 @@ class Board extends React.Component {
 
   componentDidMount() {
     this.generateBoard();
+    this.props.populateGameGrid(this.state.grid);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -46,6 +46,7 @@ class Board extends React.Component {
       this.props.newGame === true
     ) {
       this.generateBoard();
+      this.props.populateGameGrid(this.state.grid);
     }
 
     if (!isEqual(prevState.grid, this.state.grid)) {
@@ -54,6 +55,7 @@ class Board extends React.Component {
       } else {
         this.setState({ complete: false });
       }
+      this.props.populateGameGrid(this.state.grid);
     }
   }
 
