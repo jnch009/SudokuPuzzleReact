@@ -63,9 +63,14 @@ class Game extends React.Component {
 
   handleSudokuSolver = () => {
     let currentGrid = cloneDeep(this.state.grid);
+    
+    currentGrid = currentGrid.map(row => row.map(el => {
+      return typeof el === 'string' ? null : el;
+    }));
+    
+    //console.log(currentGrid);
+    
     fn.solve(currentGrid, shuffled);
-
-    console.log(currentGrid);
 
     this.setState({
       grid: currentGrid,

@@ -41,28 +41,35 @@ class Board extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const {
+      newGame,
+      populateGameGrid,
+      difficulty,
+      solvedGrid,
+      solvedButton,
+    } = this.props;
+
+    const { grid } = this.state;
+
     if (!isEqual(prevProps, this.props)) {
-      if (
-        prevProps.difficulty !== this.props.difficulty ||
-        this.props.newGame === true
-      ) {
+      if (prevProps.difficulty !== difficulty || newGame === true) {
         this.setState({
-          complete: false
-        })
+          complete: false,
+        });
         this.generateBoard();
-        this.props.populateGameGrid(this.state.grid);
-      } else if (this.props.solvedButton === true) {
+        populateGameGrid(grid);
+      } else if (solvedButton === true) {
         this.setState({
-          grid: this.props.solvedGrid,
+          grid: solvedGrid,
         });
       }
-    } else if (!isEqual(prevState.grid, this.state.grid)) {
+    } else if (!isEqual(prevState.grid, grid)) {
       if (fn.verifySudoku(this.state.grid)) {
         this.setState({ complete: true });
       } else {
         this.setState({ complete: false });
       }
-      this.props.populateGameGrid(this.state.grid);
+      populateGameGrid(this.state.grid);
     }
   }
 
