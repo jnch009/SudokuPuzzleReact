@@ -27,6 +27,7 @@ class Board extends React.Component {
   componentDidMount() {
     let gridNewly = fn.createGrid();
     fn.solve(gridNewly, fn.shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]));
+    fn.removingEntries(gridNewly, this.props.difficulty);
 
     this.setState(
       {
@@ -34,8 +35,6 @@ class Board extends React.Component {
       },
       () => {
         console.log(this.state.grid);
-        console.log(this.state.grid[0]);
-        console.log(this.state.grid[0][0]);
       },
     );
   }
@@ -130,8 +129,14 @@ class Board extends React.Component {
         {/* {error} */}
         {/* <div className='winCondition'>{winner}</div> */}
 
-        {grid.map((row,rowNum) => (
-          <Row key={rowNum} grid={grid} cells={row} rowNum={rowNum} />
+        {grid.map((row, rowNum) => (
+          <Row
+            key={rowNum}
+            grid={grid}
+            cells={row}
+            rowNum={rowNum}
+            handleKeyPress={this.handleKeyPress}
+          />
         ))}
       </div>
     );

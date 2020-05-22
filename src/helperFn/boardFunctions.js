@@ -284,14 +284,14 @@ function generateInitialBox(arr, entries) {
   }
 }
 
-function removingEntries(newGrid, difficulty) {
-  var minToRemove;
-  var maxToRemove;
+const removingEntries = (newGrid, difficulty) => {
+  let minToRemove;
+  let maxToRemove;
   if (difficulty === 'Beginner') {
     minToRemove = 1;
-    maxToRemove = 1;
+    maxToRemove = 2;
   } else if (difficulty === 'Easy') {
-    minToRemove = 1;
+    minToRemove = 3;
     maxToRemove = 3;
   } else if (difficulty === 'Normal') {
     minToRemove = 4;
@@ -301,14 +301,14 @@ function removingEntries(newGrid, difficulty) {
     maxToRemove = 10;
   }
 
-  for (var box = 0; box < newGrid.length; box += 1) {
-    var entriesToRemove = randomlyGeneratedValue(minToRemove, maxToRemove);
-    var entriesRemoved = 0;
-    var indexEntries = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  for (let row = 0; row < newGrid.length; row += 1) {
+    let entriesToRemove = randomlyGeneratedValue(minToRemove, maxToRemove);
+    let entriesRemoved = 0;
+    let indexEntries = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
     while (entriesRemoved < entriesToRemove) {
-      var entryRemoved = randomlyGeneratedValue(0, indexEntries.length);
-      newGrid[box].splice(indexEntries[entryRemoved], 1, null);
+      let entryRemoved = randomlyGeneratedValue(0, indexEntries.length);
+      newGrid[row].splice(indexEntries[entryRemoved], 1, null);
       indexEntries.splice(entryRemoved, 1);
       entriesRemoved += 1;
     }
@@ -359,7 +359,7 @@ const createGrid = () => {
   for (let i = 0; i < 9; i++) {
     let innerArr = [];
     for (let j = 0; j < 9; j++) {
-      innerArr.push(0);
+      innerArr.push(null);
     }
     arr.push(innerArr);
   }
@@ -411,7 +411,7 @@ const isValid = (grid, row, col, num) => {
 const verifySudoku = grid => {
   for (let row = 0; row < 9; row++) {
     for (let col = 0; col < 9; col++) {
-      if (grid[row][col] === 0) {
+      if (grid[row][col] === null) {
         return false;
       }
     }
@@ -431,14 +431,14 @@ const shuffle = a => {
 const solve = (grid, shuffled) => {
   for (let row = 0; row < 9; row++) {
     for (let col = 0; col < 9; col++) {
-      if (grid[row][col] === 0) {
+      if (grid[row][col] === null) {
         shuffled.forEach(choice => {
           if (isValid(grid, row, col, choice)) {
             grid[row][col] = choice;
             solve(grid, shuffle(shuffled));
             // this is something that I added to stop the recursion when a solution is found otherwise it finds every solution!
             if (!verifySudoku(grid)) {
-              grid[row][col] = 0;
+              grid[row][col] = null;
             }
           }
         });

@@ -1,7 +1,7 @@
 import React from 'react';
 import Square from './square';
 
-const renderSquare = (grid, num, row, col) => {
+const renderSquare = (grid, num, row, col, handleKeyPress) => {
   const gridEntry = num;
 
   if (gridEntry === null || typeof gridEntry === 'string') {
@@ -9,7 +9,7 @@ const renderSquare = (grid, num, row, col) => {
       <Square
         key={`${row} ${col}`}
         number={gridEntry}
-        pressKey={this.handleKeyPress}
+        pressKey={handleKeyPress}
         row={row}
         col={col}
         grid={grid}
@@ -21,10 +21,12 @@ const renderSquare = (grid, num, row, col) => {
   }
 };
 
-const Row = ({ cells = [], rowNum, grid }) => {
+const Row = ({ cells = [], rowNum, grid, handleKeyPress }) => {
   return (
     <div className='sudoku-row'>
-      {cells.map((cell, cellNum) => renderSquare(grid, cell, rowNum, cellNum))}
+      {cells.map((cell, cellNum) =>
+        renderSquare(grid, cell, rowNum, cellNum, handleKeyPress),
+      )}
     </div>
   );
 };
