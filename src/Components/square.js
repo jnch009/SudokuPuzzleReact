@@ -11,26 +11,14 @@ class Square extends React.Component {
       edit: false,
       valid: true,
     };
-
-    this.handleClick = this.handleClick.bind(this);
-    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
-  handleKeyPress(e) {
+  handleKeyPress = (e) => {
     //e.preventDefault();
-    const rowNumber = this.props.row;
-    const colNumber = this.props.col;
-    const grid = this.props.grid;
-    const box = this.props.boxNumber;
-    const keyPressed = parseInt(e.nativeEvent.data);
+    const {rowNumber, colNumber, grid, number} = this.props;
+    //const keyPressed = parseInt(e.nativeEvent.data);
 
-    var beginRow = fn.selectRow(box);
-    var beginCol = fn.selectCol(box);
-
-    if (
-      !fn.insertConstraint(grid, rowNumber, colNumber, keyPressed) ||
-      !fn.insertIntoBox(grid, beginRow, beginCol, keyPressed)
-    ) {
+    if (!fn.isValid(grid,rowNumber,colNumber,number)) {
       this.setState({ valid: false });
     } else {
       this.setState({ valid: true });
@@ -44,7 +32,7 @@ class Square extends React.Component {
     }
   }
 
-  handleClick() {
+  handleClick = () => {
     this.setState(() => ({ edit: !this.state.edit }));
   }
 

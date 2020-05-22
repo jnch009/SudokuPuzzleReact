@@ -92,33 +92,6 @@ class Board extends React.Component {
     }
   }
 
-  renderSquare(i, j, box) {
-    const gridEntry = this.state.grid[i][j];
-
-    if (gridEntry === null || typeof gridEntry === 'string') {
-      return (
-        <Square
-          key={`${i} ${j} ${box}`}
-          number={this.state.grid[i][j]}
-          pressKey={this.handleKeyPress}
-          row={i}
-          col={j}
-          grid={this.state.grid}
-          boxNumber={box}
-          modify={true}
-        />
-      );
-    } else {
-      return (
-        <Square
-          key={`${i} ${j} ${box}`}
-          number={this.state.grid[i][j]}
-          modify={false}
-        />
-      );
-    }
-  }
-
   render() {
     // const finish =
     //   fn.ensureGridSatisfied(this.state.grid) &&
@@ -157,8 +130,8 @@ class Board extends React.Component {
         {/* {error} */}
         {/* <div className='winCondition'>{winner}</div> */}
 
-        {grid.map(row => (
-          <Row cells={row} />
+        {grid.map((row,rowNum) => (
+          <Row key={rowNum} grid={grid} cells={row} rowNum={rowNum} />
         ))}
       </div>
     );
