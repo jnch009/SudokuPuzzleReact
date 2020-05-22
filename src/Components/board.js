@@ -2,7 +2,8 @@ import React from 'react';
 import { Alert } from 'shards-react';
 
 import fn from '../helperFn/boardFunctions';
-import { Square } from './square';
+import Square from './square';
+import Row from './row';
 
 class Board extends React.Component {
   constructor(props) {
@@ -26,13 +27,15 @@ class Board extends React.Component {
   componentDidMount() {
     let gridNewly = fn.createGrid();
     fn.solve(gridNewly, fn.shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]));
-    
+
     this.setState(
       {
         grid: gridNewly,
       },
       () => {
         console.log(this.state.grid);
+        console.log(this.state.grid[0]);
+        console.log(this.state.grid[0][0]);
       },
     );
   }
@@ -148,25 +151,15 @@ class Board extends React.Component {
     //   return grid;
     // };
 
+    const { grid } = this.state;
     return (
       <div className='sudoku'>
-        {/* {error}
-        <div className='winCondition'>{winner}</div>
-        <div className='sudoku-row'>
-          <div className='sudoku-grid'>{generateGrid(8, 0, 7)}</div>
-          <div className='sudoku-grid'>{generateGrid(8, 3, 8)}</div>
-          <div className='sudoku-grid'>{generateGrid(8, 6, 9)}</div>
-        </div>
-        <div className='sudoku-row'>
-          <div className='sudoku-grid'>{generateGrid(5, 0, 4)}</div>
-          <div className='sudoku-grid'>{generateGrid(5, 3, 5)}</div>
-          <div className='sudoku-grid'>{generateGrid(5, 6, 6)}</div>
-        </div>
-        <div className='sudoku-row'>
-          <div className='sudoku-grid'>{generateGrid(2, 0, 1)}</div>
-          <div className='sudoku-grid'>{generateGrid(2, 3, 2)}</div>
-          <div className='sudoku-grid'>{generateGrid(2, 6, 3)}</div>
-        </div> */}
+        {/* {error} */}
+        {/* <div className='winCondition'>{winner}</div> */}
+
+        {grid.map(row => (
+          <Row cells={row} />
+        ))}
       </div>
     );
   }

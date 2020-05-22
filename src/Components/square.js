@@ -96,4 +96,4 @@ class Square extends React.Component {
   }
 }
 
-export { Square };
+export default Square;
