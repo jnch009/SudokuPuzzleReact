@@ -11,8 +11,9 @@ import {
   FormRadio,
 } from 'shards-react';
 import fn from '../helperFn/boardFunctions';
+import cloneDeep from 'lodash.clonedeep';
 
-const shuffled = [1,2,3,4,5,6,7,8,9];
+const shuffled = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -24,7 +25,8 @@ class Game extends React.Component {
       openNewGame: false,
       difficulty: 'Normal',
       newGame: false,
-      grid: []
+      solvedButton: false,
+      grid: [],
     };
   }
 
@@ -60,12 +62,20 @@ class Game extends React.Component {
   };
 
   handleSudokuSolver = () => {
-    fn.solve(this.state.grid, shuffled);
+    let currentGrid = cloneDeep(this.state.grid);
+    fn.solve(currentGrid, shuffled);
+
+    console.log(currentGrid);
+
+    this.setState({
+      grid: currentGrid,
+      solvedButton: true,
+    });
   };
-  
-  populateGameGrid = (grid) => {
-    this.setState({grid: grid})
-  }
+
+  populateGameGrid = grid => {
+    this.setState({ grid: grid, solvedButton: false });
+  };
 
   render() {
     return (
@@ -78,6 +88,8 @@ class Game extends React.Component {
             difficulty={this.state.difficulty}
             newGame={this.state.newGame}
             populateGameGrid={this.populateGameGrid}
+            solvedButton={this.state.solvedButton}
+            solvedGrid={this.state.grid}
           />
         </div>
         <Container className='dr-example-container'>
