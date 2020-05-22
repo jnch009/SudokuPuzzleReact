@@ -1,8 +1,8 @@
-import React from "react";
-import { Alert } from "shards-react";
+import React from 'react';
+import { Alert } from 'shards-react';
 
-import fn from "../helperFn/boardFunctions";
-import { Square } from "./square";
+import fn from '../helperFn/boardFunctions';
+import { Square } from './square';
 
 class Board extends React.Component {
   constructor(props) {
@@ -11,9 +11,7 @@ class Board extends React.Component {
     this.interval = null;
     this.state = {
       // https://stackoverflow.com/questions/966225/how-can-i-create-a-two-dimensional-array-in-javascript
-      grid: Array(9)
-        .fill(null)
-        .map((x) => Array(9).fill(null)),
+      grid: [],
       displayError: false,
       beginTimer: 0,
       timeUntilDismissed: 3,
@@ -26,52 +24,17 @@ class Board extends React.Component {
   }
 
   componentDidMount() {
-    var arr = Array(9).fill(null);
-    var entries = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    fn.generateInitialBox(arr, entries);
-
-    var newGrid = Array(9)
-      .fill(null)
-      .map((x) => Array(9).fill(null));
-    var boxGrid = Array(9)
-      .fill(null)
-      .map((x) => []);
-    var row = 0;
-    var col = 0;
-
-    while (row <= 6) {
-      while (col <= 6) {
-        if (row === 0 && col === 0) {
-          fn.generateBox(row, col, arr, newGrid);
-        } else {
-          arr = fn.generateValidEntries(boxGrid, entries, row, col, newGrid);
-          fn.generateBox(row, col, arr, newGrid);
-        }
-
-        if (row === 6 && col === 6) {
-          if (!fn.ensureGridSatisfied(newGrid)) {
-            row = 0;
-            col = 0;
-            fn.generateInitialBox(arr, entries);
-            newGrid = Array(9)
-              .fill(null)
-              .map((x) => Array(9).fill(null));
-            continue;
-          }
-        }
-
-        boxGrid = Array(9)
-          .fill(null)
-          .map((x) => []);
-        col += 3;
-      }
-
-      row += 3;
-      col = 0;
-    }
-
-    fn.removingEntries(newGrid, this.props.difficulty);
-    this.setState(() => ({ grid: newGrid }));
+    let gridNewly = fn.createGrid();
+    fn.solve(gridNewly, fn.shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]));
+    
+    this.setState(
+      {
+        grid: gridNewly,
+      },
+      () => {
+        console.log(this.state.grid);
+      },
+    );
   }
 
   componentDidUpdate(prevProps) {
@@ -129,7 +92,7 @@ class Board extends React.Component {
   renderSquare(i, j, box) {
     const gridEntry = this.state.grid[i][j];
 
-    if (gridEntry === null || typeof gridEntry === "string") {
+    if (gridEntry === null || typeof gridEntry === 'string') {
       return (
         <Square
           key={`${i} ${j} ${box}`}
@@ -154,56 +117,56 @@ class Board extends React.Component {
   }
 
   render() {
-    const finish =
-      fn.ensureGridSatisfied(this.state.grid) &&
-      fn.ensureGridFilled(this.state.grid);
-    let winner;
-    let error;
-    if (finish) {
-      winner = "You have successfully solved the sudoku!";
-    } else {
-      winner = "You are not done yet!";
-    }
+    // const finish =
+    //   fn.ensureGridSatisfied(this.state.grid) &&
+    //   fn.ensureGridFilled(this.state.grid);
+    // let winner;
+    // let error;
+    // if (finish) {
+    //   winner = 'You have successfully solved the sudoku!';
+    // } else {
+    //   winner = 'You are not done yet!';
+    // }
 
-    if (this.state.displayError) {
-      error = (
-        <div className="alertConstraint">
-          <Alert theme="danger" open={this.state.displayError}>
-            Must type a number between 1 and 9
-          </Alert>
-        </div>
-      );
-    }
+    // if (this.state.displayError) {
+    //   error = (
+    //     <div className='alertConstraint'>
+    //       <Alert theme='danger' open={this.state.displayError}>
+    //         Must type a number between 1 and 9
+    //       </Alert>
+    //     </div>
+    //   );
+    // }
 
-    const generateGrid = (startRow, startCol, boxNumber) => {
-      let grid = [];
-      for (let row = startRow; row > startRow - 3; row--) {
-        for (let col = startCol; col < startCol + 3; col++) {
-          grid.push(this.renderSquare(row, col, boxNumber));
-        }
-      }
-      return grid;
-    };
+    // const generateGrid = (startRow, startCol, boxNumber) => {
+    //   let grid = [];
+    //   for (let row = startRow; row > startRow - 3; row--) {
+    //     for (let col = startCol; col < startCol + 3; col++) {
+    //       grid.push(this.renderSquare(row, col, boxNumber));
+    //     }
+    //   }
+    //   return grid;
+    // };
 
     return (
-      <div className="sudoku">
-        {error}
-        <div className="winCondition">{winner}</div>
-        <div className="sudoku-row">
-          <div className="sudoku-grid">{generateGrid(8, 0, 7)}</div>
-          <div className="sudoku-grid">{generateGrid(8, 3, 8)}</div>
-          <div className="sudoku-grid">{generateGrid(8, 6, 9)}</div>
+      <div className='sudoku'>
+        {/* {error}
+        <div className='winCondition'>{winner}</div>
+        <div className='sudoku-row'>
+          <div className='sudoku-grid'>{generateGrid(8, 0, 7)}</div>
+          <div className='sudoku-grid'>{generateGrid(8, 3, 8)}</div>
+          <div className='sudoku-grid'>{generateGrid(8, 6, 9)}</div>
         </div>
-        <div className="sudoku-row">
-          <div className="sudoku-grid">{generateGrid(5, 0, 4)}</div>
-          <div className="sudoku-grid">{generateGrid(5, 3, 5)}</div>
-          <div className="sudoku-grid">{generateGrid(5, 6, 6)}</div>
+        <div className='sudoku-row'>
+          <div className='sudoku-grid'>{generateGrid(5, 0, 4)}</div>
+          <div className='sudoku-grid'>{generateGrid(5, 3, 5)}</div>
+          <div className='sudoku-grid'>{generateGrid(5, 6, 6)}</div>
         </div>
-        <div className="sudoku-row">
-          <div className="sudoku-grid">{generateGrid(2, 0, 1)}</div>
-          <div className="sudoku-grid">{generateGrid(2, 3, 2)}</div>
-          <div className="sudoku-grid">{generateGrid(2, 6, 3)}</div>
-        </div>
+        <div className='sudoku-row'>
+          <div className='sudoku-grid'>{generateGrid(2, 0, 1)}</div>
+          <div className='sudoku-grid'>{generateGrid(2, 3, 2)}</div>
+          <div className='sudoku-grid'>{generateGrid(2, 6, 3)}</div>
+        </div> */}
       </div>
     );
   }

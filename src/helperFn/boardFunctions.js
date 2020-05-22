@@ -12,7 +12,7 @@ function insertIntoCol(grid, colNumber, valueToAdd) {
 }
 
 function insertIntoRow(grid, rowNumber, valueToAdd) {
-  if (grid[rowNumber].map((x) => parseInt(x)).indexOf(valueToAdd) !== -1) {
+  if (grid[rowNumber].map(x => parseInt(x)).indexOf(valueToAdd) !== -1) {
     return false;
   }
   return true;
@@ -54,7 +54,7 @@ function ensureGridSatisfied(grid) {
 
   // col
   for (col = 0; col < 9; col += 1) {
-    if (verifyColumn(grid, col) === false) {
+    if (verifyCol(grid, col) === false) {
       return false;
     }
   }
@@ -71,9 +71,9 @@ function ensureGridSatisfied(grid) {
 }
 
 function ensureGridFilled(grid) {
-  for (var row = 0; row < 9; row += 1) {
-    for (var col = 0; col < 9; col += 1) {
-      if (grid[row][col] === null) {
+  for (let row = 0; row < 9; row++) {
+    for (let col = 0; col < 9; col++) {
+      if (grid[row][col] === 0) {
         return false;
       }
     }
@@ -81,40 +81,38 @@ function ensureGridFilled(grid) {
   return true;
 }
 
-function verifyRow(grid, rowNumber) {
-  var row = grid[rowNumber].map((x) => parseInt(x));
-  var rowCopy = row.filter(function(val, i) {
-    return row.indexOf(val) >= i;
-  });
+// const verifyRow = (grid, row, val) => {
+//   if (grid[row].includes(val)) {
+//     return false;
+//   }
+//   return true;
+// };
 
-  return rowCopy.length === grid[rowNumber].length;
-}
+// function verifyColumn(grid, colNumber) {
+//   var columnEntries = [];
+//   var columnCopy = [];
+//   for (var row = 0; row < 9; row += 1) {
+//     if (columnCopy.indexOf(parseInt(grid[row][colNumber])) === -1) {
+//       columnCopy.push(grid[row][colNumber]);
+//     }
+//     columnEntries.push(grid[row][colNumber]);
+//   }
 
-function verifyColumn(grid, colNumber) {
-  var columnEntries = [];
-  var columnCopy = [];
-  for (var row = 0; row < 9; row += 1) {
-    if (columnCopy.indexOf(parseInt(grid[row][colNumber])) === -1) {
-      columnCopy.push(grid[row][colNumber]);
-    }
-    columnEntries.push(grid[row][colNumber]);
-  }
+//   return columnCopy.length === columnEntries.length;
+// }
 
-  return columnCopy.length === columnEntries.length;
-}
+// function verifyBox(grid, rowNumber, colNumber) {
+//   var boxEntries = [];
+//   for (var row = rowNumber; row < rowNumber + 3; row += 1) {
+//     for (var col = colNumber; col < colNumber + 3; col += 1) {
+//       if (boxEntries.indexOf(grid[row][col]) === -1) {
+//         boxEntries.push(grid[row][col]);
+//       }
+//     }
+//   }
 
-function verifyBox(grid, rowNumber, colNumber) {
-  var boxEntries = [];
-  for (var row = rowNumber; row < rowNumber + 3; row += 1) {
-    for (var col = colNumber; col < colNumber + 3; col += 1) {
-      if (boxEntries.indexOf(grid[row][col]) === -1) {
-        boxEntries.push(grid[row][col]);
-      }
-    }
-  }
-
-  return boxEntries.length === 9;
-}
+//   return boxEntries.length === 9;
+// }
 
 function checkColElementsExist(grid, col) {
   for (var row = 0; row < 9; row += 1) {
@@ -155,7 +153,7 @@ function arrayLengths(arr) {
 }
 
 function scanGrid(boxGrid, tempGrid) {
-  var boxEntries = boxGrid.filter((x) => x.length !== 0).length;
+  var boxEntries = boxGrid.filter(x => x.length !== 0).length;
   if (boxEntries !== 9) {
     tempGrid = [];
     return tempGrid;
@@ -165,8 +163,8 @@ function scanGrid(boxGrid, tempGrid) {
   let index;
   let boxOfInterest;
 
-  while (tempGrid.filter((x) => x !== null).length < 9) {
-    let tmp = arrOfLengths.filter((x) => x !== undefined);
+  while (tempGrid.filter(x => x !== null).length < 9) {
+    let tmp = arrOfLengths.filter(x => x !== undefined);
     index = arrOfLengths.findIndex(function(x) {
       return x === Math.min(...tmp);
     });
@@ -230,7 +228,7 @@ function generateValidEntries(boxGrid, entries, beginRow, beginCol, newGrid) {
       row1Entries = intersectArrays(boxGrid[0], boxGrid[3]);
       row2Entries = intersectArrays(boxGrid[3], boxGrid[6]);
       concatRows = row1Entries.concat(row2Entries);
-      row3Entries = entries.filter((x) => !concatRows.includes(x));
+      row3Entries = entries.filter(x => !concatRows.includes(x));
       concatResult = row1Entries.concat(row2Entries);
       concatResult = concatResult.concat(row3Entries);
     }
@@ -247,7 +245,7 @@ function generateValidEntries(boxGrid, entries, beginRow, beginCol, newGrid) {
       row1Entries = intersectArrays(boxGrid[0], boxGrid[1]);
       row2Entries = intersectArrays(boxGrid[1], boxGrid[2]);
       concatRows = row1Entries.concat(row2Entries);
-      row3Entries = entries.filter((x) => !concatRows.includes(x));
+      row3Entries = entries.filter(x => !concatRows.includes(x));
       for (var i = 0; i < 3; i++) {
         concatResult.push(row1Entries[i]);
         concatResult.push(row2Entries[i]);
@@ -289,16 +287,16 @@ function generateInitialBox(arr, entries) {
 function removingEntries(newGrid, difficulty) {
   var minToRemove;
   var maxToRemove;
-  if (difficulty === "Beginner") {
+  if (difficulty === 'Beginner') {
     minToRemove = 1;
     maxToRemove = 1;
-  } else if (difficulty === "Easy") {
+  } else if (difficulty === 'Easy') {
     minToRemove = 1;
     maxToRemove = 3;
-  } else if (difficulty === "Normal") {
+  } else if (difficulty === 'Normal') {
     minToRemove = 4;
     maxToRemove = 8;
-  } else if (difficulty === "Hard") {
+  } else if (difficulty === 'Hard') {
     minToRemove = 7;
     maxToRemove = 10;
   }
@@ -355,6 +353,102 @@ function selectCol(boxNumber) {
   }
 }
 
+const createGrid = () => {
+  let arr = [];
+
+  for (let i = 0; i < 9; i++) {
+    let innerArr = [];
+    for (let j = 0; j < 9; j++) {
+      innerArr.push(0);
+    }
+    arr.push(innerArr);
+  }
+
+  return arr;
+};
+
+const verifyRow = (grid, row, val) => {
+  if (grid[row].includes(val)) {
+    return false;
+  }
+  return true;
+};
+
+const verifyCol = (grid, col, val) => {
+  for (let row = 0; row < 9; row++) {
+    if (grid[row][col] === val) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const verifyBox = (grid, row, col, val) => {
+  let startRow = parseInt(row / 3) * 3;
+  let startCol = parseInt(col / 3) * 3;
+
+  for (let r = startRow; r < startRow + 3; r++) {
+    for (let c = startCol; c < startCol + 3; c++) {
+      if (grid[r][c] === val) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
+const isValid = (grid, row, col, num) => {
+  if (
+    verifyBox(grid, row, col, num) &&
+    verifyCol(grid, col, num) &&
+    verifyRow(grid, row, num)
+  ) {
+    return true;
+  }
+  return false;
+};
+
+const verifySudoku = grid => {
+  for (let row = 0; row < 9; row++) {
+    for (let col = 0; col < 9; col++) {
+      if (grid[row][col] === 0) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
+// https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array fisher yates
+const shuffle = a => {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
+const solve = (grid, shuffled) => {
+  for (let row = 0; row < 9; row++) {
+    for (let col = 0; col < 9; col++) {
+      if (grid[row][col] === 0) {
+        shuffled.forEach(choice => {
+          if (isValid(grid, row, col, choice)) {
+            grid[row][col] = choice;
+            solve(grid, shuffle(shuffled));
+            // this is something that I added to stop the recursion when a solution is found otherwise it finds every solution!
+            if (!verifySudoku(grid)) {
+              grid[row][col] = 0;
+            }
+          }
+        });
+        return;
+      }
+    }
+  }
+  return grid;
+};
+
 export default {
   randomlyGeneratedValue,
   insertIntoCol,
@@ -368,7 +462,7 @@ export default {
   arrayLengths,
   generateValidEntries,
   verifyRow,
-  verifyColumn,
+  verifyCol,
   verifyBox,
   ensureGridSatisfied,
   generateBox,
@@ -377,4 +471,9 @@ export default {
   ensureGridFilled,
   selectRow,
   selectCol,
+  createGrid,
+  isValid,
+  verifySudoku,
+  shuffle,
+  solve,
 };
