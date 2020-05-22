@@ -294,8 +294,8 @@ const removingEntries = (newGrid, difficulty) => {
     minToRemove = 3;
     maxToRemove = 3;
   } else if (difficulty === 'Normal') {
-    minToRemove = 4;
-    maxToRemove = 8;
+    minToRemove = 5;
+    maxToRemove = 6;
   } else if (difficulty === 'Hard') {
     minToRemove = 7;
     maxToRemove = 10;
