@@ -73,21 +73,19 @@ class Board extends React.Component {
   }
 
   handleKeyPress(key, row, col) {
+    const gridCopy = this.state.grid.slice();
     if (key === null) {
-      const gridCopy = this.state.grid.slice();
       gridCopy[row].splice(col, 1, key);
-      this.setState(() => ({ grid: gridCopy }));
-      return;
-    }
-
-    var digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    if (digits.indexOf(parseInt(key)) === -1) {
-      this.showInvalidKeyPress();
-      //this.setState(() => ({displayError: true}));
+      this.setState(() => ({ grid: gridCopy }))
     } else {
-      const gridCopy = this.state.grid.slice();
-      gridCopy[row].splice(col, 1, key);
-      this.setState(() => ({ grid: gridCopy }));
+      const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      if (digits.indexOf(parseInt(key)) === -1) {
+        this.showInvalidKeyPress();
+        //this.setState(() => ({displayError: true}));
+      } else {
+        gridCopy[row].splice(col, 1, key);
+        this.setState(() => ({ grid: gridCopy }));
+      } 
     }
   }
 

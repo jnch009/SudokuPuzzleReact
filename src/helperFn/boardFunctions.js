@@ -368,7 +368,8 @@ const createGrid = () => {
 };
 
 const verifyRow = (grid, row, val) => {
-  if (grid[row].includes(val)) {
+  //console.log(`${grid[row]} ${row} ${val}`);
+  if (Array.from(grid[row], x => Number(x)).includes(Number(val))) {
     return false;
   }
   return true;
@@ -376,7 +377,7 @@ const verifyRow = (grid, row, val) => {
 
 const verifyCol = (grid, col, val) => {
   for (let row = 0; row < 9; row++) {
-    if (grid[row][col] === val) {
+    if (Number(grid[row][col]) === Number(val)) {
       return false;
     }
   }
@@ -389,7 +390,7 @@ const verifyBox = (grid, row, col, val) => {
 
   for (let r = startRow; r < startRow + 3; r++) {
     for (let c = startCol; c < startCol + 3; c++) {
-      if (grid[r][c] === val) {
+      if (Number(grid[r][c]) === Number(val)) {
         return false;
       }
     }
