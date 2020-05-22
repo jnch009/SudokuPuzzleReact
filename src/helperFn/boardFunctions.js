@@ -367,15 +367,27 @@ const createGrid = () => {
   return arr;
 };
 
-const verifyRow = (grid, row, val) => {
-  //console.log(`${grid[row]} ${row} ${val}`);
-  if (Array.from(grid[row], x => Number(x)).includes(Number(val))) {
-    return false;
+// I could be wrong here, but we only need to check one condition
+// If this condition fails, then they all fail
+const verifyRow = (grid, row, val = null) => {
+  const rowOfNums = Array.from(grid[row], x => Number(x));
+  if (!val) {
+    let verifyArr = [];
+    rowOfNums.forEach(row => {
+      if (!verifyArr.includes(row)) {
+        verifyArr.push(row);
+      }
+    });
+    return verifyArr.length === grid[row].length;
+  } else {
+    if (rowOfNums.includes(Number(val))) {
+      return false;
+    }
+    return true; 
   }
-  return true;
 };
 
-const verifyCol = (grid, col, val) => {
+const verifyCol = (grid, col, val = null) => {
   for (let row = 0; row < 9; row++) {
     if (Number(grid[row][col]) === Number(val)) {
       return false;
@@ -384,7 +396,7 @@ const verifyCol = (grid, col, val) => {
   return true;
 };
 
-const verifyBox = (grid, row, col, val) => {
+const verifyBox = (grid, row, col, val = null) => {
   let startRow = parseInt(row / 3) * 3;
   let startCol = parseInt(col / 3) * 3;
 
@@ -398,7 +410,7 @@ const verifyBox = (grid, row, col, val) => {
   return true;
 };
 
-const isValid = (grid, row, col, num) => {
+const isValid = (grid, row, col, num = null) => {
   if (
     verifyBox(grid, row, col, num) &&
     verifyCol(grid, col, num) &&
@@ -409,10 +421,10 @@ const isValid = (grid, row, col, num) => {
   return false;
 };
 
-const verifyFilled = grid => {
+const verifySudoku = grid => {
   for (let row = 0; row < 9; row++) {
     for (let col = 0; col < 9; col++) {
-      if (grid[row][col] === null) {
+      if (!isValid(grid,row,col)) {
         return false;
       }
     }
@@ -436,9 +448,9 @@ const solve = (grid, shuffled) => {
         shuffled.forEach(choice => {
           if (isValid(grid, row, col, choice)) {
             grid[row][col] = choice;
-            solve(grid, shuffled);
+            solve(grid, shuffle(shuffled));
             // this is something that I added to stop the recursion when a solution is found otherwise it finds every solution!
-            if (!verifyFilled(grid)) {
+            if (!verifySudoku(grid)) {
               grid[row][col] = null;
             }
           }
@@ -474,7 +486,7 @@ export default {
   selectCol,
   createGrid,
   isValid,
-  verifyFilled,
+  verifySudoku,
   shuffle,
   solve,
 };

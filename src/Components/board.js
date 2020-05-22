@@ -50,8 +50,10 @@ class Board extends React.Component {
     }
 
     if (!isEqual(prevState.grid, this.state.grid)) {
-      if (fn.verifyFilled(this.state.grid)) {
+      if (fn.verifySudoku(this.state.grid)) {
         this.setState({ complete: true });
+      } else {
+        this.setState({ complete: false });
       }
     }
   }
