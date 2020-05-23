@@ -3,7 +3,7 @@ import React from 'react';
 import { FormInput, Button } from 'shards-react';
 import fn from '../helperFn/boardFunctions';
 import styled from 'styled-components';
-import './square.scss'
+import './square.scss';
 
 const initialSquare = {
   edit: false,
@@ -16,7 +16,7 @@ const topRightRange = [2, 5, 8];
 const SquareBorderTopLeft = styled.button`
   border-top: 0.2em red solid;
   border-left: 0.2em red solid;
-  color: ${props => props.modify ? null : '#fff'};
+  color: ${props => (props.modify ? null : '#fff')};
   opacity: ${props => (props.children !== null ? 0.65 : 1)};
 `;
 
@@ -27,13 +27,26 @@ const SquareBorderTopRight = styled.button`
   opacity: ${props => (props.children !== null ? 0.65 : 1)};
 `;
 
-const DisabledTopLeft = styled(SquareBorderTopLeft) `
+const SquareBorderBottomLeft = styled.button`
+  border-bottom: 0.2em red solid;
+  border-left: 0.2em red solid;
+  color: ${props => (props.modify ? null : '#fff')};
+  opacity: ${props => (props.children !== null ? 0.65 : 1)};
+`;
+
+const DisabledTopLeft = styled(SquareBorderTopLeft)`
   &&& {
     cursor: not-allowed;
   }
-`
+`;
 
 const DisabledTopRight = styled(SquareBorderTopRight)`
+  &&& {
+    cursor: not-allowed;
+  }
+`;
+
+const DisabledBottomLeft = styled(SquareBorderBottomLeft)`
   &&& {
     cursor: not-allowed;
   }
@@ -82,11 +95,17 @@ class Square extends React.Component {
             {this.props.number}
           </DisabledTopLeft>
         );
-      } else if (rowTopLeft.includes(row) && topRightRange.includes(col)){
+      } else if (rowTopLeft.includes(row) && topRightRange.includes(col)) {
         btn = (
           <DisabledTopRight className='square primary'>
             {this.props.number}
           </DisabledTopRight>
+        );
+      } else if (topRightRange.includes(row) && rowTopLeft.includes(col)) {
+        btn = (
+          <DisabledBottomLeft className='square primary'>
+            {this.props.number}
+          </DisabledBottomLeft>
         );
       } else {
         btn = (
@@ -109,7 +128,7 @@ class Square extends React.Component {
                 {this.props.number}
               </SquareBorderTopLeft>
             );
-          } else if (rowTopLeft.includes(row) && topRightRange.includes(col)){
+          } else if (rowTopLeft.includes(row) && topRightRange.includes(col)) {
             btn = (
               <SquareBorderTopRight
                 onClick={this.handleClick}
@@ -120,8 +139,18 @@ class Square extends React.Component {
                 {this.props.number}
               </SquareBorderTopRight>
             );
-          }
-          else {
+          } else if (topRightRange.includes(row) && rowTopLeft.includes(col)) {
+            btn = (
+              <SquareBorderBottomLeft
+                onClick={this.handleClick}
+                theme='danger'
+                active
+                className='square danger'
+              >
+                {this.props.number}
+              </SquareBorderBottomLeft>
+            );
+          } else {
             btn = (
               <Button
                 onClick={this.handleClick}
@@ -145,7 +174,7 @@ class Square extends React.Component {
                 {this.props.number}
               </SquareBorderTopLeft>
             );
-          } else if (rowTopLeft.includes(row) && topRightRange.includes(col)){
+          } else if (rowTopLeft.includes(row) && topRightRange.includes(col)) {
             btn = (
               <SquareBorderTopRight
                 onClick={this.handleClick}
@@ -155,6 +184,17 @@ class Square extends React.Component {
               >
                 {this.props.number}
               </SquareBorderTopRight>
+            );
+          } else if (topRightRange.includes(row) && rowTopLeft.includes(col)) {
+            btn = (
+              <SquareBorderBottomLeft
+                onClick={this.handleClick}
+                theme='light'
+                className='square light'
+                modify={true}
+              >
+                {this.props.number}
+              </SquareBorderBottomLeft>
             );
           } else {
             btn = (
