@@ -17,7 +17,15 @@ const renderSquare = (grid, num, row, col, handleKeyPress) => {
       />
     );
   } else {
-    return <Square key={`${row} ${col}`} number={gridEntry} modify={false} />;
+    return (
+      <Square
+        key={`${row} ${col}`}
+        row={row}
+        col={col}
+        number={gridEntry}
+        modify={false}
+      />
+    );
   }
 };
 

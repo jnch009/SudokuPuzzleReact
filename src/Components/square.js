@@ -2,11 +2,22 @@ import React from 'react';
 //import Button from 'react-bootstrap/Button';
 import { FormInput, Button } from 'shards-react';
 import fn from '../helperFn/boardFunctions';
+import styled from 'styled-components';
 
 const initialSquare = {
   edit: false,
   valid: true,
 };
+
+const SquareBorderTopLeft = styled.button`
+  border-top: 0.2em red solid;
+  border-left: 0.2em red solid;
+  background-color: #212529;
+  color: #fff;
+  opacity: 0.65;
+`;
+
+const topLeftRange = [0,3,6];
 
 class Square extends React.Component {
   constructor(props) {
@@ -41,32 +52,75 @@ class Square extends React.Component {
   };
 
   render() {
+    const { row, col } = this.props;
     let btn;
+    
     if (this.props.modify === false) {
-      btn = (
-        <Button disabled theme='dark' className='square'>
-          {this.props.number}
-        </Button>
-      );
+      if (topLeftRange.includes(row) && topLeftRange.includes(col)){
+        btn = (
+          <SquareBorderTopLeft
+            disabled
+            theme='dark'
+            className='square'
+          >
+            {this.props.number}
+          </SquareBorderTopLeft>
+        );
+      } else {
+        btn = (
+          <Button disabled theme='dark' className='square'>
+            {this.props.number}
+          </Button>
+        );
+      }
     } else {
       if (!this.state.edit) {
         if (!this.state.valid && this.props.number !== null) {
-          btn = (
-            <Button
-              onClick={this.handleClick}
-              theme='danger'
-              active
-              className='square'
-            >
-              {this.props.number}
-            </Button>
-          );
+          if (topLeftRange.includes(row) && topLeftRange.includes(col)){
+            btn = (
+              <SquareBorderTopLeft
+                onClick={this.handleClick}
+                theme='danger'
+                active
+                className='square'
+              >
+                {this.props.number}
+              </SquareBorderTopLeft>
+            );
+          } else {
+            btn = (
+              <Button
+                onClick={this.handleClick}
+                theme='danger'
+                active
+                className='square'
+              >
+                {this.props.number}
+              </Button>
+            );
+          }
         } else {
-          btn = (
-            <Button onClick={this.handleClick} theme='light' className='square'>
-              {this.props.number}
-            </Button>
-          );
+          if (topLeftRange.includes(row) && topLeftRange.includes(col)){
+            btn = (
+              <SquareBorderTopLeft
+                onClick={this.handleClick}
+                theme='light'
+                className='square'
+              >
+                {this.props.number}
+              </SquareBorderTopLeft>
+            );
+          } else {
+            btn = (
+              <Button
+                onClick={this.handleClick}
+                theme='light'
+                className='square'
+              >
+                {this.props.number}
+              </Button>
+            );
+          }
         }
       } else {
         btn = (
