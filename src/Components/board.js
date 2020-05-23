@@ -56,6 +56,7 @@ class Board extends React.Component {
         this.setState({
           complete: false,
         });
+
         this.generateBoard();
         populateGameGrid(grid);
       } else if (solvedButton === true) {
@@ -112,7 +113,7 @@ class Board extends React.Component {
       }
     }
   }
-
+  
   render() {
     let error;
 
@@ -127,6 +128,7 @@ class Board extends React.Component {
     }
 
     const { grid, complete } = this.state;
+
     return (
       <div className='sudoku'>
         {error}
@@ -135,7 +137,6 @@ class Board extends React.Component {
             ? 'You have successfully solved the sudoku!'
             : 'You are not done yet!'}
         </div>
-
         {grid.map((row, rowNum) => (
           <Row
             key={rowNum}

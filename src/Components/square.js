@@ -3,27 +3,29 @@ import React from 'react';
 import { FormInput, Button } from 'shards-react';
 import fn from '../helperFn/boardFunctions';
 
+const initialSquare = {
+  edit: false,
+  valid: true,
+};
+
 class Square extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      edit: false,
-      valid: true,
-    };
+    this.state = initialSquare;
   }
 
   handleKeyPress = async e => {
     const { row, col, grid } = this.props;
     const number = e.key;
-    
+
     //debugger;
-    if (Number(number) !== Number(grid[row][col])){
+    if (Number(number) !== Number(grid[row][col])) {
       if (!fn.isValid(grid, row, col, number)) {
         this.setState({ valid: false });
       } else {
         this.setState({ valid: true });
-      } 
+      }
     }
 
     if (e.key === 'Backspace' || e.key === 'Delete') {
@@ -48,7 +50,7 @@ class Square extends React.Component {
       );
     } else {
       if (!this.state.edit) {
-        if (!this.state.valid) {
+        if (!this.state.valid && this.props.number !== null) {
           btn = (
             <Button
               onClick={this.handleClick}
