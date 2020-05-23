@@ -16,14 +16,14 @@ const topRightRange = [2, 5, 8];
 const SquareBorderTopLeft = styled.button`
   border-top: 0.2em red solid;
   border-left: 0.2em red solid;
-  color: #fff;
+  color: ${props => props.modify ? null : '#fff'};
   opacity: ${props => (props.children !== null ? 0.65 : 1)};
 `;
 
 const SquareBorderTopRight = styled.button`
   border-top: 0.2em red solid;
   border-right: 0.2em red solid;
-  color: #fff;
+  color: ${props => (props.modify ? null : '#fff')};
   opacity: ${props => (props.children !== null ? 0.65 : 1)};
 `;
 
@@ -84,7 +84,7 @@ class Square extends React.Component {
         );
       } else if (rowTopLeft.includes(row) && topRightRange.includes(col)){
         btn = (
-          <DisabledTopRight className='square primary cursorDisabled'>
+          <DisabledTopRight className='square primary'>
             {this.props.number}
           </DisabledTopRight>
         );
@@ -140,6 +140,7 @@ class Square extends React.Component {
                 onClick={this.handleClick}
                 theme='light'
                 className='square light'
+                modify={true}
               >
                 {this.props.number}
               </SquareBorderTopLeft>
@@ -150,6 +151,7 @@ class Square extends React.Component {
                 onClick={this.handleClick}
                 theme='light'
                 className='square light'
+                modify={true}
               >
                 {this.props.number}
               </SquareBorderTopRight>
