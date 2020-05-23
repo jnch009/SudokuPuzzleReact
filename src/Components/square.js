@@ -1,77 +1,69 @@
-import React from "react";
+import React from 'react';
 //import Button from 'react-bootstrap/Button';
-import { FormInput, Button } from "shards-react";
-import fn from "../helperFn/boardFunctions";
+import { FormInput, Button } from 'shards-react';
+import fn from '../helperFn/boardFunctions';
+
+const initialSquare = {
+  edit: false,
+  valid: true,
+};
 
 class Square extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      edit: false,
-      valid: true,
-    };
-
-    this.handleClick = this.handleClick.bind(this);
-    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.state = initialSquare;
   }
 
-  handleKeyPress(e) {
-    //e.preventDefault();
-    const rowNumber = this.props.row;
-    const colNumber = this.props.col;
-    const grid = this.props.grid;
-    const box = this.props.boxNumber;
-    const keyPressed = parseInt(e.nativeEvent.data);
+  handleKeyPress = async e => {
+    const { row, col, grid } = this.props;
+    const number = e.key;
 
-    var beginRow = fn.selectRow(box);
-    var beginCol = fn.selectCol(box);
-
-    if (
-      !fn.insertConstraint(grid, rowNumber, colNumber, keyPressed) ||
-      !fn.insertIntoBox(grid, beginRow, beginCol, keyPressed)
-    ) {
-      this.setState({ valid: false });
-    } else {
-      this.setState({ valid: true });
+    //debugger;
+    if (Number(number) !== Number(grid[row][col])) {
+      if (!fn.isValid(grid, row, col, number)) {
+        this.setState({ valid: false });
+      } else {
+        this.setState({ valid: true });
+      }
     }
 
-    if (e.nativeEvent.data === "Backspace" || e.nativeEvent.data === "Delete") {
-      this.props.pressKey(null, rowNumber, colNumber);
+    if (e.key === 'Backspace' || e.key === 'Delete') {
+      this.props.pressKey(null, row, col);
     } else {
-      this.props.pressKey(e.nativeEvent.data, rowNumber, colNumber);
+      this.props.pressKey(e.key, row, col);
       this.handleClick();
     }
-  }
+  };
 
-  handleClick() {
+  handleClick = () => {
     this.setState(() => ({ edit: !this.state.edit }));
-  }
+  };
 
   render() {
     let btn;
     if (this.props.modify === false) {
       btn = (
-        <Button disabled theme="dark" className="square">
+        <Button disabled theme='dark' className='square'>
           {this.props.number}
         </Button>
       );
     } else {
       if (!this.state.edit) {
-        if (!this.state.valid) {
+        if (!this.state.valid && this.props.number !== null) {
           btn = (
             <Button
               onClick={this.handleClick}
-              theme="danger"
+              theme='danger'
               active
-              className="square"
+              className='square'
             >
               {this.props.number}
             </Button>
           );
         } else {
           btn = (
-            <Button onClick={this.handleClick} theme="light" className="square">
+            <Button onClick={this.handleClick} theme='light' className='square'>
               {this.props.number}
             </Button>
           );
@@ -81,12 +73,12 @@ class Square extends React.Component {
           <FormInput
             autoFocus={true}
             onBlur={this.handleClick}
-            type="text"
-            pattern="[0-9]*"
-            inputMode="numeric"
-            onChange={(e) => this.handleKeyPress(e)}
-            className="square"
-            value={this.props.number !== null ? this.props.number : ""}
+            type='text'
+            pattern='[0-9]*'
+            inputMode='numeric'
+            onKeyDown={this.handleKeyPress}
+            className='square'
+            value={this.props.number !== null ? this.props.number : ''}
           ></FormInput>
         );
       }
@@ -96,4 +88,4 @@ class Square extends React.Component {
   }
 }
 
-export { Square };
+export default Square;
