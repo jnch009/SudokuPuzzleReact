@@ -9,15 +9,14 @@ const initialSquare = {
   valid: true,
 };
 
+const topLeftRange = [0, 3, 6];
 const SquareBorderTopLeft = styled.button`
   border-top: 0.2em red solid;
   border-left: 0.2em red solid;
-  background-color: #212529;
+  background-color: ${props => (props.children !== null ? '#212529' : '#fff')};
   color: #fff;
-  opacity: 0.65;
+  opacity: ${props => (props.children !== null ? 0.65 : 1)};
 `;
-
-const topLeftRange = [0,3,6];
 
 class Square extends React.Component {
   constructor(props) {
@@ -54,15 +53,11 @@ class Square extends React.Component {
   render() {
     const { row, col } = this.props;
     let btn;
-    
+
     if (this.props.modify === false) {
-      if (topLeftRange.includes(row) && topLeftRange.includes(col)){
+      if (topLeftRange.includes(row) && topLeftRange.includes(col)) {
         btn = (
-          <SquareBorderTopLeft
-            disabled
-            theme='dark'
-            className='square'
-          >
+          <SquareBorderTopLeft disabled theme='dark' className='square'>
             {this.props.number}
           </SquareBorderTopLeft>
         );
@@ -76,7 +71,7 @@ class Square extends React.Component {
     } else {
       if (!this.state.edit) {
         if (!this.state.valid && this.props.number !== null) {
-          if (topLeftRange.includes(row) && topLeftRange.includes(col)){
+          if (topLeftRange.includes(row) && topLeftRange.includes(col)) {
             btn = (
               <SquareBorderTopLeft
                 onClick={this.handleClick}
@@ -100,7 +95,7 @@ class Square extends React.Component {
             );
           }
         } else {
-          if (topLeftRange.includes(row) && topLeftRange.includes(col)){
+          if (topLeftRange.includes(row) && topLeftRange.includes(col)) {
             btn = (
               <SquareBorderTopLeft
                 onClick={this.handleClick}
