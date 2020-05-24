@@ -12,4 +12,12 @@ $light: #fff;
 
 .light{
     background-color: $light;
+    transition: all 250ms cubic-bezier(.27,.01,.38,1.06);
+}
+
+.light:hover{
+    color: #212529;
+    background-color: #dadfe4;
+    border-color: #dadfe4;
+    box-shadow: 0 5px 15px rgba(0,0,0,.05), 0 4px 10px rgba(233,236,239,.25);
 }
