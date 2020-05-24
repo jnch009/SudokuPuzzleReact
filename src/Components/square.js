@@ -30,6 +30,10 @@ const topCondition = (row, col) => {
   return rowTopLeft.includes(row) && topBorder.includes(col);
 };
 
+const bottomCondition = (row,col) => {
+  return topRightRange.includes(row) && topBorder.includes(col);
+}
+
 const rowTopLeft = [0, 3, 6];
 const topRightRange = [2, 5, 8];
 const topBorder = [1, 4, 7];
@@ -68,6 +72,18 @@ const SquareBorderBottomRight = styled.button`
   opacity: ${props => (props.children !== null ? 0.65 : 1)};
 `;
 
+const SquareBorderBottom = styled.button`
+  border-bottom: ${props => `0.2em ${props.borderColor} solid`};
+  color: ${props => (props.modify ? null : '#fff')};
+  opacity: ${props => (props.children !== null ? 0.65 : 1)};
+`;
+
+const DisabledTop = styled(SquareBorderTop)`
+  &&& {
+    cursor: not-allowed;
+  }
+`;
+
 const DisabledTopLeft = styled(SquareBorderTopLeft)`
   &&& {
     cursor: not-allowed;
@@ -92,7 +108,7 @@ const DisabledBottomRight = styled(SquareBorderBottomRight)`
   }
 `;
 
-const DisabledTop = styled(SquareBorderTop)`
+const DisabledBottom = styled(SquareBorderBottom)`
   &&& {
     cursor: not-allowed;
   }
@@ -197,6 +213,8 @@ class Square extends React.Component {
         btn = disabledBtn(DisabledBottomRight, number, boxColor);
       } else if (topCondition(row, col)) {
         btn = disabledBtn(DisabledTop, number, boxColor);
+      } else if (bottomCondition(row,col)){
+        btn = disabledBtn(DisabledBottom, number, boxColor);
       } else {
         btn = (
           <Button disabled theme='dark' className='square'>
@@ -238,6 +256,13 @@ class Square extends React.Component {
           } else if (topCondition(row, col)) {
             btn = squareBtnDanger(
               SquareBorderTop,
+              number,
+              this.handleClick,
+              boxColor,
+            );
+          } else if (bottomCondition(row,col)){
+            btn = squareBtnDanger(
+              SquareBorderBottom,
               number,
               this.handleClick,
               boxColor,
@@ -286,6 +311,13 @@ class Square extends React.Component {
           } else if (topCondition(row, col)) {
             btn = squareBtnLight(
               SquareBorderTop,
+              number,
+              this.handleClick,
+              boxColor,
+            );
+          } else if (bottomCondition(row,col)){
+            btn = squareBtnLight(
+              SquareBorderBottom,
               number,
               this.handleClick,
               boxColor,
