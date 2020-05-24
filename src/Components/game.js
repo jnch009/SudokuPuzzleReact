@@ -206,7 +206,7 @@ class Game extends React.Component {
           </ModalBody>
         </Modal>
 
-        <Modal open={this.state.openNewGame}>
+        <Modal open={this.state.openNewGame} toggle={this.handleNewGameClick}>
           <ModalBody>
             <div className='newGameText'>
               Are you sure?<br></br>
