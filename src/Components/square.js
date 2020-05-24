@@ -26,8 +26,19 @@ const bottomRightCondition = (row, col) => {
   return topRightRange.includes(row) && topRightRange.includes(col);
 };
 
+const topCondition = (row, col) => {
+  return rowTopLeft.includes(row) && topBorder.includes(col);
+};
+
 const rowTopLeft = [0, 3, 6];
 const topRightRange = [2, 5, 8];
+const topBorder = [1, 4, 7];
+
+const SquareBorderTop = styled.button`
+  border-top: ${props => `0.2em ${props.borderColor} solid`};
+  color: ${props => (props.modify ? null : '#fff')};
+  opacity: ${props => (props.children !== null ? 0.65 : 1)};
+`;
 
 const SquareBorderTopLeft = styled.button`
   border-top: ${props => `0.2em ${props.borderColor} solid`};
@@ -81,6 +92,12 @@ const DisabledBottomRight = styled(SquareBorderBottomRight)`
   }
 `;
 
+const DisabledTop = styled(SquareBorderTop)`
+  &&& {
+    cursor: not-allowed;
+  }
+`;
+
 const disabledBtn = (componentName, num, borderColor) => {
   return React.createElement(
     componentName,
@@ -110,17 +127,25 @@ const squareBtnLight = (componentName, num, handleClick, borderColor) => {
   );
 };
 
-const setBorderColor = (row,col) => {
+const setBorderColor = (row, col) => {
   //box 1,5 or 9
-  if ((row === 0 && col === 0) || (row === 3 && col === 3) || (row === 6 && col === 6)){
+  if (
+    (row === 0 && col === 0) ||
+    (row === 3 && col === 3) ||
+    (row === 6 && col === 6)
+  ) {
     return 'blue';
-  } //box 2,6, or 7 
-  else if ((row === 0 && col === 3) || (row === 3 && col === 6) || (row === 6 && col === 0)){
-    return 'yellow'; 
+  } //box 2,6, or 7
+  else if (
+    (row === 0 && col === 3) ||
+    (row === 3 && col === 6) ||
+    (row === 6 && col === 0)
+  ) {
+    return 'yellow';
   } else {
     return '#c700ff';
   }
-}
+};
 
 class Square extends React.Component {
   constructor(props) {
@@ -159,8 +184,8 @@ class Square extends React.Component {
     let btn;
     const startRow = parseInt(row / 3) * 3;
     const startCol = parseInt(col / 3) * 3;
-    const boxColor = setBorderColor(startRow,startCol);
-    
+    const boxColor = setBorderColor(startRow, startCol);
+
     if (this.props.modify === false) {
       if (topLeftCondition(row, col)) {
         btn = disabledBtn(DisabledTopLeft, number, boxColor);
@@ -168,8 +193,10 @@ class Square extends React.Component {
         btn = disabledBtn(DisabledTopRight, number, boxColor);
       } else if (bottomLeftCondition(row, col)) {
         btn = disabledBtn(DisabledBottomLeft, number, boxColor);
-      } else if (bottomRightCondition(row,col)){
+      } else if (bottomRightCondition(row, col)) {
         btn = disabledBtn(DisabledBottomRight, number, boxColor);
+      } else if (topCondition(row, col)) {
+        btn = disabledBtn(DisabledTop, number, boxColor);
       } else {
         btn = (
           <Button disabled theme='dark' className='square'>
@@ -201,9 +228,16 @@ class Square extends React.Component {
               this.handleClick,
               boxColor,
             );
-          } else if (bottomRightCondition(row,col)){
+          } else if (bottomRightCondition(row, col)) {
             btn = squareBtnDanger(
               SquareBorderBottomRight,
+              number,
+              this.handleClick,
+              boxColor,
+            );
+          } else if (topCondition(row, col)) {
+            btn = squareBtnDanger(
+              SquareBorderTop,
               number,
               this.handleClick,
               boxColor,
@@ -242,9 +276,16 @@ class Square extends React.Component {
               this.handleClick,
               boxColor,
             );
-          } else if (bottomRightCondition(row,col)){ 
+          } else if (bottomRightCondition(row, col)) {
             btn = squareBtnLight(
               SquareBorderBottomRight,
+              number,
+              this.handleClick,
+              boxColor,
+            );
+          } else if (topCondition(row, col)) {
+            btn = squareBtnLight(
+              SquareBorderTop,
               number,
               this.handleClick,
               boxColor,
