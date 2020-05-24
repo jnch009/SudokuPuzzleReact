@@ -10,6 +10,18 @@ const initialSquare = {
   valid: true,
 };
 
+const topLeftCondition = (row, col) => {
+  return rowTopLeft.includes(row) && rowTopLeft.includes(col);
+};
+
+const topRightCondition = (row, col) => {
+  return rowTopLeft.includes(row) && topRightRange.includes(col);
+};
+
+const bottomLeftCondition = (row, col) => {
+  return topRightRange.includes(row) && rowTopLeft.includes(col);
+};
+
 const rowTopLeft = [0, 3, 6];
 const topRightRange = [2, 5, 8];
 
@@ -52,6 +64,30 @@ const DisabledBottomLeft = styled(SquareBorderBottomLeft)`
   }
 `;
 
+const disabledBtn = (componentName, num) => {
+  return React.createElement(
+    componentName,
+    { className: 'square primary' },
+    num,
+  );
+};
+
+const squareBtnDanger = (componentName, num, handleClick) => {
+  return React.createElement(
+    componentName,
+    { onClick: handleClick, className: 'square danger' },
+    num,
+  );
+};
+
+const squareBtnLight = (componentName, num, handleClick) => {
+  return React.createElement(
+    componentName,
+    { onClick: handleClick, className: 'square light', modify: true },
+    num,
+  );
+};
+
 class Square extends React.Component {
   constructor(props) {
     super(props);
@@ -85,28 +121,16 @@ class Square extends React.Component {
   };
 
   render() {
-    const { row, col } = this.props;
+    const { row, col, number } = this.props;
     let btn;
 
     if (this.props.modify === false) {
-      if (rowTopLeft.includes(row) && rowTopLeft.includes(col)) {
-        btn = (
-          <DisabledTopLeft className='square primary'>
-            {this.props.number}
-          </DisabledTopLeft>
-        );
-      } else if (rowTopLeft.includes(row) && topRightRange.includes(col)) {
-        btn = (
-          <DisabledTopRight className='square primary'>
-            {this.props.number}
-          </DisabledTopRight>
-        );
-      } else if (topRightRange.includes(row) && rowTopLeft.includes(col)) {
-        btn = (
-          <DisabledBottomLeft className='square primary'>
-            {this.props.number}
-          </DisabledBottomLeft>
-        );
+      if (topLeftCondition(row, col)) {
+        btn = disabledBtn(DisabledTopLeft, number);
+      } else if (topRightCondition(row, col)) {
+        btn = disabledBtn(DisabledTopRight, number);
+      } else if (bottomLeftCondition(row, col)) {
+        btn = disabledBtn(DisabledBottomLeft, number);
       } else {
         btn = (
           <Button disabled theme='dark' className='square'>
@@ -117,39 +141,12 @@ class Square extends React.Component {
     } else {
       if (!this.state.edit) {
         if (!this.state.valid && this.props.number !== null) {
-          if (rowTopLeft.includes(row) && rowTopLeft.includes(col)) {
-            btn = (
-              <SquareBorderTopLeft
-                onClick={this.handleClick}
-                theme='danger'
-                active
-                className='square danger'
-              >
-                {this.props.number}
-              </SquareBorderTopLeft>
-            );
-          } else if (rowTopLeft.includes(row) && topRightRange.includes(col)) {
-            btn = (
-              <SquareBorderTopRight
-                onClick={this.handleClick}
-                theme='danger'
-                active
-                className='square danger'
-              >
-                {this.props.number}
-              </SquareBorderTopRight>
-            );
-          } else if (topRightRange.includes(row) && rowTopLeft.includes(col)) {
-            btn = (
-              <SquareBorderBottomLeft
-                onClick={this.handleClick}
-                theme='danger'
-                active
-                className='square danger'
-              >
-                {this.props.number}
-              </SquareBorderBottomLeft>
-            );
+          if (topLeftCondition(row, col)) {
+            btn = squareBtnDanger(SquareBorderTopLeft, number, this.handleClick);
+          } else if (topRightCondition(row, col)) {
+            btn = squareBtnDanger(SquareBorderTopRight, number, this.handleClick);
+          } else if (bottomLeftCondition(row, col)) {
+            btn = squareBtnDanger(SquareBorderBottomLeft, number, this.handleClick);
           } else {
             btn = (
               <Button
@@ -163,39 +160,12 @@ class Square extends React.Component {
             );
           }
         } else {
-          if (rowTopLeft.includes(row) && rowTopLeft.includes(col)) {
-            btn = (
-              <SquareBorderTopLeft
-                onClick={this.handleClick}
-                theme='light'
-                className='square light'
-                modify={true}
-              >
-                {this.props.number}
-              </SquareBorderTopLeft>
-            );
-          } else if (rowTopLeft.includes(row) && topRightRange.includes(col)) {
-            btn = (
-              <SquareBorderTopRight
-                onClick={this.handleClick}
-                theme='light'
-                className='square light'
-                modify={true}
-              >
-                {this.props.number}
-              </SquareBorderTopRight>
-            );
-          } else if (topRightRange.includes(row) && rowTopLeft.includes(col)) {
-            btn = (
-              <SquareBorderBottomLeft
-                onClick={this.handleClick}
-                theme='light'
-                className='square light'
-                modify={true}
-              >
-                {this.props.number}
-              </SquareBorderBottomLeft>
-            );
+          if (topLeftCondition(row, col)) {
+            btn = squareBtnLight(SquareBorderTopLeft,number,this.handleClick)
+          } else if (topRightCondition(row, col)) {
+            btn = squareBtnLight(SquareBorderTopRight, number, this.handleClick);
+          } else if (bottomLeftCondition(row, col)) {
+            btn = squareBtnLight(SquareBorderBottomLeft, number, this.handleClick);
           } else {
             btn = (
               <Button
