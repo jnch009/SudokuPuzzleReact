@@ -22,6 +22,10 @@ const bottomLeftCondition = (row, col) => {
   return topRightRange.includes(row) && rowTopLeft.includes(col);
 };
 
+const bottomRightCondition = (row, col) => {
+  return topRightRange.includes(row) && topRightRange.includes(col);
+};
+
 const rowTopLeft = [0, 3, 6];
 const topRightRange = [2, 5, 8];
 
@@ -46,6 +50,13 @@ const SquareBorderBottomLeft = styled.button`
   opacity: ${props => (props.children !== null ? 0.65 : 1)};
 `;
 
+const SquareBorderBottomRight = styled.button`
+  border-bottom: 0.2em red solid;
+  border-right: 0.2em red solid;
+  color: ${props => (props.modify ? null : '#fff')};
+  opacity: ${props => (props.children !== null ? 0.65 : 1)};
+`;
+
 const DisabledTopLeft = styled(SquareBorderTopLeft)`
   &&& {
     cursor: not-allowed;
@@ -59,6 +70,12 @@ const DisabledTopRight = styled(SquareBorderTopRight)`
 `;
 
 const DisabledBottomLeft = styled(SquareBorderBottomLeft)`
+  &&& {
+    cursor: not-allowed;
+  }
+`;
+
+const DisabledBottomRight = styled(SquareBorderBottomRight)`
   &&& {
     cursor: not-allowed;
   }
@@ -131,6 +148,8 @@ class Square extends React.Component {
         btn = disabledBtn(DisabledTopRight, number);
       } else if (bottomLeftCondition(row, col)) {
         btn = disabledBtn(DisabledBottomLeft, number);
+      } else if (bottomRightCondition(row,col)){
+        btn = disabledBtn(DisabledBottomRight, number);
       } else {
         btn = (
           <Button disabled theme='dark' className='square'>
@@ -147,6 +166,8 @@ class Square extends React.Component {
             btn = squareBtnDanger(SquareBorderTopRight, number, this.handleClick);
           } else if (bottomLeftCondition(row, col)) {
             btn = squareBtnDanger(SquareBorderBottomLeft, number, this.handleClick);
+          } else if (bottomRightCondition(row,col)){
+            btn = squareBtnDanger(SquareBorderBottomRight, number, this.handleClick);
           } else {
             btn = (
               <Button
@@ -166,6 +187,8 @@ class Square extends React.Component {
             btn = squareBtnLight(SquareBorderTopRight, number, this.handleClick);
           } else if (bottomLeftCondition(row, col)) {
             btn = squareBtnLight(SquareBorderBottomLeft, number, this.handleClick);
+          } else if (bottomRightCondition(row,col)){ 
+            btn = squareBtnLight(SquareBorderBottomRight, number, this.handleClick);
           } else {
             btn = (
               <Button
