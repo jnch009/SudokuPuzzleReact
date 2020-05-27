@@ -30,13 +30,13 @@ const topCondition = (row, col) => {
   return rowTopLeft.includes(row) && topBorder.includes(col);
 };
 
-const bottomCondition = (row,col) => {
+const bottomCondition = (row, col) => {
   return topRightRange.includes(row) && topBorder.includes(col);
-}
+};
 
-const leftCondition = (row,col) => {
+const leftCondition = (row, col) => {
   return topBorder.includes(row) && rowTopLeft.includes(col);
-}
+};
 
 const rightCondition = (row, col) => {
   return topBorder.includes(row) && topRightRange.includes(col);
@@ -45,6 +45,73 @@ const rightCondition = (row, col) => {
 const rowTopLeft = [0, 3, 6];
 const topRightRange = [2, 5, 8];
 const topBorder = [1, 4, 7];
+
+const boxConditionLookup = () => {
+  const boxLookup = {};
+  for (let rowNum = 0; rowNum < rowTopLeft.length; rowNum++) {
+    for (let colNum = 0; colNum < rowTopLeft.length; colNum++) {
+      boxLookup[
+        `${rowTopLeft[rowNum]} ${rowTopLeft[colNum]}`
+      ] = SquareBorderTopLeft;
+    }
+  }
+
+  for (let rowNum = 0; rowNum < rowTopLeft.length; rowNum++) {
+    for (let colNum = 0; colNum < topRightRange.length; colNum++) {
+      boxLookup[
+        `${rowTopLeft[rowNum]} ${topRightRange[colNum]}`
+      ] = SquareBorderTopRight;
+    }
+  }
+
+  for (let rowNum = 0; rowNum < topRightRange.length; rowNum++) {
+    for (let colNum = 0; colNum < rowTopLeft.length; colNum++) {
+      boxLookup[
+        `${topRightRange[rowNum]} ${rowTopLeft[colNum]}`
+      ] = SquareBorderBottomLeft;
+    }
+  }
+
+  for (let rowNum = 0; rowNum < topRightRange.length; rowNum++) {
+    for (let colNum = 0; colNum < topRightRange.length; colNum++) {
+      boxLookup[
+        `${topRightRange[rowNum]} ${topRightRange[colNum]}`
+      ] = SquareBorderBottomRight;
+    }
+  }
+
+  for (let rowNum = 0; rowNum < rowTopLeft.length; rowNum++) {
+    for (let colNum = 0; colNum < topBorder.length; colNum++) {
+      boxLookup[`${rowTopLeft[rowNum]} ${topBorder[colNum]}`] = SquareBorderTop;
+    }
+  }
+
+  for (let rowNum = 0; rowNum < topRightRange.length; rowNum++) {
+    for (let colNum = 0; colNum < topBorder.length; colNum++) {
+      boxLookup[
+        `${topRightRange[rowNum]} ${topBorder[colNum]}`
+      ] = SquareBorderBottom;
+    }
+  }
+
+  for (let rowNum = 0; rowNum < topBorder.length; rowNum++) {
+    for (let colNum = 0; colNum < rowTopLeft.length; colNum++) {
+      boxLookup[
+        `${topBorder[rowNum]} ${rowTopLeft[colNum]}`
+      ] = SquareBorderLeft;
+    }
+  }
+
+  for (let rowNum = 0; rowNum < topBorder.length; rowNum++) {
+    for (let colNum = 0; colNum < topRightRange.length; colNum++) {
+      boxLookup[
+        `${topBorder[rowNum]} ${topRightRange[colNum]}`
+      ] = SquareBorderRight;
+    }
+  }
+
+  return boxLookup;
+};
 
 const SquareBorderTop = styled.button`
   border-top: ${props => `0.2em ${props.borderColor} solid`};
@@ -176,17 +243,15 @@ const squareBtnLight = (componentName, num, handleClick, borderColor) => {
 };
 
 const borderColorLookup = (row, col) => {
-  return (
-    {
-      [`0 0`]: 'blue',
-      [`3 3`]: 'blue',
-      [`6 6`]: 'blue',
-      [`0 3`]: 'yellow',
-      [`3 6`]: 'yellow',
-      [`6 0`]: 'yellow',
-    }[`${row} ${col}`]
-  );
-}
+  return {
+    [`0 0`]: 'blue',
+    [`3 3`]: 'blue',
+    [`6 6`]: 'blue',
+    [`0 3`]: 'yellow',
+    [`3 6`]: 'yellow',
+    [`6 0`]: 'yellow',
+  }[`${row} ${col}`];
+};
 
 const setBorderColor = (row, col) => {
   //box 1,5 or 9
@@ -231,7 +296,10 @@ class Square extends React.Component {
     const startRow = parseInt(row / 3) * 3;
     const startCol = parseInt(col / 3) * 3;
     const boxColor = setBorderColor(startRow, startCol);
-    
+    const boxLookup = boxConditionLookup();
+
+    //console.log(boxLookup[`${row} ${col}`]);
+
     if (this.props.modify === false) {
       if (topLeftCondition(row, col)) {
         btn = disabledBtn(DisabledTopLeft, number, boxColor);
@@ -243,11 +311,11 @@ class Square extends React.Component {
         btn = disabledBtn(DisabledBottomRight, number, boxColor);
       } else if (topCondition(row, col)) {
         btn = disabledBtn(DisabledTop, number, boxColor);
-      } else if (bottomCondition(row,col)){
+      } else if (bottomCondition(row, col)) {
         btn = disabledBtn(DisabledBottom, number, boxColor);
-      } else if (leftCondition(row,col)){
+      } else if (leftCondition(row, col)) {
         btn = disabledBtn(DisabledLeft, number, boxColor);
-      } else if (rightCondition(row,col)){
+      } else if (rightCondition(row, col)) {
         btn = disabledBtn(DisabledRight, number, boxColor);
       } else {
         btn = (
@@ -259,64 +327,15 @@ class Square extends React.Component {
     } else {
       if (!this.state.edit) {
         if (!this.state.valid && this.props.number !== null) {
-          if (topLeftCondition(row, col)) {
-            btn = squareBtnDanger(
-              SquareBorderTopLeft,
-              number,
-              this.handleClick,
-              boxColor,
-            );
-          } else if (topRightCondition(row, col)) {
-            btn = squareBtnDanger(
-              SquareBorderTopRight,
-              number,
-              this.handleClick,
-              boxColor,
-            );
-          } else if (bottomLeftCondition(row, col)) {
-            btn = squareBtnDanger(
-              SquareBorderBottomLeft,
-              number,
-              this.handleClick,
-              boxColor,
-            );
-          } else if (bottomRightCondition(row, col)) {
-            btn = squareBtnDanger(
-              SquareBorderBottomRight,
-              number,
-              this.handleClick,
-              boxColor,
-            );
-          } else if (topCondition(row, col)) {
-            btn = squareBtnDanger(
-              SquareBorderTop,
-              number,
-              this.handleClick,
-              boxColor,
-            );
-          } else if (bottomCondition(row,col)){
-            btn = squareBtnDanger(
-              SquareBorderBottom,
-              number,
-              this.handleClick,
-              boxColor,
-            );
-          } else if (leftCondition(row,col)){
-            btn = squareBtnDanger(
-              SquareBorderLeft,
-              number,
-              this.handleClick,
-              boxColor,
-            );
-          } else if (rightCondition(row,col)){
-            btn = squareBtnDanger(
-              SquareBorderRight,
-              number,
-              this.handleClick,
-              boxColor,
-            );
-          } else {
-            btn = (
+          btn =
+            boxLookup[`${row} ${col}`] !== undefined ? (
+              squareBtnDanger(
+                boxLookup[`${row} ${col}`],
+                number,
+                this.handleClick,
+                boxColor,
+              )
+            ) : (
               <Button
                 onClick={this.handleClick}
                 theme='danger'
@@ -326,66 +345,16 @@ class Square extends React.Component {
                 {this.props.number}
               </Button>
             );
-          }
         } else {
-          if (topLeftCondition(row, col)) {
-            btn = squareBtnLight(
-              SquareBorderTopLeft,
-              number,
-              this.handleClick,
-              boxColor,
-            );
-          } else if (topRightCondition(row, col)) {
-            btn = squareBtnLight(
-              SquareBorderTopRight,
-              number,
-              this.handleClick,
-              boxColor,
-            );
-          } else if (bottomLeftCondition(row, col)) {
-            btn = squareBtnLight(
-              SquareBorderBottomLeft,
-              number,
-              this.handleClick,
-              boxColor,
-            );
-          } else if (bottomRightCondition(row, col)) {
-            btn = squareBtnLight(
-              SquareBorderBottomRight,
-              number,
-              this.handleClick,
-              boxColor,
-            );
-          } else if (topCondition(row, col)) {
-            btn = squareBtnLight(
-              SquareBorderTop,
-              number,
-              this.handleClick,
-              boxColor,
-            );
-          } else if (bottomCondition(row,col)){
-            btn = squareBtnLight(
-              SquareBorderBottom,
-              number,
-              this.handleClick,
-              boxColor,
-            );
-          } else if (leftCondition(row,col)){
-            btn = squareBtnLight(
-              SquareBorderLeft,
-              number,
-              this.handleClick,
-              boxColor,
-            );
-          } else if (rightCondition(row,col)){
-            btn = squareBtnLight(
-              SquareBorderRight,
-              number,
-              this.handleClick,
-              boxColor,
-            );
-          } else {
-            btn = (
+          btn =
+            boxLookup[`${row} ${col}`] !== undefined ? (
+              squareBtnLight(
+                boxLookup[`${row} ${col}`],
+                number,
+                this.handleClick,
+                boxColor,
+              )
+            ) : (
               <Button
                 onClick={this.handleClick}
                 theme='light'
@@ -394,7 +363,6 @@ class Square extends React.Component {
                 {this.props.number}
               </Button>
             );
-          }
         }
       } else {
         btn = (
