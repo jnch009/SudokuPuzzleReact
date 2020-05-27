@@ -5,6 +5,16 @@ import styled from 'styled-components';
 import './square.scss';
 import boxLookupAssignment from './squareUtility';
 import tl from './squareBorders/topLeft';
+import tr from './squareBorders/topRight';
+import t from './squareBorders/Top';
+import bl from './squareBorders/bottomLeft';
+import br from './squareBorders/bottomRight';
+import b from './squareBorders/Bottom';
+import l from './squareBorders/Left';
+import r from './squareBorders/Right';
+import squareBtnLight from './squareState/Active';
+import squareBtnDanger from './squareState/Danger';
+import disabledBtn from './squareState/Disabled';
 
 const initialSquare = {
   edit: false,
@@ -27,168 +37,75 @@ const boxConditionLookup = disabled => {
     tl.DisabledTopLeft,
   );
 
-  for (let rowNum = 0; rowNum < rowTopLeft.length; rowNum++) {
-    for (let colNum = 0; colNum < topRightRange.length; colNum++) {
-      boxLookup[`${rowTopLeft[rowNum]} ${topRightRange[colNum]}`] = !disabled
-        ? SquareBorderTopRight
-        : DisabledTopRight;
-    }
-  }
+  boxLookupAssignment(
+    boxLookup,
+    rowTopLeft,
+    topRightRange,
+    disabled,
+    tr.SquareBorderTopRight,
+    tr.DisabledTopRight,
+  );
 
-  for (let rowNum = 0; rowNum < topRightRange.length; rowNum++) {
-    for (let colNum = 0; colNum < rowTopLeft.length; colNum++) {
-      boxLookup[`${topRightRange[rowNum]} ${rowTopLeft[colNum]}`] = !disabled
-        ? SquareBorderBottomLeft
-        : DisabledBottomLeft;
-    }
-  }
+  boxLookupAssignment(
+    boxLookup,
+    topRightRange,
+    rowTopLeft,
+    disabled,
+    bl.SquareBorderBottomLeft,
+    bl.DisabledBottomLeft,
+  );
 
-  for (let rowNum = 0; rowNum < topRightRange.length; rowNum++) {
-    for (let colNum = 0; colNum < topRightRange.length; colNum++) {
-      boxLookup[`${topRightRange[rowNum]} ${topRightRange[colNum]}`] = !disabled
-        ? SquareBorderBottomRight
-        : DisabledBottomRight;
-    }
-  }
+  boxLookupAssignment(
+    boxLookup,
+    topRightRange,
+    topRightRange,
+    disabled,
+    br.SquareBorderBottomRight,
+    br.DisabledBottomRight,
+  );
 
-  for (let rowNum = 0; rowNum < rowTopLeft.length; rowNum++) {
-    for (let colNum = 0; colNum < topBorder.length; colNum++) {
-      boxLookup[`${rowTopLeft[rowNum]} ${topBorder[colNum]}`] = !disabled
-        ? SquareBorderTop
-        : DisabledTop;
-    }
-  }
+  boxLookupAssignment(
+    boxLookup,
+    rowTopLeft,
+    topBorder,
+    disabled,
+    t.SquareBorderTop,
+    t.DisabledTop,
+  );
 
-  for (let rowNum = 0; rowNum < topRightRange.length; rowNum++) {
-    for (let colNum = 0; colNum < topBorder.length; colNum++) {
-      boxLookup[`${topRightRange[rowNum]} ${topBorder[colNum]}`] = !disabled
-        ? SquareBorderBottom
-        : DisabledBottom;
-    }
-  }
+  boxLookupAssignment(
+    boxLookup,
+    topRightRange,
+    topBorder,
+    disabled,
+    b.SquareBorderBottom,
+    b.DisabledBottom,
+  );
 
-  for (let rowNum = 0; rowNum < topBorder.length; rowNum++) {
-    for (let colNum = 0; colNum < rowTopLeft.length; colNum++) {
-      boxLookup[`${topBorder[rowNum]} ${rowTopLeft[colNum]}`] = !disabled
-        ? SquareBorderLeft
-        : DisabledLeft;
-    }
-  }
+  boxLookupAssignment(
+    boxLookup,
+    topBorder,
+    rowTopLeft,
+    disabled,
+    l.SquareBorderLeft,
+    l.DisabledLeft,
+  );
 
-  for (let rowNum = 0; rowNum < topBorder.length; rowNum++) {
-    for (let colNum = 0; colNum < topRightRange.length; colNum++) {
-      boxLookup[`${topBorder[rowNum]} ${topRightRange[colNum]}`] = !disabled
-        ? SquareBorderRight
-        : DisabledRight;
-    }
-  }
+  boxLookupAssignment(
+    boxLookup,
+    topBorder,
+    topRightRange,
+    disabled,
+    r.SquareBorderRight,
+    r.DisabledRight,
+  );
 
   return boxLookup;
 };
 
-const SquareBorderTop = styled.button`
-  border-top: ${props => `0.2em ${props.borderColor} solid`};
-  color: ${props => (props.modify ? null : '#fff')};
-  opacity: ${props => (props.children !== null ? 0.65 : 1)};
-`;
-
-const SquareBorderTopLeft = styled.button`
-  border-top: ${props => `0.2em ${props.borderColor} solid`};
-  border-left: ${props => `0.2em ${props.borderColor} solid`};
-  color: ${props => (props.modify ? null : '#fff')};
-  opacity: ${props => (props.children !== null ? 0.65 : 1)};
-`;
-
-const SquareBorderTopRight = styled.button`
-  border-top: ${props => `0.2em ${props.borderColor} solid`};
-  border-right: ${props => `0.2em ${props.borderColor} solid`};
-  color: ${props => (props.modify ? null : '#fff')};
-  opacity: ${props => (props.children !== null ? 0.65 : 1)};
-`;
-
-const SquareBorderBottomLeft = styled.button`
-  border-bottom: ${props => `0.2em ${props.borderColor} solid`};
-  border-left: ${props => `0.2em ${props.borderColor} solid`};
-  color: ${props => (props.modify ? null : '#fff')};
-  opacity: ${props => (props.children !== null ? 0.65 : 1)};
-`;
-
-const SquareBorderBottomRight = styled.button`
-  border-bottom: ${props => `0.2em ${props.borderColor} solid`};
-  border-right: ${props => `0.2em ${props.borderColor} solid`};
-  color: ${props => (props.modify ? null : '#fff')};
-  opacity: ${props => (props.children !== null ? 0.65 : 1)};
-`;
-
-const SquareBorderBottom = styled.button`
-  border-bottom: ${props => `0.2em ${props.borderColor} solid`};
-  color: ${props => (props.modify ? null : '#fff')};
-  opacity: ${props => (props.children !== null ? 0.65 : 1)};
-`;
-
-const SquareBorderLeft = styled.button`
-  border-left: ${props => `0.2em ${props.borderColor} solid`};
-  color: ${props => (props.modify ? null : '#fff')};
-  opacity: ${props => (props.children !== null ? 0.65 : 1)};
-`;
-
-const SquareBorderRight = styled.button`
-  border-right: ${props => `0.2em ${props.borderColor} solid`};
-  color: ${props => (props.modify ? null : '#fff')};
-  opacity: ${props => (props.children !== null ? 0.65 : 1)};
-`;
-
 const noBorder = styled.button`
   color: ${props => (props.modify ? null : '#fff')};
   opacity: ${props => (props.children !== null ? 0.65 : 1)};
-`;
-
-const DisabledTop = styled(SquareBorderTop)`
-  &&& {
-    cursor: not-allowed;
-  }
-`;
-
-const DisabledTopLeft = styled(SquareBorderTopLeft)`
-  &&& {
-    cursor: not-allowed;
-  }
-`;
-
-const DisabledTopRight = styled(SquareBorderTopRight)`
-  &&& {
-    cursor: not-allowed;
-  }
-`;
-
-const DisabledBottomLeft = styled(SquareBorderBottomLeft)`
-  &&& {
-    cursor: not-allowed;
-  }
-`;
-
-const DisabledBottomRight = styled(SquareBorderBottomRight)`
-  &&& {
-    cursor: not-allowed;
-  }
-`;
-
-const DisabledBottom = styled(SquareBorderBottom)`
-  &&& {
-    cursor: not-allowed;
-  }
-`;
-
-const DisabledLeft = styled(SquareBorderLeft)`
-  &&& {
-    cursor: not-allowed;
-  }
-`;
-
-const DisabledRight = styled(SquareBorderRight)`
-  &&& {
-    cursor: not-allowed;
-  }
 `;
 
 const DisabledNoBorder = styled(noBorder)`
@@ -196,35 +113,6 @@ const DisabledNoBorder = styled(noBorder)`
     cursor: not-allowed;
   }
 `;
-
-const disabledBtn = (componentName, num, borderColor) => {
-  return React.createElement(
-    componentName,
-    { className: 'square primary', borderColor },
-    num,
-  );
-};
-
-const squareBtnDanger = (componentName, num, handleClick, borderColor) => {
-  return React.createElement(
-    componentName,
-    { onClick: handleClick, className: 'square danger', borderColor },
-    num,
-  );
-};
-
-const squareBtnLight = (componentName, num, handleClick, borderColor) => {
-  return React.createElement(
-    componentName,
-    {
-      onClick: handleClick,
-      className: 'square light',
-      modify: true,
-      borderColor,
-    },
-    num,
-  );
-};
 
 const borderColorLookup = (row, col) => {
   return {
@@ -242,10 +130,11 @@ const setBorderColor = (row, col) => {
   return borderColorLookup(row, col) || '#c700ff';
 };
 
+let btn;
+
 class Square extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = initialSquare;
   }
 
@@ -276,7 +165,6 @@ class Square extends React.Component {
 
   render() {
     const { row, col, number } = this.props;
-    let btn;
     const startRow = parseInt(row / 3) * 3;
     const startCol = parseInt(col / 3) * 3;
     const boxColor = setBorderColor(startRow, startCol);
