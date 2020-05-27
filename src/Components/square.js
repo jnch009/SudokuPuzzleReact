@@ -10,103 +10,73 @@ const initialSquare = {
   valid: true,
 };
 
-const topLeftCondition = (row, col) => {
-  return rowTopLeft.includes(row) && rowTopLeft.includes(col);
-};
-
-const topRightCondition = (row, col) => {
-  return rowTopLeft.includes(row) && topRightRange.includes(col);
-};
-
-const bottomLeftCondition = (row, col) => {
-  return topRightRange.includes(row) && rowTopLeft.includes(col);
-};
-
-const bottomRightCondition = (row, col) => {
-  return topRightRange.includes(row) && topRightRange.includes(col);
-};
-
-const topCondition = (row, col) => {
-  return rowTopLeft.includes(row) && topBorder.includes(col);
-};
-
-const bottomCondition = (row, col) => {
-  return topRightRange.includes(row) && topBorder.includes(col);
-};
-
-const leftCondition = (row, col) => {
-  return topBorder.includes(row) && rowTopLeft.includes(col);
-};
-
-const rightCondition = (row, col) => {
-  return topBorder.includes(row) && topRightRange.includes(col);
-};
-
 const rowTopLeft = [0, 3, 6];
 const topRightRange = [2, 5, 8];
 const topBorder = [1, 4, 7];
 
-const boxConditionLookup = () => {
+const boxConditionLookup = disabled => {
   const boxLookup = {};
   for (let rowNum = 0; rowNum < rowTopLeft.length; rowNum++) {
     for (let colNum = 0; colNum < rowTopLeft.length; colNum++) {
-      boxLookup[
-        `${rowTopLeft[rowNum]} ${rowTopLeft[colNum]}`
-      ] = SquareBorderTopLeft;
+      boxLookup[`${rowTopLeft[rowNum]} ${rowTopLeft[colNum]}`] = !disabled
+        ? SquareBorderTopLeft
+        : DisabledTopLeft;
     }
   }
 
   for (let rowNum = 0; rowNum < rowTopLeft.length; rowNum++) {
     for (let colNum = 0; colNum < topRightRange.length; colNum++) {
-      boxLookup[
-        `${rowTopLeft[rowNum]} ${topRightRange[colNum]}`
-      ] = SquareBorderTopRight;
+      boxLookup[`${rowTopLeft[rowNum]} ${topRightRange[colNum]}`] = !disabled
+        ? SquareBorderTopRight
+        : DisabledTopRight;
     }
   }
 
   for (let rowNum = 0; rowNum < topRightRange.length; rowNum++) {
     for (let colNum = 0; colNum < rowTopLeft.length; colNum++) {
-      boxLookup[
-        `${topRightRange[rowNum]} ${rowTopLeft[colNum]}`
-      ] = SquareBorderBottomLeft;
+      boxLookup[`${topRightRange[rowNum]} ${rowTopLeft[colNum]}`] = !disabled
+        ? SquareBorderBottomLeft
+        : DisabledBottomLeft;
     }
   }
 
   for (let rowNum = 0; rowNum < topRightRange.length; rowNum++) {
     for (let colNum = 0; colNum < topRightRange.length; colNum++) {
-      boxLookup[
-        `${topRightRange[rowNum]} ${topRightRange[colNum]}`
-      ] = SquareBorderBottomRight;
+      boxLookup[`${topRightRange[rowNum]} ${topRightRange[colNum]}`] = !disabled
+        ? SquareBorderBottomRight
+        : DisabledBottomRight;
     }
   }
 
   for (let rowNum = 0; rowNum < rowTopLeft.length; rowNum++) {
     for (let colNum = 0; colNum < topBorder.length; colNum++) {
-      boxLookup[`${rowTopLeft[rowNum]} ${topBorder[colNum]}`] = SquareBorderTop;
+      boxLookup[`${rowTopLeft[rowNum]} ${topBorder[colNum]}`] = !disabled
+        ? SquareBorderTop
+        : DisabledTop;
     }
   }
 
   for (let rowNum = 0; rowNum < topRightRange.length; rowNum++) {
     for (let colNum = 0; colNum < topBorder.length; colNum++) {
-      boxLookup[
-        `${topRightRange[rowNum]} ${topBorder[colNum]}`
-      ] = SquareBorderBottom;
+      boxLookup[`${topRightRange[rowNum]} ${topBorder[colNum]}`] = !disabled
+        ? SquareBorderBottom
+        : DisabledBottom;
     }
   }
 
   for (let rowNum = 0; rowNum < topBorder.length; rowNum++) {
     for (let colNum = 0; colNum < rowTopLeft.length; colNum++) {
-      boxLookup[
-        `${topBorder[rowNum]} ${rowTopLeft[colNum]}`
-      ] = SquareBorderLeft;
+      boxLookup[`${topBorder[rowNum]} ${rowTopLeft[colNum]}`] = !disabled
+        ? SquareBorderLeft
+        : DisabledLeft;
     }
   }
 
   for (let rowNum = 0; rowNum < topBorder.length; rowNum++) {
     for (let colNum = 0; colNum < topRightRange.length; colNum++) {
-      boxLookup[
-        `${topBorder[rowNum]} ${topRightRange[colNum]}`
-      ] = SquareBorderRight;
+      boxLookup[`${topBorder[rowNum]} ${topRightRange[colNum]}`] = !disabled
+        ? SquareBorderRight
+        : DisabledRight;
     }
   }
 
@@ -308,31 +278,11 @@ class Square extends React.Component {
     const startCol = parseInt(col / 3) * 3;
     const boxColor = setBorderColor(startRow, startCol);
     const boxLookup = boxConditionLookup()[`${row} ${col}`] || noBorder;
+    const boxLookupDisabled =
+      boxConditionLookup(true)[`${row} ${col}`] || DisabledNoBorder;
 
     if (this.props.modify === false) {
-      if (topLeftCondition(row, col)) {
-        btn = disabledBtn(DisabledTopLeft, number, boxColor);
-      } else if (topRightCondition(row, col)) {
-        btn = disabledBtn(DisabledTopRight, number, boxColor);
-      } else if (bottomLeftCondition(row, col)) {
-        btn = disabledBtn(DisabledBottomLeft, number, boxColor);
-      } else if (bottomRightCondition(row, col)) {
-        btn = disabledBtn(DisabledBottomRight, number, boxColor);
-      } else if (topCondition(row, col)) {
-        btn = disabledBtn(DisabledTop, number, boxColor);
-      } else if (bottomCondition(row, col)) {
-        btn = disabledBtn(DisabledBottom, number, boxColor);
-      } else if (leftCondition(row, col)) {
-        btn = disabledBtn(DisabledLeft, number, boxColor);
-      } else if (rightCondition(row, col)) {
-        btn = disabledBtn(DisabledRight, number, boxColor);
-      } else {
-        btn = (
-          <Button disabled theme='dark' className='square'>
-            {this.props.number}
-          </Button>
-        );
-      }
+      btn = disabledBtn(boxLookupDisabled, number, boxColor);
     } else {
       if (!this.state.edit) {
         if (!this.state.valid && this.props.number !== null) {
