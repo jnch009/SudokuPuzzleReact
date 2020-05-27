@@ -175,24 +175,22 @@ const squareBtnLight = (componentName, num, handleClick, borderColor) => {
   );
 };
 
+const borderColorLookup = (row, col) => {
+  return (
+    {
+      [`0 0`]: 'blue',
+      [`3 3`]: 'blue',
+      [`6 6`]: 'blue',
+      [`0 3`]: 'yellow',
+      [`3 6`]: 'yellow',
+      [`6 0`]: 'yellow',
+    }[`${row} ${col}`]
+  );
+}
+
 const setBorderColor = (row, col) => {
   //box 1,5 or 9
-  if (
-    (row === 0 && col === 0) ||
-    (row === 3 && col === 3) ||
-    (row === 6 && col === 6)
-  ) {
-    return 'blue';
-  } //box 2,6, or 7
-  else if (
-    (row === 0 && col === 3) ||
-    (row === 3 && col === 6) ||
-    (row === 6 && col === 0)
-  ) {
-    return 'yellow';
-  } else {
-    return '#c700ff';
-  }
+  return borderColorLookup(row, col) || '#c700ff';
 };
 
 class Square extends React.Component {
@@ -233,7 +231,7 @@ class Square extends React.Component {
     const startRow = parseInt(row / 3) * 3;
     const startCol = parseInt(col / 3) * 3;
     const boxColor = setBorderColor(startRow, startCol);
-
+    
     if (this.props.modify === false) {
       if (topLeftCondition(row, col)) {
         btn = disabledBtn(DisabledTopLeft, number, boxColor);
