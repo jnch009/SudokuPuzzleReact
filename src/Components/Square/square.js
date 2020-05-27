@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormInput } from 'shards-react';
 import fn from '../../helperFn/boardFunctions';
-import styled from 'styled-components';
 import './square.scss';
 import boxLookupAssignment from './squareUtility';
 import tl from './squareBorders/topLeft';
@@ -12,6 +11,7 @@ import br from './squareBorders/bottomRight';
 import b from './squareBorders/Bottom';
 import l from './squareBorders/Left';
 import r from './squareBorders/Right';
+import none from './squareBorders/None';
 import squareBtnLight from './squareState/Active';
 import squareBtnDanger from './squareState/Danger';
 import disabledBtn from './squareState/Disabled';
@@ -103,17 +103,6 @@ const boxConditionLookup = disabled => {
   return boxLookup;
 };
 
-const noBorder = styled.button`
-  color: ${props => (props.modify ? null : '#fff')};
-  opacity: ${props => (props.children !== null ? 0.65 : 1)};
-`;
-
-const DisabledNoBorder = styled(noBorder)`
-  &&& {
-    cursor: not-allowed;
-  }
-`;
-
 const borderColorLookup = (row, col) => {
   return {
     [`0 0`]: 'blue',
@@ -168,9 +157,9 @@ class Square extends React.Component {
     const startRow = parseInt(row / 3) * 3;
     const startCol = parseInt(col / 3) * 3;
     const boxColor = setBorderColor(startRow, startCol);
-    const boxLookup = boxConditionLookup()[`${row} ${col}`] || noBorder;
+    const boxLookup = boxConditionLookup()[`${row} ${col}`] || none.noBorder;
     const boxLookupDisabled =
-      boxConditionLookup(true)[`${row} ${col}`] || DisabledNoBorder;
+      boxConditionLookup(true)[`${row} ${col}`] || none.DisabledNoBorder;
 
     if (this.props.modify === false) {
       btn = disabledBtn(boxLookupDisabled, number, boxColor);
