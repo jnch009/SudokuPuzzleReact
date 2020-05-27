@@ -1,9 +1,10 @@
 import React from 'react';
-//import Button from 'react-bootstrap/Button';
-import { FormInput, Button } from 'shards-react';
-import fn from '../helperFn/boardFunctions';
+import { FormInput } from 'shards-react';
+import fn from '../../helperFn/boardFunctions';
 import styled from 'styled-components';
 import './square.scss';
+import boxLookupAssignment from './squareUtility';
+import tl from './squareBorders/topLeft';
 
 const initialSquare = {
   edit: false,
@@ -16,13 +17,15 @@ const topBorder = [1, 4, 7];
 
 const boxConditionLookup = disabled => {
   const boxLookup = {};
-  for (let rowNum = 0; rowNum < rowTopLeft.length; rowNum++) {
-    for (let colNum = 0; colNum < rowTopLeft.length; colNum++) {
-      boxLookup[`${rowTopLeft[rowNum]} ${rowTopLeft[colNum]}`] = !disabled
-        ? SquareBorderTopLeft
-        : DisabledTopLeft;
-    }
-  }
+
+  boxLookupAssignment(
+    boxLookup,
+    rowTopLeft,
+    rowTopLeft,
+    disabled,
+    tl.SquareBorderTopLeft,
+    tl.DisabledTopLeft,
+  );
 
   for (let rowNum = 0; rowNum < rowTopLeft.length; rowNum++) {
     for (let colNum = 0; colNum < topRightRange.length; colNum++) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import Square from './square';
+import Square from './Square/square';
 
 const renderSquare = (grid, num, row, col, handleKeyPress) => {
   const gridEntry = num;
