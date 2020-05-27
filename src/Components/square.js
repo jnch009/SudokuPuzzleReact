@@ -165,6 +165,11 @@ const SquareBorderRight = styled.button`
   opacity: ${props => (props.children !== null ? 0.65 : 1)};
 `;
 
+const noBorder = styled.button`
+  color: ${props => (props.modify ? null : '#fff')};
+  opacity: ${props => (props.children !== null ? 0.65 : 1)};
+`;
+
 const DisabledTop = styled(SquareBorderTop)`
   &&& {
     cursor: not-allowed;
@@ -208,6 +213,12 @@ const DisabledLeft = styled(SquareBorderLeft)`
 `;
 
 const DisabledRight = styled(SquareBorderRight)`
+  &&& {
+    cursor: not-allowed;
+  }
+`;
+
+const DisabledNoBorder = styled(noBorder)`
   &&& {
     cursor: not-allowed;
   }
@@ -296,9 +307,7 @@ class Square extends React.Component {
     const startRow = parseInt(row / 3) * 3;
     const startCol = parseInt(col / 3) * 3;
     const boxColor = setBorderColor(startRow, startCol);
-    const boxLookup = boxConditionLookup();
-
-    //console.log(boxLookup[`${row} ${col}`]);
+    const boxLookup = boxConditionLookup()[`${row} ${col}`] || noBorder;
 
     if (this.props.modify === false) {
       if (topLeftCondition(row, col)) {
@@ -327,42 +336,9 @@ class Square extends React.Component {
     } else {
       if (!this.state.edit) {
         if (!this.state.valid && this.props.number !== null) {
-          btn =
-            boxLookup[`${row} ${col}`] !== undefined ? (
-              squareBtnDanger(
-                boxLookup[`${row} ${col}`],
-                number,
-                this.handleClick,
-                boxColor,
-              )
-            ) : (
-              <Button
-                onClick={this.handleClick}
-                theme='danger'
-                active
-                className='square danger'
-              >
-                {this.props.number}
-              </Button>
-            );
+          btn = squareBtnDanger(boxLookup, number, this.handleClick, boxColor);
         } else {
-          btn =
-            boxLookup[`${row} ${col}`] !== undefined ? (
-              squareBtnLight(
-                boxLookup[`${row} ${col}`],
-                number,
-                this.handleClick,
-                boxColor,
-              )
-            ) : (
-              <Button
-                onClick={this.handleClick}
-                theme='light'
-                className='square light'
-              >
-                {this.props.number}
-              </Button>
-            );
+          btn = squareBtnLight(boxLookup, number, this.handleClick, boxColor);
         }
       } else {
         btn = (
