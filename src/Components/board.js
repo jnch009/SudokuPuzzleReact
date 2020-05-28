@@ -25,19 +25,23 @@ class Board extends React.Component {
     this.clearInterval = this.clearInterval.bind(this);
   }
 
-  generateBoard = () => {
+  generateBoard = populateGameGrid => {
     let gridNewly = fn.createGrid();
     fn.solve(gridNewly, fn.shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]));
     fn.removingEntries(gridNewly, this.props.difficulty);
 
-    this.setState({
-      grid: gridNewly,
-    });
+    this.setState(
+      {
+        grid: gridNewly,
+      },
+      () => populateGameGrid(this.state.grid),
+    );
   };
 
   componentDidMount() {
-    this.generateBoard();
-    this.props.populateGameGrid(this.state.grid);
+    const { populateGameGrid } = this.props;
+
+    this.generateBoard(populateGameGrid);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -57,20 +61,16 @@ class Board extends React.Component {
           complete: false,
         });
 
-        this.generateBoard();
-        populateGameGrid(grid);
+        this.generateBoard(populateGameGrid);
       } else if (solvedButton === true) {
         this.setState({
           grid: solvedGrid,
         });
       }
     } else if (!isEqual(prevState.grid, grid)) {
-      if (fn.verifySudoku(this.state.grid)) {
-        this.setState({ complete: true });
-      } else {
-        this.setState({ complete: false });
-      }
-      populateGameGrid(this.state.grid);
+      this.setState({ complete: fn.verifySudoku(this.state.grid) }, () =>
+        populateGameGrid(this.state.grid),
+      );
     }
   }
 
@@ -113,7 +113,7 @@ class Board extends React.Component {
       }
     }
   }
-  
+
   render() {
     let error;
 

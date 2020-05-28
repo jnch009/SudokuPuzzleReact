@@ -30,19 +30,15 @@ class Game extends React.Component {
     };
   }
 
-  componentDidUpdate() {
-    if (this.state.newGame === true) {
-      this.setState(() => ({ newGame: false }));
-    }
-  }
-
   changeDifficulty = diff => {
     this.setState(() => ({ difficulty: diff }));
   };
 
   newGameAccepted = () => {
-    this.setState(() => ({ newGame: true }));
-    this.handleNewGameClick();
+    this.setState(() => ({
+      newGame: true,
+      openNewGame: !this.state.openNewGame,
+    }));
   };
 
   handleDifficultyClick = () => {
@@ -63,13 +59,12 @@ class Game extends React.Component {
 
   handleSudokuSolver = () => {
     let currentGrid = cloneDeep(this.state.grid);
-    
-    currentGrid = currentGrid.map(row => row.map(el => {
-      return typeof el === 'string' ? null : el;
-    }));
-    
-    //console.log(currentGrid);
-    
+
+    currentGrid = currentGrid.map(row =>
+      row.map(el => {
+        return typeof el === 'string' ? null : el;
+      }),
+    );
     fn.solve(currentGrid, shuffled);
 
     this.setState({
@@ -79,7 +74,7 @@ class Game extends React.Component {
   };
 
   populateGameGrid = grid => {
-    this.setState({ grid: grid, solvedButton: false });
+    this.setState({ grid: grid, solvedButton: false, newGame: false });
   };
 
   render() {
