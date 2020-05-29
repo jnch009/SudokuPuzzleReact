@@ -1,5 +1,5 @@
 import React from 'react';
-import Square from './square';
+import Square from './Square/square';
 
 const renderSquare = (grid, num, row, col, handleKeyPress) => {
   const gridEntry = num;
@@ -17,7 +17,15 @@ const renderSquare = (grid, num, row, col, handleKeyPress) => {
       />
     );
   } else {
-    return <Square key={`${row} ${col}`} number={gridEntry} modify={false} />;
+    return (
+      <Square
+        key={`${row} ${col}`}
+        row={row}
+        col={col}
+        number={gridEntry}
+        modify={false}
+      />
+    );
   }
 };
 
