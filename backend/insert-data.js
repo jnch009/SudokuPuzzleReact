@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 
 // Replace the following with your Atlas connection string
 
@@ -74,5 +74,69 @@ async function view() {
   }
 }
 
+async function list() {
+  try {
+    await client.connect();
+    console.log('Connected correctly to server');
+    let listDBs = await client.db().admin().listDatabases();
+    console.log(listDBs);
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
+    await client.close();
+  }
+}
+
+async function addDB() {
+  const dbName = 'sudokuSaves';
+  try {
+    await client.connect();
+    console.log('Connected correctly to server');
+
+    const db = client.db(dbName);
+    // Use the collection "people"
+    const col = db.collection('saves');
+    const testSave = {
+      name: 'Jeremy',
+      board: [1, 2, 3],
+      date: new Date(Date.now()),
+    };
+
+    await col.insertOne(testSave);
+    const findResults = await col.find().toArray();
+    console.log(findResults);
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
+    await client.close();
+  }
+}
+
+async function update() {
+  const dbName = 'sudokuSaves';
+  try {
+    await client.connect();
+    console.log('Connected correctly to server');
+
+    const db = client.db(dbName);
+    // Use the collection "people"
+    const col = db.collection('saves');
+
+    await col.updateOne(
+      { _id: ObjectId('5f324e82d13e5007a4dbbf24') },
+      { $set: { gems: 123 } }
+    );
+    const findResults = await col.find().toArray();
+    console.log(findResults);
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
+    await client.close();
+  }
+}
+
 //run().catch(console.dir);
-view().catch(console.dir);
+//view().catch(console.dir);
+//list().catch(console.dir);
+//addDB().catch(console.dir);
+update().catch(console.dir);
