@@ -1,5 +1,7 @@
 import React from 'react';
 import Board from './board';
+import Login from '../Components/Login/Login';
+import Logout from '../Components/Logout/Logout';
 import {
   Container,
   Row,
@@ -12,6 +14,7 @@ import {
 } from 'shards-react';
 import fn from '../helperFn/boardFunctions';
 import cloneDeep from 'lodash.clonedeep';
+import { withAuth0 } from '@auth0/auth0-react';
 
 const shuffled = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 class Game extends React.Component {
@@ -78,6 +81,8 @@ class Game extends React.Component {
   };
 
   render() {
+    const { isAuthenticated } = this.props.auth0;
+
     return (
       <div className='game'>
         <div className='game-title'>
@@ -118,6 +123,9 @@ class Game extends React.Component {
               <Button onClick={this.handleNewGameClick} className='navBar'>
                 New Game
               </Button>
+            </Col>
+            <Col>
+              {isAuthenticated ?  <Logout /> : <Login />}
             </Col>
           </Row>
         </Container>
@@ -217,4 +225,4 @@ class Game extends React.Component {
   }
 }
 
-export default Game;
+export default withAuth0(Game);

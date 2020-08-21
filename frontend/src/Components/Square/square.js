@@ -105,12 +105,12 @@ const boxConditionLookup = disabled => {
 
 const borderColorLookup = (row, col) => {
   return {
-    [`0 0`]: 'blue',
-    [`3 3`]: 'blue',
-    [`6 6`]: 'blue',
-    [`0 3`]: 'yellow',
-    [`3 6`]: 'yellow',
-    [`6 0`]: 'yellow',
+    '0 0': 'blue',
+    '3 3': 'blue',
+    '6 6': 'blue',
+    '0 3': 'yellow',
+    '3 6': 'yellow',
+    '6 0': 'yellow',
   }[`${row} ${col}`];
 };
 
