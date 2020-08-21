@@ -4,7 +4,7 @@
   "description": "REST API allowing for users to save their sudoku game",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --recursive './test/*.js' --exit",
     "start": "nodemon index.js"
   },
   "author": "Jeremy Ng",
@@ -17,6 +17,9 @@
     "mongodb": "^3.6.0"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^8.1.1",
     "nodemon": "^2.0.4"
   }
 }

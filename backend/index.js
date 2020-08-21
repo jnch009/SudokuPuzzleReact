@@ -25,6 +25,10 @@ const checkJwt = jwt({
 
 const checkScopes = jwtAuthz([ 'read:saves' ]);
 
+app.get('/', (req,res) => {
+  res.json('HELLO WORLD!');
+})
+
 app.get('/sudoku/', checkJwt, checkScopes, (req, res) => {
   res.send('Protected Route');
 });
@@ -32,3 +36,5 @@ app.get('/sudoku/', checkJwt, checkScopes, (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
+
+module.exports = app;

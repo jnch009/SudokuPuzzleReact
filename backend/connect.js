@@ -5,8 +5,8 @@ const url = `mongodb+srv://jnch009:${process.env.MONGO_PASS}@sudokusavedgames.xa
 const client = new MongoClient(url);
 const run = async () => {
   try {
-    await client.connect();
-    console.log('Connected correctly to server');
+    const connected = await client.connect();
+    return connected;
   } catch (err) {
     console.log(err.stack);
   } finally {
