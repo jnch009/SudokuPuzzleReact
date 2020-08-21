@@ -12,4 +12,4 @@ const squareBtnLight = (componentName, num, handleClick, borderColor) => {
   );
 };
 
-export default squareBtnLight
+export default squareBtnLight;

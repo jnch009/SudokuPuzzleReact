@@ -15,4 +15,4 @@ const DisabledTopLeft = styled(SquareBorderTopLeft)`
 export default {
   SquareBorderTopLeft,
   DisabledTopLeft
-}
+};
