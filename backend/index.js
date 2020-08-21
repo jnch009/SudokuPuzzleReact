@@ -30,7 +30,9 @@ const checkJwt = jwt({
   algorithms: ['RS256']
 });
 
-app.get('/sudoku/', checkJwt, (req, res) => {
+const checkScopes = jwtAuthz([ 'read:saves' ]);
+
+app.get('/sudoku/', checkJwt, checkScopes, (req, res) => {
   res.send('Protected Route');
 });
 
