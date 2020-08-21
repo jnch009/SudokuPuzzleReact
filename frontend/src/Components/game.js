@@ -1,5 +1,6 @@
 import React from 'react';
 import Board from './board';
+import Login from '../Components/Login/Login'
 import {
   Container,
   Row,
@@ -118,6 +119,9 @@ class Game extends React.Component {
               <Button onClick={this.handleNewGameClick} className='navBar'>
                 New Game
               </Button>
+            </Col>
+            <Col>
+              <Login />
             </Col>
           </Row>
         </Container>
