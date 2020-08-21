@@ -10,13 +10,7 @@ const connect = require('./connect');
 
 connect.run().catch(console.dir);
 
-// Authentication middleware. When used, the
-// Access Token must exist and be verified against
-// the Auth0 JSON Web Key Set
 const checkJwt = jwt({
-  // Dynamically provide a signing key
-  // based on the kid in the header and 
-  // the signing keys provided by the JWKS endpoint.
   secret: jwksRsa.expressJwtSecret({
     cache: true,
     rateLimit: true,
@@ -24,7 +18,6 @@ const checkJwt = jwt({
     jwksUri: process.env.JWKS_URI
   }),
 
-  // Validate the audience and the issuer.
   audience: process.env.AUDIENCE,
   issuer: process.env.ISSUER,
   algorithms: ['RS256']
