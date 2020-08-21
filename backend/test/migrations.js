@@ -12,10 +12,7 @@ const beforeGet = async () => {
   const userWithSaves = {
     _id: userFound, //technically the player's user id
     name: 'Jeremy Ng',
-    saves: [
-      [2, 3, 5, 6],
-      [5, 6, 8, 9, 3],
-    ],
+    saves: [[2, 3, 5, 6],[5, 6, 8, 9, 3]],
     date: new Date(Date.now()),
   };
 
