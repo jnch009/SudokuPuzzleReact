@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@auth0/auth0-react": "^1.0.0",
     "bootstrap": "^4.4.1",
     "lodash.clonedeep": "^4.5.0",
     "lodash.isequal": "^4.5.0",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "^3.4.1",
+    "react-scripts": "^3.4.3",
     "sass": "^1.26.5",
     "shards-react": "^1.0.3",
     "styled-components": "^5.1.0"
@@ -18,10 +19,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "eject": "react-scripts eject",
+    "lint": "npx eslint ./src --fix"
   },
   "browserslist": {
     "production": [
