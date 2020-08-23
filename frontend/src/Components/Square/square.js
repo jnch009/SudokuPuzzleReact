@@ -1,6 +1,5 @@
 import React from 'react';
 import { FormInput } from 'shards-react';
-import fn from '../../helperFn/boardFunctions';
 import './square.scss';
 import boxLookupAssignment from './squareUtility';
 import tl from './squareBorders/topLeft';
@@ -17,8 +16,7 @@ import squareBtnDanger from './squareState/Danger';
 import disabledBtn from './squareState/Disabled';
 
 const initialSquare = {
-  edit: false,
-  valid: true,
+  edit: false
 };
 
 const rowTopLeft = [0, 3, 6];
@@ -128,22 +126,13 @@ class Square extends React.Component {
   }
 
   handleKeyPress = async e => {
-    const { row, col, grid } = this.props;
+    const { row, col } = this.props;
     const number = e.key;
 
-    //debugger;
-    if (Number(number) !== Number(grid[row][col])) {
-      if (!fn.isValid(grid, row, col, number)) {
-        this.setState({ valid: false });
-      } else {
-        this.setState({ valid: true });
-      }
-    }
-
-    if (e.key === 'Backspace' || e.key === 'Delete') {
+    if (number === 'Backspace' || number === 'Delete') {
       this.props.pressKey(null, row, col);
     } else {
-      this.props.pressKey(e.key, row, col);
+      this.props.pressKey(number, row, col);
       this.handleClick();
     }
   };
@@ -153,7 +142,7 @@ class Square extends React.Component {
   };
 
   render() {
-    const { row, col, number } = this.props;
+    const { row, col, number, modify, valid } = this.props;
     const startRow = parseInt(row / 3) * 3;
     const startCol = parseInt(col / 3) * 3;
     const boxColor = setBorderColor(startRow, startCol);
@@ -161,11 +150,11 @@ class Square extends React.Component {
     const boxLookupDisabled =
       boxConditionLookup(true)[`${row} ${col}`] || none.DisabledNoBorder;
 
-    if (this.props.modify === false) {
+    if (modify === false) {
       btn = disabledBtn(boxLookupDisabled, number, boxColor);
     } else {
       if (!this.state.edit) {
-        if (!this.state.valid && this.props.number !== null) {
+        if (!valid && this.props.number !== null) {
           btn = squareBtnDanger(boxLookup, number, this.handleClick, boxColor);
         } else {
           btn = squareBtnLight(boxLookup, number, this.handleClick, boxColor);
