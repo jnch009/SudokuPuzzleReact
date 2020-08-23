@@ -16,8 +16,7 @@ import squareBtnDanger from './squareState/Danger';
 import disabledBtn from './squareState/Disabled';
 
 const initialSquare = {
-  edit: false,
-  valid: true
+  edit: false
 };
 
 const rowTopLeft = [0, 3, 6];
