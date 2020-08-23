@@ -23,80 +23,49 @@ const rowTopLeft = [0, 3, 6];
 const topRightRange = [2, 5, 8];
 const topBorder = [1, 4, 7];
 
-const boxConditionLookup = disabled => {
+const boxConditionLookup = () => {
   const boxLookup = {};
 
   boxLookupAssignment(
     boxLookup,
     rowTopLeft,
     rowTopLeft,
-    disabled,
-    tl.SquareBorderTopLeft,
-    tl.DisabledTopLeft,
+    tl.SquareBorderTopLeft
   );
 
   boxLookupAssignment(
     boxLookup,
     rowTopLeft,
     topRightRange,
-    disabled,
-    tr.SquareBorderTopRight,
-    tr.DisabledTopRight,
+    tr.SquareBorderTopRight
   );
 
   boxLookupAssignment(
     boxLookup,
     topRightRange,
     rowTopLeft,
-    disabled,
-    bl.SquareBorderBottomLeft,
-    bl.DisabledBottomLeft,
+    bl.SquareBorderBottomLeft
   );
 
   boxLookupAssignment(
     boxLookup,
     topRightRange,
     topRightRange,
-    disabled,
-    br.SquareBorderBottomRight,
-    br.DisabledBottomRight,
+    br.SquareBorderBottomRight
   );
 
-  boxLookupAssignment(
-    boxLookup,
-    rowTopLeft,
-    topBorder,
-    disabled,
-    t.SquareBorderTop,
-    t.DisabledTop,
-  );
+  boxLookupAssignment(boxLookup, rowTopLeft, topBorder, t.SquareBorderTop);
 
   boxLookupAssignment(
     boxLookup,
     topRightRange,
     topBorder,
-    disabled,
-    b.SquareBorderBottom,
-    b.DisabledBottom,
+    b.SquareBorderBottom
   );
 
-  boxLookupAssignment(
-    boxLookup,
-    topBorder,
-    rowTopLeft,
-    disabled,
-    l.SquareBorderLeft,
-    l.DisabledLeft,
-  );
+  boxLookupAssignment(boxLookup, topBorder, rowTopLeft, l.SquareBorderLeft);
 
-  boxLookupAssignment(
-    boxLookup,
-    topBorder,
-    topRightRange,
-    disabled,
-    r.SquareBorderRight,
-    r.DisabledRight,
-  );
+  boxLookupAssignment(boxLookup, topBorder, topRightRange, r.SquareBorderRight);
 
   return boxLookup;
 };
@@ -147,11 +116,9 @@ class Square extends React.Component {
     const startCol = parseInt(col / 3) * 3;
     const boxColor = setBorderColor(startRow, startCol);
     const boxLookup = boxConditionLookup()[`${row} ${col}`] || none.noBorder;
-    const boxLookupDisabled =
-      boxConditionLookup(true)[`${row} ${col}`] || none.DisabledNoBorder;
 
-    if (modify === false) {
-      btn = disabledBtn(boxLookupDisabled, number, boxColor);
+    if (!modify) {
+      btn = disabledBtn(boxLookup, number, boxColor);
     } else {
       if (!this.state.edit) {
         if (!valid && this.props.number !== null) {
@@ -170,7 +137,7 @@ class Square extends React.Component {
             onKeyDown={this.handleKeyPress}
             className='square'
             value={this.props.number !== null ? this.props.number : ''}
-          ></FormInput>
+          />
         );
       }
     }
