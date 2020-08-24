@@ -20,6 +20,13 @@ async function connectMongoClient(req, res, next) {
 }
 
 app.use(connectMongoClient);
+app.use(express.json());
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
+
 let dbName = 'sudokuSaves';
 
 const checkJwt = jwt({
@@ -35,7 +42,9 @@ const checkJwt = jwt({
   algorithms: ['RS256'],
 });
 
-const checkScopes = jwtAuthz(['read:saves']);
+const checkScopes = jwtAuthz(['read:saves', 'write:saves'], {
+  checkAllScopes: true,
+});
 
 app.get('/', (req, res) => {
   res.json('HELLO WORLD!');
@@ -53,18 +62,23 @@ app.get('/sudoku/:userId', async (req, res) => {
 
     const getSaves = await col.findOne({ _id: req.params.userId });
     if (getSaves === null || getSaves.saves.length === 0) {
-      res.json('No Saves Found');
+      res.status(404).json('No Saves Found');
     } else if (toGet > getSaves.saves.length) {
-      res.json('Save game not found');
+      res.status(404).json('Save game not found');
     } else {
-      toGet === undefined ? res.json(getSaves.saves) : res.json(getSaves.saves[toGet-1]);
+      toGet === undefined
+        ? res.json(getSaves.saves)
+        : res.json(getSaves.saves[toGet - 1]);
     }
   } catch (err) {
     console.log(err.stack);
   }
 });
 
-
+app.post('/sudoku/register', checkJwt, checkScopes, async (req, res) => {
+  console.log(req.body);
+  res.json('Hello World!');
+});
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

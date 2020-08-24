@@ -6,17 +6,26 @@ const app = require('../index');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
-const { beforeGet, cleanUp } = require('./migrations');
+const {
+  beforeGet,
+  cleanUp,
+  beforeRegister,
+  afterRegister,
+  getToken,
+  getUserByEmail,
+  getManagementAPIToken,
+} = require('./migrations');
 
 chai.use(chaiHttp);
+
+const sudokuClientId = 'eBLyUrakkSNPNOWrSe9zgcV8Uc92wFcg';
+const sudokuAud = 'https://jnch009/sudoku';
 
 const userNonExistant = '234u29340923840923';
 const userFound = '12312312';
 const userNoSaves = '123';
 const gameToGet = 2;
 const gameOutOfBounds = 23;
-const exceededName = 'y9qd0sVbJj57QRmfHyA2MfTlDPTgZe9FWWafRxiRy79shUeyYM8c9rwnsGSsZVOrACE630UfOHsMn63pApVONUAUIKyAHYvog2j6BExzh7d6SG';
-const inappropriateName = 'fuckingpisscuntmotherfuckershit';
 
 describe('First test', () => {
   it('Should assert true to be true', () => {
@@ -36,6 +45,7 @@ describe('GET', () => {
   describe('Negative tests', () => {
     it('No saves found for user', async () => {
       const resp = await chai.request(app).get(`/sudoku/${userNoSaves}`);
+      expect(resp).to.have.status(404);
       expect(resp.body).to.equal('No Saves Found');
     });
 
@@ -44,6 +54,7 @@ describe('GET', () => {
         .request(app)
         .get(`/sudoku/${userFound}`)
         .query({ saveGame: gameOutOfBounds });
+      expect(resp).to.have.status(404);
       expect(resp.body).to.equal('Save game not found');
     });
 
@@ -56,6 +67,7 @@ describe('GET', () => {
   describe('GET /:userId/ Get all saved games for user', () => {
     it('Return all saved games for user', async () => {
       const resp = await chai.request(app).get(`/sudoku/${userFound}`);
+      expect(resp).to.have.status(200);
       expect(resp.body).to.be.a('array');
       expect(resp.body).to.have.lengthOf(2);
     });
@@ -67,8 +79,10 @@ describe('GET', () => {
         .request(app)
         .get(`/sudoku/${userFound}`)
         .query({ saveGame: gameToGet });
-      expect(resp.body).to.be.a('array');
-      expect(resp.body).to.have.lengthOf(5);
+      expect(resp).to.have.status(200);
+      expect(resp.body.name).to.be.a('string');
+      expect(resp.body.grid).to.be.a('array');
+      expect(resp.body.grid).to.have.lengthOf(5);
     });
   });
 });
@@ -83,33 +97,53 @@ describe('/POST Add New Saved Game', () => {
   });
 
   describe('Negative tests', () => {
-    it('Testing length of name, should be 100 characters max', async () => {
+    it('Testing length of name, should be 100 characters max', async () => {});
 
-    })
+    it('Testing of inappropriate name', async () => {});
 
-    it('Testing of inappropriate name', async () => {
-
-    })
-
-    it('Saving past the limit', async() => {
-
-    })
-  })
+    it('Saving past the limit', async () => {});
+  });
 
   describe('Save Game saved correctly', () => {
-    it('Save game added correctly to the array', async () => {
-
-    })
-  })
-
-  //1. On login/registration, make a request to this endpoint to add a new collection
+    it('Save game added correctly to the array', async () => {});
+  });
 });
 
 describe('/POST user registers', () => {
-    it('Testing new entry added for user', async () => {
-      
-    })
-})
+  beforeEach(async function () {
+    await beforeRegister();
+  });
+
+  afterEach(async function () {
+    await afterRegister();
+  });
+
+  it.only('Testing new entry added for user', async () => {
+    const sudokuToken = await getToken(
+      sudokuClientId,
+      process.env.SUDOKU_CLIENT_SECRET,
+      sudokuAud
+    );
+
+    const getUser = await getUserByEmail(
+      process.env.MOCK_EMAIL,
+      await getManagementAPIToken()
+    );
+
+    const postRegistration = await chai
+      .request(app)
+      .post(`/sudoku/register`)
+      .set('Authorization', `Bearer ${sudokuToken}`)
+      .type('form')
+      .send({ user_id: getUser[0].user_id });
+
+    expect(postRegistration).to.have.status(200);
+    expect(postRegistration.body).to.have.lengthOf(1);
+    expect(postRegistration.body._id).to.be.a('string');
+    expect(postRegistration.body.saves).to.be.a('array');
+
+  });
+});
 
 describe('/PUT Update Saved Game(s)', () => {});
 
