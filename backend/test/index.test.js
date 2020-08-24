@@ -26,9 +26,9 @@ const {
 chai.use(chaiHttp);
 
 describe('Sudoku Tests', function () {
-  this.timeout(5000);
+  this.timeout(10000);
 
-  describe('GET', function () {
+  describe('/GET', function () {
     beforeEach(async function () {
       await beforeGet();
     });
@@ -216,7 +216,7 @@ describe('Sudoku Tests', function () {
     });
 
     describe('Negative tests', function () {
-      it("Attempting to update game number which doesn't exist", async function () {
+      it("Attempting to update game for user id which doesn't exist", async function () {
         const sudokuToken = await getToken(
           process.env.SUDOKU_CLIENT_ID,
           process.env.SUDOKU_CLIENT_SECRET,
@@ -232,10 +232,10 @@ describe('Sudoku Tests', function () {
           .type('form')
           .send(objConstants.SUCCESS_PUT_OBJ);
         expect(putSaveGame).to.have.status(400);
-        expect(putSaveGame).to.equal(errorMessages.USER_NON_EXISTENT);
+        expect(putSaveGame.body).to.equal(errorMessages.USER_NON_EXISTENT);
       });
 
-      it("Attempting to update game for user id which doesn't exist", async function () {
+      it("Attempting to update game number which doesn't exist", async function () {
         const sudokuToken = await getToken(
           process.env.SUDOKU_CLIENT_ID,
           process.env.SUDOKU_CLIENT_SECRET,
@@ -245,13 +245,13 @@ describe('Sudoku Tests', function () {
         const putSaveGame = await chai
           .request(app)
           .put(
-            `/sudoku/${objConstants.USER_SAVES_OBJ}/${testConstants.GAME_OUT_OF_BOUNDS}`
+            `/sudoku/${appConstants.USER_FOUND}/${testConstants.GAME_OUT_OF_BOUNDS}`
           )
           .set('Authorization', `Bearer ${sudokuToken}`)
           .type('form')
           .send(objConstants.SUCCESS_PUT_OBJ);
         expect(putSaveGame).to.have.status(400);
-        expect(putSaveGame).to.equal(errorMessages.SAVE_GAME_NOT_FOUND);
+        expect(putSaveGame.body).to.equal(errorMessages.SAVE_GAME_NOT_FOUND);
       });
 
       it('Attempting to save game with name longer than 100 characters', async function () {
@@ -264,13 +264,13 @@ describe('Sudoku Tests', function () {
         const putSaveGame = await chai
           .request(app)
           .put(
-            `/sudoku/${objConstants.USER_SAVES_OBJ}/${testConstants.GAME_TO_GET}`
+            `/sudoku/${appConstants.USER_FOUND}/${testConstants.GAME_TO_GET}`
           )
           .set('Authorization', `Bearer ${sudokuToken}`)
           .type('form')
           .send(objConstants.EXCEEDED_NAME_PUT_OBJ);
         expect(putSaveGame).to.have.status(400);
-        expect(putSaveGame).to.equal(errorMessages.SAVE_GAME_NOT_FOUND);
+        expect(putSaveGame.body).to.equal(errorMessages.MAX_LENGTH);
       });
 
       it('Attempting to save game number with an inappropriate name', async function () {
@@ -283,13 +283,13 @@ describe('Sudoku Tests', function () {
         const putSaveGame = await chai
           .request(app)
           .put(
-            `/sudoku/${objConstants.USER_SAVES_OBJ}/${testConstants.GAME_TO_GET}`
+            `/sudoku/${appConstants.USER_FOUND}/${testConstants.GAME_TO_GET}`
           )
           .set('Authorization', `Bearer ${sudokuToken}`)
           .type('form')
           .send(objConstants.INAPPROPRIATE_NAME_PUT_OBJ);
         expect(putSaveGame).to.have.status(400);
-        expect(putSaveGame).to.equal(errorMessages.SAVE_GAME_NOT_FOUND);
+        expect(putSaveGame.body).to.equal(errorMessages.INAPPROPRIATE);
       });
     });
 
@@ -302,15 +302,15 @@ describe('Sudoku Tests', function () {
         );
 
         const saveGameToUpdate = testConstants.GAME_TO_GET;
-
         const putSaveGame = await chai
           .request(app)
-          .put(`/sudoku/${objConstants.USER_SAVES_OBJ}/${saveGameToUpdate}`)
+          .put(`/sudoku/${appConstants.USER_FOUND}/${saveGameToUpdate}`)
           .set('Authorization', `Bearer ${sudokuToken}`)
           .type('form')
           .send(objConstants.SUCCESS_PUT_OBJ);
 
         expect(putSaveGame).to.have.status(200);
+        
         expect(putSaveGame.body.saves[saveGameToUpdate - 1].date).to.not.equal(
           objConstants.USER_SAVES_OBJ.saves[saveGameToUpdate - 1].date
         );
@@ -319,7 +319,7 @@ describe('Sudoku Tests', function () {
             putSaveGame.body.saves[saveGameToUpdate - 1].grid,
             objConstants.USER_SAVES_OBJ.saves[saveGameToUpdate - 1].grid
           )
-        ).to.be.true;
+        ).to.be.false;
         expect(putSaveGame.body.saves[saveGameToUpdate - 1].name).to.not.equal(
           objConstants.USER_SAVES_OBJ.saves[saveGameToUpdate - 1].name
         );
