@@ -49,6 +49,7 @@ const checkScopes = jwtAuthz(['read:saves', 'write:saves'], {
   checkAllScopes: true,
 });
 
+//TODO: add middleware to this
 app.get('/sudoku/:userId', async (req, res) => {
   try {
     const db = client.db(process.env['NODE_ENV'] === 'test' ? 'test' : dbName);
@@ -160,6 +161,15 @@ app.put(
     } catch (err) {
       res.status(400).json(err.stack);
     }
+  }
+);
+
+app.delete(
+  '/sudoku/:userId/:saveGame',
+  checkJwt,
+  checkScopes,
+  async (req, res) => {
+    res.json("game deleted");
   }
 );
 
