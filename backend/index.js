@@ -76,7 +76,6 @@ app.get('/sudoku/:userId', async (req, res) => {
 });
 
 app.post('/sudoku/register', checkJwt, checkScopes, async (req, res) => {
-  console.log(req.body);
   res.json('Hello World!');
 });
 
