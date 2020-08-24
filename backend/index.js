@@ -6,10 +6,9 @@ const port = 3000;
 const jwt = require('express-jwt');
 const jwtAuthz = require('express-jwt-authz');
 const jwksRsa = require('jwks-rsa');
+const { errorMessages, appConstants } = require('./constants/constants');
 
-const url = `mongodb+srv://jnch009:${process.env.MONGO_PASS}@sudokusavedgames.xaesp.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority&useNewUrlParser=true&useUnifiedTopology=true`;
-const client = new MongoClient(url);
-
+const client = new MongoClient(appConstants.MONGO_URL);
 async function connectMongoClient(req, res, next) {
   try {
     if (!client.isConnected()) await client.connect();
@@ -28,7 +27,6 @@ app.use(
 );
 
 let dbName = 'sudokuSaves';
-
 const checkJwt = jwt({
   secret: jwksRsa.expressJwtSecret({
     cache: true,
@@ -54,9 +52,9 @@ app.get('/sudoku/:userId', async (req, res) => {
 
     const getSaves = await col.findOne({ _id: req.params.userId });
     if (getSaves === null || getSaves.saves.length === 0) {
-      res.status(404).json('No Saves Found');
+      res.status(404).json(errorMessages.NO_SAVES);
     } else if (toGet > getSaves.saves.length) {
-      res.status(404).json('Save game not found');
+      res.status(404).json(errorMessages.SAVE_GAME_NOT_FOUND);
     } else {
       toGet === undefined
         ? res.json(getSaves.saves)
@@ -87,9 +85,9 @@ app.post('/sudoku', checkJwt, checkScopes, async (req, res) => {
   try {
     const regex = new RegExp(process.env.REGEX_CURSE_WORDS);
     if (req.body.saveGame.name.length > 100) {
-      res.status(400).json('Maximum length is 100 characters');
+      res.status(400).json(errorMessages.MAX_LENGTH);
     } else if (regex.test(req.body.saveGame.name)) {
-      res.status(400).json('Inappropriate words found, please be courteous');
+      res.status(400).json(errorMessages.INAPPROPRIATE);
     } else {
       const db = client.db(
         process.env['NODE_ENV'] === 'test' ? 'test' : dbName
@@ -97,9 +95,7 @@ app.post('/sudoku', checkJwt, checkScopes, async (req, res) => {
       const col = db.collection('saves');
       const getSaves = await col.findOne({ _id: req.body.user_id });
       if (getSaves.saves.length >= 9) {
-        res
-          .status(400)
-          .json('Maximum saves is 9, please overwrite or delete a save file');
+        res.status(400).json(errorMessages.MAX_SAVES);
       } else {
         await col.updateOne(
           { _id: req.body.user_id },

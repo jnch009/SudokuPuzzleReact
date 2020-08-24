@@ -1,46 +1,9 @@
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
 const axios = require('axios');
-
-// Replace the following with your Atlas connection string
-const url = `mongodb+srv://jnch009:${process.env.MONGO_PASS}@sudokusavedgames.xaesp.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority&useNewUrlParser=true&useUnifiedTopology=true`;
-const mockPassword = "kTL&4e?R9'_dH3.q";
+const { appConstants, objConstants } = require('../constants/constants');
 
 const dbName = 'test';
-const userFound = '12312312';
-const userNoSaves = '123';
-const userIdMaxSaves = '6969';
-const connection = 'Username-Password-Authentication';
-
-const userWithSaves = {
-  _id: userFound, //technically the player's user id
-  saves: [
-    { name: 'jeremy1', grid: [2, 3, 5, 6], date: new Date(Date.now()) },
-    { name: 'jeremy2', grid: [5, 6, 8, 9, 3], date: new Date(Date.now()) },
-  ],
-};
-
-const userWithNoSaves = {
-  _id: userNoSaves, //technically the player's user id
-  saves: [],
-};
-
-const userMaxSaves = {
-  _id: userIdMaxSaves,
-  saves: [
-    { name: 'jeremy1', grid: [2, 3, 5, 6], date: new Date(Date.now()) },
-    { name: 'jeremy2', grid: [2, 3, 5, 6], date: new Date(Date.now()) },
-    { name: 'jeremy3', grid: [2, 3, 5, 6], date: new Date(Date.now()) },
-    { name: 'jeremy4', grid: [2, 3, 5, 6], date: new Date(Date.now()) },
-    { name: 'jeremy5', grid: [2, 3, 5, 6], date: new Date(Date.now()) },
-    { name: 'jeremy6', grid: [2, 3, 5, 6], date: new Date(Date.now()) },
-    { name: 'jeremy7', grid: [2, 3, 5, 6], date: new Date(Date.now()) },
-    { name: 'jeremy8', grid: [2, 3, 5, 6], date: new Date(Date.now()) },
-    { name: 'jeremy9', grid: [2, 3, 5, 6], date: new Date(Date.now()) },
-  ],
-  date: new Date(Date.now()),
-};
-
 let client;
 
 const getToken = async (client_id, secret, aud) => {
@@ -78,12 +41,16 @@ const getManagementAPIToken = async () => {
 
 const beforeGet = async () => {
   try {
-    client = new MongoClient(url);
+    client = new MongoClient(appConstants.MONGO_URL);
     await client.connect();
     const db = client.db(dbName);
 
     const col = db.collection('saves');
-    await col.insertMany([userWithSaves, userWithNoSaves, userMaxSaves]);
+    await col.insertMany([
+      objConstants.USER_SAVES_OBJ,
+      objConstants.USER_NO_SAVES_OBJ,
+      objConstants.USER_MAX_SAVES_OBJ,
+    ]);
   } catch (err) {
     console.log(err.stack);
   } finally {
@@ -92,7 +59,7 @@ const beforeGet = async () => {
 };
 
 const cleanUp = async () => {
-  client = new MongoClient(url);
+  client = new MongoClient(appConstants.MONGO_URL);
   try {
     await client.connect();
     await client.db(dbName).dropDatabase();
@@ -108,8 +75,8 @@ const beforeRegister = async () => {
     await axios.post(process.env.REGISTER_ENDPOINT, {
       client_id: process.env.SPA_CLIENT_ID,
       email: process.env.MOCK_EMAIL,
-      password: mockPassword,
-      connection: connection,
+      password: appConstants.MOCK_PASSWORD,
+      connection: appConstants.CONNECTION,
     });
   } catch (err) {
     console.log(err);
@@ -140,7 +107,4 @@ module.exports = {
   getToken,
   getUserByEmail,
   getManagementAPIToken,
-  userFound,
-  userNoSaves,
-  userIdMaxSaves
 };
