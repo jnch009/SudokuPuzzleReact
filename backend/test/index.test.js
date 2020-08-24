@@ -14,13 +14,14 @@ const {
   getToken,
   getUserByEmail,
   getManagementAPIToken,
+  userFound,
+  userNoSaves,
+  userMaxSaves
 } = require('./migrations');
 
 chai.use(chaiHttp);
 
 const userNonExistant = '234u29340923840923';
-const userFound = '12312312';
-const userNoSaves = '123';
 const gameToGet = 2;
 const gameOutOfBounds = 23;
 
@@ -94,15 +95,103 @@ describe('/POST Add New Saved Game', () => {
   });
 
   describe('Negative tests', () => {
-    it('Testing length of name, should be 100 characters max', async () => {});
+    it('Testing length of name, should be 100 characters max', async () => {
+      const sudokuToken = await getToken(
+        process.env.SUDOKU_CLIENT_ID,
+        process.env.SUDOKU_CLIENT_SECRET,
+        process.env.SUDOKU_AUD
+      );
 
-    it('Testing of inappropriate name', async () => {});
+      const postSaveGame = await chai
+        .request(app)
+        .post('/sudoku')
+        .set('Authorization', `Bearer ${sudokuToken}`)
+        .type('form')
+        .send({
+          user_id: userFound,
+          saveGame: {
+            name: process.env.EXCEEDED_NAME,
+            grid: [1, 2, 3, 4, 5],
+            date: new Date(Date.now()),
+          },
+        });
+      expect(postSaveGame).to.have.status(400);
+      expect(postSaveGame.body).to.equal('Maximum length is 100 characters');
+    });
 
-    it('Saving past the limit', async () => {});
+    it('Testing of inappropriate name', async () => {
+      const sudokuToken = await getToken(
+        process.env.SUDOKU_CLIENT_ID,
+        process.env.SUDOKU_CLIENT_SECRET,
+        process.env.SUDOKU_AUD
+      );
+
+      const postSaveGame = await chai
+        .request(app)
+        .post('/sudoku')
+        .set('Authorization', `Bearer ${sudokuToken}`)
+        .type('form')
+        .send({
+          user_id: userFound,
+          saveGame: {
+            name: process.env.INAPPROPRIATE_NAME,
+            grid: [1, 2, 3, 4, 5],
+            date: new Date(Date.now()),
+          },
+        });
+      expect(postSaveGame).to.have.status(400);
+      expect(postSaveGame.body).to.equal('Inappropriate words found, please be courteous');
+    });
+
+    it('Saving past the limit', async () => {
+      const sudokuToken = await getToken(
+        process.env.SUDOKU_CLIENT_ID,
+        process.env.SUDOKU_CLIENT_SECRET,
+        process.env.SUDOKU_AUD
+      );
+
+      const postSaveGame = await chai
+        .request(app)
+        .post('/sudoku')
+        .set('Authorization', `Bearer ${sudokuToken}`)
+        .type('form')
+        .send({
+          user_id: userMaxSaves,
+          saveGame: {
+            name: 'Testing max',
+            grid: [1, 2, 3, 4, 5],
+            date: new Date(Date.now()),
+          },
+        });
+      expect(postSaveGame).to.have.status(400);
+      expect(postSaveGame.body).to.equal('Maximum saves is 9, please overwrite or delete a save file');
+    });
   });
 
   describe('Save Game saved correctly', () => {
-    it('Save game added correctly to the array', async () => {});
+    it('Save game added correctly to the array', async () => {
+      const sudokuToken = await getToken(
+        process.env.SUDOKU_CLIENT_ID,
+        process.env.SUDOKU_CLIENT_SECRET,
+        process.env.SUDOKU_AUD
+      );
+
+      const postSaveGame = await chai
+        .request(app)
+        .post('/sudoku')
+        .set('Authorization', `Bearer ${sudokuToken}`)
+        .type('form')
+        .send({
+          user_id: userNoSaves,
+          saveGame: {
+            name: 'Testing Success',
+            grid: [1, 2, 3, 4, 5],
+            date: new Date(Date.now()),
+          },
+        });
+      expect(postSaveGame).to.have.status(200);
+      expect(postSaveGame.body.saves).to.have.lengthOf(1);
+    });
   });
 });
 
@@ -139,7 +228,6 @@ describe('/POST user registers', () => {
     expect(postRegistration).to.have.status(200);
     expect(postRegistration.body._id).to.be.a('string');
     expect(postRegistration.body.saves).to.be.a('array');
-
   });
 });
 

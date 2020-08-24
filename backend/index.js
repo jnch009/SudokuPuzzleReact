@@ -77,10 +77,14 @@ app.post('/sudoku/register', checkJwt, checkScopes, async (req, res) => {
     };
 
     await col.insertOne(userDocument);
-    res.json(await col.findOne({_id: req.body.user_id}));
+    res.json(await col.findOne({ _id: req.body.user_id }));
   } catch (err) {
     res.status(400).json(err.stack);
   }
+});
+
+app.post('/sudoku', checkJwt, checkScopes, async (req, res) => {
+  res.json('adding a new saved game');
 });
 
 app.listen(port, () => {

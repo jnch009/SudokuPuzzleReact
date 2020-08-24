@@ -74,7 +74,7 @@ const getManagementAPIToken = async () => {
     process.env.MANAGEMENT_CLIENT_SECRET,
     process.env.MANAGEMENT_AUD
   );
-}
+};
 
 const beforeGet = async () => {
   try {
@@ -83,7 +83,7 @@ const beforeGet = async () => {
     const db = client.db(dbName);
 
     const col = db.collection('saves');
-    await col.insertMany([userWithSaves, userWithNoSaves]);
+    await col.insertMany([userWithSaves, userWithNoSaves, userMaxSaves]);
   } catch (err) {
     console.log(err.stack);
   } finally {
@@ -121,9 +121,12 @@ const afterRegister = async () => {
     const apiToken = await getManagementAPIToken();
     const getUser = await getUserByEmail(process.env.MOCK_EMAIL, apiToken);
 
-    await axios.delete(`${process.env.DELETE_USER_BY_ID_ENDPOINT}${getUser[0].user_id}`, {
-      headers: { Authorization: `Bearer ${apiToken}` },
-    });
+    await axios.delete(
+      `${process.env.DELETE_USER_BY_ID_ENDPOINT}${getUser[0].user_id}`,
+      {
+        headers: { Authorization: `Bearer ${apiToken}` },
+      }
+    );
   } catch (err) {
     console.log(err);
   }
@@ -136,5 +139,8 @@ module.exports = {
   afterRegister,
   getToken,
   getUserByEmail,
-  getManagementAPIToken
+  getManagementAPIToken,
+  userFound,
+  userNoSaves,
+  userMaxSaves
 };
