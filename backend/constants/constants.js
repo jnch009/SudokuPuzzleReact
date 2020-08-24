@@ -35,7 +35,6 @@ const objConstants = {
       { name: 'jeremy8', grid: [2, 3, 5, 6], date: new Date(Date.now()) },
       { name: 'jeremy9', grid: [2, 3, 5, 6], date: new Date(Date.now()) },
     ],
-    date: new Date(Date.now()),
   },
   EXCEEDED_NAME_POST_OBJ: {
     user_id: appConstants.USER_FOUND,
@@ -45,8 +44,22 @@ const objConstants = {
       date: appConstants.CURRENT_DATE,
     },
   },
+  EXCEEDED_NAME_PUT_OBJ: {
+    saveGame: {
+      name: process.env.EXCEEDED_NAME,
+      grid: appConstants.TEST_GRID,
+      date: appConstants.CURRENT_DATE,
+    },
+  },
   INAPPROPRIATE_NAME_POST_OBJ: {
     user_id: appConstants.USER_FOUND,
+    saveGame: {
+      name: process.env.INAPPROPRIATE_NAME,
+      grid: appConstants.TEST_GRID,
+      date: appConstants.CURRENT_DATE,
+    },
+  },
+  INAPPROPRIATE_NAME_PUT_OBJ: {
     saveGame: {
       name: process.env.INAPPROPRIATE_NAME,
       grid: appConstants.TEST_GRID,
@@ -69,6 +82,13 @@ const objConstants = {
       date: appConstants.CURRENT_DATE,
     },
   },
+  SUCCESS_PUT_OBJ: {
+    saveGame: {
+      name: 'Save success',
+      grid: appConstants.TEST_GRID,
+      date: appConstants.CURRENT_DATE,
+    },
+  },
 };
 
 const errorMessages = {
@@ -77,6 +97,7 @@ const errorMessages = {
   MAX_LENGTH: 'Maximum length is 100 characters',
   INAPPROPRIATE: 'Inappropriate words found, please be courteous',
   MAX_SAVES: 'Maximum saves is 9, please overwrite or delete a save file',
+  USER_NON_EXISTENT: 'User does not exist',
 };
 
 const testConstants = {

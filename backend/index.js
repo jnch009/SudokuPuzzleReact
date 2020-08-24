@@ -113,6 +113,15 @@ app.post('/sudoku', checkJwt, checkScopes, async (req, res) => {
   }
 });
 
+app.put(
+  '/sudoku/:userId/:saveGame',
+  checkJwt,
+  checkScopes,
+  async (req, res) => {
+    res.json('update save game');
+  }
+);
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
