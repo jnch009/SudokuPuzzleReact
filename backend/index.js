@@ -6,11 +6,7 @@ const port = 3000;
 const jwt = require('express-jwt');
 const jwtAuthz = require('express-jwt-authz');
 const jwksRsa = require('jwks-rsa');
-const {
-  errorMessages,
-  appConstants,
-  objConstants,
-} = require('./constants/constants');
+const { errorMessages, appConstants } = require('./constants/constants');
 const e = require('express');
 
 const client = new MongoClient(appConstants.MONGO_URL);
