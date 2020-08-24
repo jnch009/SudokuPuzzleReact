@@ -46,14 +46,6 @@ const checkScopes = jwtAuthz(['read:saves', 'write:saves'], {
   checkAllScopes: true,
 });
 
-app.get('/', (req, res) => {
-  res.json('HELLO WORLD!');
-});
-
-app.get('/sudoku/', checkJwt, checkScopes, (req, res) => {
-  res.send('Protected Route');
-});
-
 app.get('/sudoku/:userId', async (req, res) => {
   try {
     const db = client.db(process.env['NODE_ENV'] === 'test' ? 'test' : dbName);

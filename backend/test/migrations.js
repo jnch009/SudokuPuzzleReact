@@ -4,20 +4,13 @@ const axios = require('axios');
 
 // Replace the following with your Atlas connection string
 const url = `mongodb+srv://jnch009:${process.env.MONGO_PASS}@sudokusavedgames.xaesp.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority&useNewUrlParser=true&useUnifiedTopology=true`;
-const dbName = 'test';
 const mockPassword = "kTL&4e?R9'_dH3.q";
-const registerEndpoint = 'https://jnch009.auth0.com/dbconnections/signup';
-const getUserByEmailEndpoint =
-  'https://jnch009.auth0.com/api/v2/users-by-email';
-const deleteUserByIdEndpoint = 'https://jnch009.auth0.com/api/v2/users/';
 
-const tokenAPI = 'https://jnch009.auth0.com/oauth/token';
-const managementClientId = '80b6UkndM1kte81GHEmE3jGZomxybbWq';
-const managementAud = 'https://jnch009.auth0.com/api/v2/';
-
+const dbName = 'test';
 const userFound = '12312312';
 const userNoSaves = '123';
 const userIdMaxSaves = '6969';
+const connection = 'Username-Password-Authentication';
 
 const userWithSaves = {
   _id: userFound, //technically the player's user id
@@ -52,7 +45,7 @@ let client;
 
 const getToken = async (client_id, secret, aud) => {
   const res = await axios.post(
-    tokenAPI,
+    process.env.TOKEN_API_ENDPOINT,
     {
       grant_type: 'client_credentials',
       client_id: client_id,
@@ -66,7 +59,7 @@ const getToken = async (client_id, secret, aud) => {
 };
 
 const getUserByEmail = async (email, access_token) => {
-  const res = await axios.get(getUserByEmailEndpoint, {
+  const res = await axios.get(process.env.GET_USER_BY_EMAIL_ENDPOINT, {
     params: {
       email,
     },
@@ -77,9 +70,9 @@ const getUserByEmail = async (email, access_token) => {
 
 const getManagementAPIToken = async () => {
   return await getToken(
-    managementClientId,
+    process.env.MANAGEMENT_CLIENT_ID,
     process.env.MANAGEMENT_CLIENT_SECRET,
-    managementAud
+    process.env.MANAGEMENT_AUD
   );
 }
 
@@ -112,11 +105,11 @@ const cleanUp = async () => {
 
 const beforeRegister = async () => {
   try {
-    await axios.post(registerEndpoint, {
-      client_id: '0Ef0pnv0k533hdciXNUr8w2o4xXHznf8',
-      email: 'ngjeremy009@gmail.com',
+    await axios.post(process.env.REGISTER_ENDPOINT, {
+      client_id: process.env.SPA_CLIENT_ID,
+      email: process.env.MOCK_EMAIL,
       password: mockPassword,
-      connection: 'Username-Password-Authentication',
+      connection: connection,
     });
   } catch (err) {
     console.log(err);
@@ -128,7 +121,7 @@ const afterRegister = async () => {
     const apiToken = await getManagementAPIToken();
     const getUser = await getUserByEmail(process.env.MOCK_EMAIL, apiToken);
 
-    await axios.delete(`${deleteUserByIdEndpoint}${getUser[0].user_id}`, {
+    await axios.delete(`${process.env.DELETE_USER_BY_ID_ENDPOINT}${getUser[0].user_id}`, {
       headers: { Authorization: `Bearer ${apiToken}` },
     });
   } catch (err) {

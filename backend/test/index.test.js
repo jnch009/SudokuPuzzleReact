@@ -18,9 +18,6 @@ const {
 
 chai.use(chaiHttp);
 
-const sudokuClientId = 'eBLyUrakkSNPNOWrSe9zgcV8Uc92wFcg';
-const sudokuAud = 'https://jnch009/sudoku';
-
 const userNonExistant = '234u29340923840923';
 const userFound = '12312312';
 const userNoSaves = '123';
@@ -122,9 +119,9 @@ describe('/POST user registers', () => {
 
   it('Testing new entry added for user', async () => {
     const sudokuToken = await getToken(
-      sudokuClientId,
+      process.env.SUDOKU_CLIENT_ID,
       process.env.SUDOKU_CLIENT_SECRET,
-      sudokuAud
+      process.env.SUDOKU_AUD
     );
 
     const getUser = await getUserByEmail(
