@@ -310,18 +310,18 @@ describe('Sudoku Tests', function () {
           .send(objConstants.SUCCESS_PUT_OBJ);
 
         expect(putSaveGame).to.have.status(200);
-        
-        expect(putSaveGame.body.saves[saveGameToUpdate - 1].date).to.not.equal(
-          objConstants.USER_SAVES_OBJ.saves[saveGameToUpdate - 1].date
+
+        expect(putSaveGame.body.saves[saveGameToUpdate].date).to.not.equal(
+          objConstants.USER_SAVES_OBJ.saves[saveGameToUpdate].date
         );
         expect(
           isEqual(
-            putSaveGame.body.saves[saveGameToUpdate - 1].grid,
-            objConstants.USER_SAVES_OBJ.saves[saveGameToUpdate - 1].grid
+            putSaveGame.body.saves[saveGameToUpdate].grid,
+            objConstants.USER_SAVES_OBJ.saves[saveGameToUpdate].grid
           )
         ).to.be.false;
-        expect(putSaveGame.body.saves[saveGameToUpdate - 1].name).to.not.equal(
-          objConstants.USER_SAVES_OBJ.saves[saveGameToUpdate - 1].name
+        expect(putSaveGame.body.saves[saveGameToUpdate].name).to.not.equal(
+          objConstants.USER_SAVES_OBJ.saves[saveGameToUpdate].name
         );
       });
     });

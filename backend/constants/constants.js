@@ -102,7 +102,7 @@ const errorMessages = {
 
 const testConstants = {
   USER_NON_EXISTENT: '234u29340923840923',
-  GAME_TO_GET: 2,
+  GAME_TO_GET: 1,
   GAME_OUT_OF_BOUNDS: 23,
 };
 

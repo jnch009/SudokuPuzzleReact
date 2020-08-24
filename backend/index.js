@@ -63,7 +63,7 @@ app.get('/sudoku/:userId', async (req, res) => {
     } else {
       toGet === undefined
         ? res.json(getSaves.saves)
-        : res.json(getSaves.saves[toGet - 1]);
+        : res.json(getSaves.saves[toGet]);
     }
   } catch (err) {
     res.status(400).json(err.stack);
@@ -139,11 +139,11 @@ app.put(
         if (getSaves === null) {
           res.status(400).json(errorMessages.USER_NON_EXISTENT);
         } else {
-          if (getSaves.saves[req.params.saveGame - 1] === undefined) {
+          if (getSaves.saves[req.params.saveGame] === undefined) {
             res.status(400).json(errorMessages.SAVE_GAME_NOT_FOUND);
           } else {
             const updatedSaveGame = req.body.saveGame;
-            getSaves.saves.splice(req.params.saveGame - 1, 1, updatedSaveGame);
+            getSaves.saves.splice(req.params.saveGame, 1, updatedSaveGame);
 
             await col.updateOne(
               { _id: req.params.userId },
