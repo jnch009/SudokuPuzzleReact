@@ -49,8 +49,7 @@ const checkScopes = jwtAuthz(['read:saves', 'write:saves'], {
   checkAllScopes: true,
 });
 
-//TODO: add middleware to this
-app.get('/sudoku/:userId', async (req, res) => {
+app.get('/sudoku/:userId', checkJwt, checkScopes, async (req, res) => {
   try {
     const db = client.db(process.env['NODE_ENV'] === 'test' ? 'test' : dbName);
     const col = db.collection('saves');
