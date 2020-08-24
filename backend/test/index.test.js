@@ -112,13 +112,15 @@ describe('/POST Add New Saved Game', () => {
 describe('/POST user registers', () => {
   beforeEach(async function () {
     await beforeRegister();
+    await beforeGet();
   });
 
   afterEach(async function () {
     await afterRegister();
+    await cleanUp();
   });
 
-  it.only('Testing new entry added for user', async () => {
+  it('Testing new entry added for user', async () => {
     const sudokuToken = await getToken(
       sudokuClientId,
       process.env.SUDOKU_CLIENT_SECRET,
@@ -138,7 +140,6 @@ describe('/POST user registers', () => {
       .send({ user_id: getUser[0].user_id });
 
     expect(postRegistration).to.have.status(200);
-    expect(postRegistration.body).to.have.lengthOf(1);
     expect(postRegistration.body._id).to.be.a('string');
     expect(postRegistration.body.saves).to.be.a('array');
 

@@ -118,7 +118,6 @@ const beforeRegister = async () => {
       password: mockPassword,
       connection: 'Username-Password-Authentication',
     });
-    console.log('Registered successfully!');
   } catch (err) {
     console.log(err);
   }
@@ -132,7 +131,6 @@ const afterRegister = async () => {
     await axios.delete(`${deleteUserByIdEndpoint}${getUser[0].user_id}`, {
       headers: { Authorization: `Bearer ${apiToken}` },
     });
-    console.log('User Deleted!');
   } catch (err) {
     console.log(err);
   }

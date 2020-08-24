@@ -71,12 +71,24 @@ app.get('/sudoku/:userId', async (req, res) => {
         : res.json(getSaves.saves[toGet - 1]);
     }
   } catch (err) {
-    console.log(err.stack);
+    res.status(400).json(err.stack);
   }
 });
 
 app.post('/sudoku/register', checkJwt, checkScopes, async (req, res) => {
-  res.json('Hello World!');
+  try {
+    const db = client.db(process.env['NODE_ENV'] === 'test' ? 'test' : dbName);
+    const col = db.collection('saves');
+    const userDocument = {
+      _id: req.body.user_id,
+      saves: [],
+    };
+
+    await col.insertOne(userDocument);
+    res.json(await col.findOne({_id: req.body.user_id}));
+  } catch (err) {
+    res.status(400).json(err.stack);
+  }
 });
 
 app.listen(port, () => {
