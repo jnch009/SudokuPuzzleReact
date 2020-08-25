@@ -17,7 +17,6 @@ const getToken = async (client_id, secret, aud) => {
     },
     { headers: { 'content-type': 'application/json' } }
   );
-
   return res.data.access_token;
 };
 
@@ -104,7 +103,6 @@ module.exports = {
   cleanUp,
   beforeRegister,
   afterRegister,
-  getToken,
   getUserByEmail,
   getManagementAPIToken,
 };

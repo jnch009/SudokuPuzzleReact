@@ -1,6 +1,5 @@
 require('dotenv').config();
 const {
-  getToken,
   beforeGet,
   cleanUp,
   chai,
@@ -25,18 +24,12 @@ function PutTests() {
 
     describe('Negative tests', function () {
       it("Attempting to update game for user id which doesn't exist", async function () {
-        const sudokuToken = await getToken(
-          process.env.SUDOKU_CLIENT_ID,
-          process.env.SUDOKU_CLIENT_SECRET,
-          process.env.SUDOKU_AUD
-        );
-
         const putSaveGame = await chai
           .request(app)
           .put(
             `/sudoku/${testConstants.USER_NON_EXISTENT}/${testConstants.GAME_TO_GET}`
           )
-          .set('Authorization', `Bearer ${sudokuToken}`)
+          .set('Authorization', `Bearer ${process.env.SUDOKU_TOKEN}`)
           .type('form')
           .send(objConstants.SUCCESS_PUT_OBJ);
         expect(putSaveGame).to.have.status(400);
@@ -44,18 +37,12 @@ function PutTests() {
       });
 
       it("Attempting to update game number which doesn't exist", async function () {
-        const sudokuToken = await getToken(
-          process.env.SUDOKU_CLIENT_ID,
-          process.env.SUDOKU_CLIENT_SECRET,
-          process.env.SUDOKU_AUD
-        );
-
         const putSaveGame = await chai
           .request(app)
           .put(
             `/sudoku/${appConstants.USER_FOUND}/${testConstants.GAME_OUT_OF_BOUNDS}`
           )
-          .set('Authorization', `Bearer ${sudokuToken}`)
+          .set('Authorization', `Bearer ${process.env.SUDOKU_TOKEN}`)
           .type('form')
           .send(objConstants.SUCCESS_PUT_OBJ);
         expect(putSaveGame).to.have.status(400);
@@ -63,18 +50,12 @@ function PutTests() {
       });
 
       it('Attempting to save game with name longer than 100 characters', async function () {
-        const sudokuToken = await getToken(
-          process.env.SUDOKU_CLIENT_ID,
-          process.env.SUDOKU_CLIENT_SECRET,
-          process.env.SUDOKU_AUD
-        );
-
         const putSaveGame = await chai
           .request(app)
           .put(
             `/sudoku/${appConstants.USER_FOUND}/${testConstants.GAME_TO_GET}`
           )
-          .set('Authorization', `Bearer ${sudokuToken}`)
+          .set('Authorization', `Bearer ${process.env.SUDOKU_TOKEN}`)
           .type('form')
           .send(objConstants.EXCEEDED_NAME_PUT_OBJ);
         expect(putSaveGame).to.have.status(400);
@@ -82,18 +63,12 @@ function PutTests() {
       });
 
       it('Attempting to save game number with an inappropriate name', async function () {
-        const sudokuToken = await getToken(
-          process.env.SUDOKU_CLIENT_ID,
-          process.env.SUDOKU_CLIENT_SECRET,
-          process.env.SUDOKU_AUD
-        );
-
         const putSaveGame = await chai
           .request(app)
           .put(
             `/sudoku/${appConstants.USER_FOUND}/${testConstants.GAME_TO_GET}`
           )
-          .set('Authorization', `Bearer ${sudokuToken}`)
+          .set('Authorization', `Bearer ${process.env.SUDOKU_TOKEN}`)
           .type('form')
           .send(objConstants.INAPPROPRIATE_NAME_PUT_OBJ);
         expect(putSaveGame).to.have.status(400);
@@ -103,17 +78,11 @@ function PutTests() {
 
     describe('Saved game is updated', function () {
       it('Saved Game is successfully updated', async function () {
-        const sudokuToken = await getToken(
-          process.env.SUDOKU_CLIENT_ID,
-          process.env.SUDOKU_CLIENT_SECRET,
-          process.env.SUDOKU_AUD
-        );
-
         const saveGameToUpdate = testConstants.GAME_TO_GET;
         const putSaveGame = await chai
           .request(app)
           .put(`/sudoku/${appConstants.USER_FOUND}/${saveGameToUpdate}`)
-          .set('Authorization', `Bearer ${sudokuToken}`)
+          .set('Authorization', `Bearer ${process.env.SUDOKU_TOKEN}`)
           .type('form')
           .send(objConstants.SUCCESS_PUT_OBJ);
 

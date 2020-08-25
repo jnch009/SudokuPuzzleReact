@@ -1,6 +1,5 @@
 require('dotenv').config();
 const {
-  getToken,
   beforeGet,
   cleanUp,
   beforeRegister,
@@ -27,12 +26,6 @@ function PostRegister() {
     });
 
     it('Testing new entry added for user', async function () {
-      const sudokuToken = await getToken(
-        process.env.SUDOKU_CLIENT_ID,
-        process.env.SUDOKU_CLIENT_SECRET,
-        process.env.SUDOKU_AUD
-      );
-
       const getUser = await getUserByEmail(
         process.env.MOCK_EMAIL,
         await getManagementAPIToken()
@@ -41,7 +34,7 @@ function PostRegister() {
       const postRegistration = await chai
         .request(app)
         .post(`/sudoku/register`)
-        .set('Authorization', `Bearer ${sudokuToken}`)
+        .set('Authorization', `Bearer ${process.env.SUDOKU_TOKEN}`)
         .type('form')
         .send({ user_id: getUser[0].user_id });
 
@@ -64,16 +57,10 @@ function PostNewSaveGame() {
 
     describe('Negative tests', function () {
       it('Testing length of name, should be 100 characters max', async function () {
-        const sudokuToken = await getToken(
-          process.env.SUDOKU_CLIENT_ID,
-          process.env.SUDOKU_CLIENT_SECRET,
-          process.env.SUDOKU_AUD
-        );
-
         const postSaveGame = await chai
           .request(app)
           .post('/sudoku')
-          .set('Authorization', `Bearer ${sudokuToken}`)
+          .set('Authorization', `Bearer ${process.env.SUDOKU_TOKEN}`)
           .type('form')
           .send(objConstants.EXCEEDED_NAME_POST_OBJ);
         expect(postSaveGame).to.have.status(400);
@@ -81,16 +68,10 @@ function PostNewSaveGame() {
       });
 
       it('Testing of inappropriate name', async function () {
-        const sudokuToken = await getToken(
-          process.env.SUDOKU_CLIENT_ID,
-          process.env.SUDOKU_CLIENT_SECRET,
-          process.env.SUDOKU_AUD
-        );
-
         const postSaveGame = await chai
           .request(app)
           .post('/sudoku')
-          .set('Authorization', `Bearer ${sudokuToken}`)
+          .set('Authorization', `Bearer ${process.env.SUDOKU_TOKEN}`)
           .type('form')
           .send(objConstants.INAPPROPRIATE_NAME_POST_OBJ);
         expect(postSaveGame).to.have.status(400);
@@ -98,16 +79,10 @@ function PostNewSaveGame() {
       });
 
       it('Saving past the limit', async function () {
-        const sudokuToken = await getToken(
-          process.env.SUDOKU_CLIENT_ID,
-          process.env.SUDOKU_CLIENT_SECRET,
-          process.env.SUDOKU_AUD
-        );
-
         const postSaveGame = await chai
           .request(app)
           .post('/sudoku')
-          .set('Authorization', `Bearer ${sudokuToken}`)
+          .set('Authorization', `Bearer ${process.env.SUDOKU_TOKEN}`)
           .type('form')
           .send(objConstants.MAX_SAVES_POST_OBJ);
         expect(postSaveGame).to.have.status(400);
@@ -117,16 +92,10 @@ function PostNewSaveGame() {
 
     describe('Save Game saved correctly', function () {
       it('Save game added correctly to the array', async function () {
-        const sudokuToken = await getToken(
-          process.env.SUDOKU_CLIENT_ID,
-          process.env.SUDOKU_CLIENT_SECRET,
-          process.env.SUDOKU_AUD
-        );
-
         const postSaveGame = await chai
           .request(app)
           .post('/sudoku')
-          .set('Authorization', `Bearer ${sudokuToken}`)
+          .set('Authorization', `Bearer ${process.env.SUDOKU_TOKEN}`)
           .type('form')
           .send(objConstants.SUCCESS_POST_OBJ);
         expect(postSaveGame).to.have.status(200);

@@ -17,7 +17,6 @@ const {
   cleanUp,
   beforeRegister,
   afterRegister,
-  getToken,
   getUserByEmail,
   getManagementAPIToken,
 } = require('../test/migrations');
@@ -36,7 +35,6 @@ module.exports = {
   cleanUp,
   beforeRegister,
   afterRegister,
-  getToken,
   getUserByEmail,
   getManagementAPIToken,
 };
