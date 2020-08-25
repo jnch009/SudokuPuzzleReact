@@ -7,7 +7,6 @@ const jwt = require('express-jwt');
 const jwtAuthz = require('express-jwt-authz');
 const jwksRsa = require('jwks-rsa');
 const { errorMessages, appConstants } = require('./constants/constants');
-const e = require('express');
 
 const client = new MongoClient(appConstants.MONGO_URL);
 async function connectMongoClient(req, res, next) {
