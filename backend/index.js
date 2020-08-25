@@ -8,6 +8,11 @@ const jwtAuthz = require('express-jwt-authz');
 const jwksRsa = require('jwks-rsa');
 const { errorMessages, appConstants } = require('./constants/constants');
 
+const { handleGetSaves } = require('./controllers/GET');
+const { handleRegistration, handleAddSave } = require('./controllers/POST');
+const { handleUpdateSavedGame } = require('./controllers/PUT');
+const { handleDeleteSavedGame } = require('./controllers/DELETE');
+
 const client = new MongoClient(appConstants.MONGO_URL);
 async function connectMongoClient(req, res, next) {
   try {
@@ -45,72 +50,15 @@ const checkScopes = jwtAuthz(['read:saves', 'write:saves'], {
 });
 
 app.get('/sudoku/:userId', checkJwt, checkScopes, async (req, res) => {
-  try {
-    const db = client.db(process.env['NODE_ENV'] === 'test' ? 'test' : dbName);
-    const col = db.collection('saves');
-    const toGet = req.query.saveGame;
-
-    const getSaves = await col.findOne({ _id: req.params.userId });
-    if (getSaves === null || getSaves.saves.length === 0) {
-      res.status(404).json(errorMessages.NO_SAVES);
-    } else if (toGet > getSaves.saves.length) {
-      res.status(404).json(errorMessages.SAVE_GAME_NOT_FOUND);
-    } else {
-      toGet === undefined
-        ? res.json(getSaves.saves)
-        : res.json(getSaves.saves[toGet]);
-    }
-  } catch (err) {
-    res.status(400).json(err.stack);
-  }
+  handleGetSaves(req, res, client, dbName);
 });
 
 app.post('/sudoku/register', checkJwt, checkScopes, async (req, res) => {
-  try {
-    const db = client.db(process.env['NODE_ENV'] === 'test' ? 'test' : dbName);
-    const col = db.collection('saves');
-    const userDocument = {
-      _id: req.body.user_id,
-      saves: [],
-    };
-
-    await col.insertOne(userDocument);
-    res.json(await col.findOne({ _id: req.body.user_id }));
-  } catch (err) {
-    res.status(400).json(err.stack);
-  }
+  handleRegistration(req, res, client, dbName);
 });
 
 app.post('/sudoku', checkJwt, checkScopes, async (req, res) => {
-  try {
-    const regex = new RegExp(process.env.REGEX_CURSE_WORDS);
-    if (req.body.saveGame.name.length > 100) {
-      res.status(400).json(errorMessages.MAX_LENGTH);
-    } else if (regex.test(req.body.saveGame.name)) {
-      res.status(400).json(errorMessages.INAPPROPRIATE);
-    } else {
-      const db = client.db(
-        process.env['NODE_ENV'] === 'test' ? 'test' : dbName
-      );
-      const col = db.collection('saves');
-      const getSaves = await col.findOne({ _id: req.body.user_id });
-      if (getSaves.saves.length >= 9) {
-        res.status(400).json(errorMessages.MAX_SAVES);
-      } else {
-        await col.updateOne(
-          { _id: req.body.user_id },
-          {
-            $push: {
-              saves: req.body.saveGame,
-            },
-          }
-        );
-        res.json(await col.findOne({ _id: req.body.user_id }));
-      }
-    }
-  } catch (err) {
-    res.status(400).json(err.stack);
-  }
+  handleAddSave(req, res, client, dbName);
 });
 
 app.put(
@@ -118,43 +66,7 @@ app.put(
   checkJwt,
   checkScopes,
   async (req, res) => {
-    try {
-      const regex = new RegExp(process.env.REGEX_CURSE_WORDS);
-      if (req.body.saveGame.name.length > 100) {
-        res.status(400).json(errorMessages.MAX_LENGTH);
-      } else if (regex.test(req.body.saveGame.name)) {
-        res.status(400).json(errorMessages.INAPPROPRIATE);
-      } else {
-        const db = client.db(
-          process.env['NODE_ENV'] === 'test' ? 'test' : dbName
-        );
-        const col = db.collection('saves');
-        const getSaves = await col.findOne({ _id: req.params.userId });
-
-        if (getSaves === null) {
-          res.status(400).json(errorMessages.USER_NON_EXISTENT);
-        } else {
-          if (getSaves.saves[req.params.saveGame] === undefined) {
-            res.status(400).json(errorMessages.SAVE_GAME_NOT_FOUND);
-          } else {
-            const updatedSaveGame = req.body.saveGame;
-            getSaves.saves.splice(req.params.saveGame, 1, updatedSaveGame);
-
-            await col.updateOne(
-              { _id: req.params.userId },
-              {
-                $set: {
-                  saves: getSaves.saves,
-                },
-              }
-            );
-            res.json(await col.findOne({ _id: req.params.userId }));
-          }
-        }
-      }
-    } catch (err) {
-      res.status(400).json(err.stack);
-    }
+    handleUpdateSavedGame(req, res, client, dbName);
   }
 );
 
@@ -163,40 +75,12 @@ app.delete(
   checkJwt,
   checkScopes,
   async (req, res) => {
-    try {
-      const db = client.db(
-        process.env['NODE_ENV'] === 'test' ? 'test' : dbName
-      );
-      const col = db.collection('saves');
-      const getSaves = await col.findOne({ _id: req.params.userId });
-
-      if (getSaves === null) {
-        res.status(400).json(errorMessages.USER_NON_EXISTENT);
-      } else {
-        if (getSaves.saves[req.params.saveGame] === undefined) {
-          res.status(400).json(errorMessages.SAVE_GAME_NOT_FOUND);
-        } else {
-          getSaves.saves.splice(req.params.saveGame, 1);
-
-          await col.updateOne(
-            { _id: req.params.userId },
-            {
-              $set: {
-                saves: getSaves.saves,
-              },
-            }
-          );
-          res.json(await col.findOne({ _id: req.params.userId }));
-        }
-      }
-    } catch (err) {
-      res.status(400).json(err.stack);
-    }
+    handleDeleteSavedGame(req, res, client, dbName);
   }
 );
 
 app.listen(port, () => {
-  //console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Sudoku app listening at http://localhost:${port}`);
 });
 
 module.exports = app;
