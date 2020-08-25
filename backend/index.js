@@ -6,7 +6,7 @@ const port = 3000;
 const jwt = require('express-jwt');
 const jwtAuthz = require('express-jwt-authz');
 const jwksRsa = require('jwks-rsa');
-const { errorMessages, appConstants } = require('./constants/constants');
+const { appConstants } = require('./constants/constants');
 
 const { handleGetSaves } = require('./controllers/GET');
 const { handleRegistration, handleAddSave } = require('./controllers/POST');
