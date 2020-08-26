@@ -11,17 +11,17 @@
   & > .hide-hover {
     display: inline-block;
     position: absolute;
-    width: 100px;
+    width: 150px;
     opacity: 1;
   }
 
   & > .hide-hover:first-of-type {
     top: 40px;
-    left: 70px;
+    left: 80px;
   }
 
   & > .hide-hover:last-of-type {
     top: 40px;
-    left: 270px;
+    left: 240px;
   }
 }

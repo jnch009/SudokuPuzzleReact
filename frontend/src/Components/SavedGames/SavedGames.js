@@ -36,13 +36,13 @@ export default function BasicModalExample() {
       </Button>
       <Modal open={open} toggle={toggle}>
         <ModalHeader>Saved Games</ModalHeader>
-        <ModalBody>
+        <ModalBody className='pt-2 px-3'>
           {games.map((game) => (
             <div
               key={game.saveName}
               className='position-relative save-container'
             >
-              <div className='w-100 text-left mb-2 bg-primary p-3 save-styling'>
+              <div className='text-left mb-2 bg-primary p-3 save-styling rounded'>
                 <p className='mb-0 text-light'>{`Save Name: ${game.saveName}`}</p>
                 <p className='mb-0 text-light'>{`User Name: ${game.userName}`}</p>
                 <p className='mb-0 text-light'>{`Date Saved: ${game.date}`}</p>
