@@ -63,29 +63,29 @@ export default function BasicModalExample() {
             </div>
           ))}
           <nav aria-label='Page navigation example'>
-            <ul class='pagination justify-content-center'>
-              <li class='page-item'>
-                <a class='page-link' href='#' aria-label='Previous'>
+            <ul className='pagination justify-content-center'>
+              <li className='page-item'>
+                <a className='page-link' href='#' aria-label='Previous'>
                   <span aria-hidden='true'>&laquo;</span>
                 </a>
               </li>
-              <li class='page-item'>
-                <a class='page-link' href='?saves=1'>
+              <li className='page-item'>
+                <a className='page-link' href='?saves=1'>
                   1
                 </a>
               </li>
-              <li class='page-item'>
-                <a class='page-link' href='?saves=2'>
+              <li className='page-item'>
+                <a className='page-link' href='?saves=2'>
                   2
                 </a>
               </li>
-              <li class='page-item'>
-                <a class='page-link' href='?saves=3'>
+              <li className='page-item'>
+                <a className='page-link' href='?saves=3'>
                   3
                 </a>
               </li>
-              <li class='page-item'>
-                <a class='page-link' href='#' aria-label='Next'>
+              <li className='page-item'>
+                <a className='page-link' href='#' aria-label='Next'>
                   <span aria-hidden='true'>&raquo;</span>
                 </a>
               </li>
