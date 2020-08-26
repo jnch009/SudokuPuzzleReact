@@ -43,7 +43,10 @@ export default function BasicModalExample() {
         Manage Games
       </Button>
       <Modal open={open} toggle={toggle}>
-        <ModalHeader>Saved Games</ModalHeader>
+        <ModalHeader>
+          Saved Games
+          <Button>Save Game</Button>
+        </ModalHeader>
         <ModalBody className='pt-2 px-3'>
           {games.map((game) => (
             <div
@@ -59,6 +62,35 @@ export default function BasicModalExample() {
               <Button className='hide-hover'>Delete</Button>
             </div>
           ))}
+          <nav aria-label='Page navigation example'>
+            <ul class='pagination justify-content-center'>
+              <li class='page-item'>
+                <a class='page-link' href='#' aria-label='Previous'>
+                  <span aria-hidden='true'>&laquo;</span>
+                </a>
+              </li>
+              <li class='page-item'>
+                <a class='page-link' href='?saves=1'>
+                  1
+                </a>
+              </li>
+              <li class='page-item'>
+                <a class='page-link' href='?saves=2'>
+                  2
+                </a>
+              </li>
+              <li class='page-item'>
+                <a class='page-link' href='?saves=3'>
+                  3
+                </a>
+              </li>
+              <li class='page-item'>
+                <a class='page-link' href='#' aria-label='Next'>
+                  <span aria-hidden='true'>&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
         </ModalBody>
       </Modal>
     </div>

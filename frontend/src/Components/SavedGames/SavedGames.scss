@@ -2,6 +2,13 @@
   display: none;
 }
 
+.modal-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
 .save-container:hover {
   & > .save-styling {
     transition: all 250ms linear;
