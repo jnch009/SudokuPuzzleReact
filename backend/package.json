@@ -4,19 +4,26 @@
   "description": "REST API allowing for users to save their sudoku game",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --recursive './test/*.js' --exit",
     "start": "nodemon index.js"
   },
   "author": "Jeremy Ng",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.20.0",
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
     "express-jwt-authz": "^2.4.1",
+    "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.9.0",
+    "lodash.isequal": "^4.5.0",
     "mongodb": "^3.6.0"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "madge": "^3.9.2",
+    "mocha": "^8.1.1",
     "nodemon": "^2.0.4"
   }
 }
