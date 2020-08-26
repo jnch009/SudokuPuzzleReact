@@ -22,5 +22,5 @@ async function handleGetSaves(req, res, client, dbName) {
 }
 
 module.exports = {
-    handleGetSaves
-}
+  handleGetSaves,
+};

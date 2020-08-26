@@ -6,9 +6,10 @@ const {
   PostRegister,
 } = require('./SavedGames/POST/PostTests');
 const { GetTests } = require('./SavedGames/GET/GetTests');
+const { testConstants } = require('../constants/imports');
 
 describe('Sudoku Tests', function () {
-  this.timeout(10000);
+  this.timeout(testConstants.TIMEOUT);
   GetTests();
   PostNewSaveGame();
   PostRegister();

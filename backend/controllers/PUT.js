@@ -1,8 +1,7 @@
-const { errorMessages } = require('../constants/constants');
+const { errorMessages, regex } = require('../constants/constants');
 
 async function handleUpdateSavedGame(req, res, client, dbName) {
   try {
-    const regex = new RegExp(process.env.REGEX_CURSE_WORDS);
     if (req.body.saveGame.name.length > 100) {
       res.status(400).json(errorMessages.MAX_LENGTH);
     } else if (regex.test(req.body.saveGame.name)) {

@@ -10,6 +10,7 @@ const {
   objConstants,
   appConstants,
   errorMessages,
+  regex
 } = require('./constants');
 
 const {
@@ -31,6 +32,7 @@ module.exports = {
   objConstants,
   appConstants,
   errorMessages,
+  regex,
   beforeGet,
   cleanUp,
   beforeRegister,
