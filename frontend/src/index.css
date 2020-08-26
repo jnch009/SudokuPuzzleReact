@@ -1,6 +1,16 @@
+html {
+  height: 100vh;
+}
+
 body {
   font: 25px "Century Gothic", Futura, sans-serif;
   background-color: darkcyan;
+  height: inherit;
+}
+
+#root {
+  height: inherit;
+  background: #343a40;
 }
 
 ol,

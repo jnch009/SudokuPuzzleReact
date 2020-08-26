@@ -1,0 +1,27 @@
+.hide-hover {
+  display: none;
+}
+
+.save-container:hover {
+  & > .save-styling {
+    transition: all 250ms linear;
+    opacity: 0.25;
+  }
+
+  & > .hide-hover {
+    display: inline-block;
+    position: absolute;
+    width: 100px;
+    opacity: 1;
+  }
+
+  & > .hide-hover:first-of-type {
+    top: 40px;
+    left: 70px;
+  }
+
+  & > .hide-hover:last-of-type {
+    top: 40px;
+    left: 270px;
+  }
+}

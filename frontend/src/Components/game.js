@@ -2,6 +2,7 @@ import React from 'react';
 import Board from './board';
 import Login from '../Components/Login/Login';
 import Logout from '../Components/Logout/Logout';
+import SavedGames from '../Components/SavedGames/SavedGames';
 import {
   Container,
   Row,
@@ -33,7 +34,7 @@ class Game extends React.Component {
     };
   }
 
-  changeDifficulty = diff => {
+  changeDifficulty = (diff) => {
     this.setState(() => ({ difficulty: diff }));
   };
 
@@ -63,10 +64,10 @@ class Game extends React.Component {
   handleSudokuSolver = () => {
     let currentGrid = cloneDeep(this.state.grid);
 
-    currentGrid = currentGrid.map(row =>
-      row.map(el => {
+    currentGrid = currentGrid.map((row) =>
+      row.map((el) => {
         return typeof el === 'string' ? null : el;
-      }),
+      })
     );
     fn.solve(currentGrid, shuffled);
 
@@ -76,17 +77,28 @@ class Game extends React.Component {
     });
   };
 
-  populateGameGrid = grid => {
+  populateGameGrid = (grid) => {
     this.setState({ grid: grid, solvedButton: false, newGame: false });
   };
 
   render() {
-    const { isAuthenticated } = this.props.auth0;
+    const { isLoading, error, isAuthenticated } = this.props.auth0;
+
+    if (isLoading) {
+      return (
+        <h1 className='h-100 m-0 d-flex justify-content-center align-items-center text-primary'>
+          Loading...
+        </h1>
+      );
+    }
+    if (error) {
+      return <div>Oops... {error.message}</div>;
+    }
 
     return (
       <div className='game'>
         <div className='game-title'>
-          <p className='title'>SUDOKU!</p>
+          <p className='title text-primary'>SUDOKU!</p>
         </div>
         <div className='game-board'>
           <Board
@@ -124,9 +136,12 @@ class Game extends React.Component {
                 New Game
               </Button>
             </Col>
-            <Col>
-              {isAuthenticated ?  <Logout /> : <Login />}
-            </Col>
+            {isAuthenticated ? (
+              <Col>
+                <SavedGames />
+              </Col>
+            ) : null}
+            <Col>{isAuthenticated ? <Logout /> : <Login />}</Col>
           </Row>
         </Container>
 

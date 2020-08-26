@@ -132,7 +132,7 @@ class Board extends React.Component {
     return (
       <div className='sudoku'>
         {error}
-        <div className='winCondition'>
+        <div className='winCondition text-primary'>
           {complete
             ? 'You have successfully solved the sudoku!'
             : 'You are not done yet!'}
