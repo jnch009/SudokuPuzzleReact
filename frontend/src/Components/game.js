@@ -20,20 +20,23 @@ import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 
 const shuffled = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+const initialState = {
+  openCredits: false,
+  openDifficulty: false,
+  openRules: false,
+  openNewGame: false,
+  difficulty: 'Normal',
+  newGame: false,
+  solvedButton: false,
+  grid: [],
+};
+
 class Game extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      openCredits: false,
-      openDifficulty: false,
-      openRules: false,
-      openNewGame: false,
-      difficulty: 'Normal',
-      newGame: false,
-      solvedButton: false,
-      grid: [],
-    };
+    this.state = initialState;
   }
 
   routeChangeHandler = (route) => {
@@ -51,12 +54,21 @@ class Game extends React.Component {
       this.handleNewGameClick();
       break;
     default:
-      break;
+      this.setState(initialState);
     }
   };
 
   componentDidMount() {
     this.routeChangeHandler(this.props.location.pathname);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.location.pathname !== this.props.location.pathname &&
+      this.props.history.action === 'POP'
+    ) {
+      this.routeChangeHandler(this.props.location.pathname);
+    }
   }
 
   changeDifficulty = (diff) => {
