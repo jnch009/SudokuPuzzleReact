@@ -6,13 +6,17 @@ import './index.css';
 import Game from './Components/game';
 import { Auth0Provider } from '@auth0/auth0-react';
 
+import { BrowserRouter as Router } from 'react-router-dom';
+
 ReactDOM.render(
-  <Auth0Provider
-    domain={process.env.REACT_APP_AUTH0_DOMAIN}
-    clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
-    redirectUri={window.location.origin}
-  >
-    <Game />
-  </Auth0Provider>,
+  <Router>
+    <Auth0Provider
+      domain={process.env.REACT_APP_AUTH0_DOMAIN}
+      clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
+      redirectUri={window.location.origin}
+    >
+      <Game />
+    </Auth0Provider>
+  </Router>,
   document.getElementById('root')
 );

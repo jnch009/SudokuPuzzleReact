@@ -15,6 +15,9 @@ import {
 import fn from '../helperFn/boardFunctions';
 import cloneDeep from 'lodash.clonedeep';
 import { withAuth0 } from '@auth0/auth0-react';
+import { withRouter } from 'react-router';
+
+import { Link } from 'react-router-dom';
 
 const shuffled = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 class Game extends React.Component {
@@ -33,7 +36,30 @@ class Game extends React.Component {
     };
   }
 
-  changeDifficulty = diff => {
+  routeChangeHandler = (route) => {
+    switch (route) {
+    case '/credits':
+      this.handleCreditsClick();
+      break;
+    case '/difficulty':
+      this.handleDifficultyClick();
+      break;
+    case '/rules':
+      this.handleRulesClick();
+      break;
+    case '/newGame':
+      this.handleNewGameClick();
+      break;
+    default:
+      break;
+    }
+  };
+
+  componentDidMount() {
+    this.routeChangeHandler(this.props.location.pathname);
+  }
+
+  changeDifficulty = (diff) => {
     this.setState(() => ({ difficulty: diff }));
   };
 
@@ -45,28 +71,70 @@ class Game extends React.Component {
   };
 
   handleDifficultyClick = () => {
-    this.setState(() => ({ openDifficulty: !this.state.openDifficulty }));
+    this.setState(
+      () => ({ openDifficulty: !this.state.openDifficulty }),
+      () => {
+        if (
+          !this.state.openDifficulty &&
+          this.props.location.pathname === '/difficulty'
+        ) {
+          this.props.history.push('/');
+        }
+      }
+    );
   };
 
   handleCreditsClick = () => {
-    this.setState(() => ({ openCredits: !this.state.openCredits }));
+    this.setState(
+      () => ({
+        openCredits: !this.state.openCredits,
+      }),
+      () => {
+        if (
+          !this.state.openCredits &&
+          this.props.location.pathname === '/credits'
+        ) {
+          this.props.history.push('/');
+        }
+      }
+    );
   };
 
   handleRulesClick = () => {
-    this.setState(() => ({ openRules: !this.state.openRules }));
+    this.setState(
+      () => ({ openRules: !this.state.openRules }),
+      () => {
+        if (
+          !this.state.openRules &&
+          this.props.location.pathname === '/rules'
+        ) {
+          this.props.history.push('/');
+        }
+      }
+    );
   };
 
   handleNewGameClick = () => {
-    this.setState(() => ({ openNewGame: !this.state.openNewGame }));
+    this.setState(
+      () => ({ openNewGame: !this.state.openNewGame }),
+      () => {
+        if (
+          !this.state.openNewGame === true &&
+          this.props.location.pathname === '/newGame'
+        ) {
+          this.props.history.push('/');
+        }
+      }
+    );
   };
 
   handleSudokuSolver = () => {
     let currentGrid = cloneDeep(this.state.grid);
 
-    currentGrid = currentGrid.map(row =>
-      row.map(el => {
+    currentGrid = currentGrid.map((row) =>
+      row.map((el) => {
         return typeof el === 'string' ? null : el;
-      }),
+      })
     );
     fn.solve(currentGrid, shuffled);
 
@@ -76,13 +144,12 @@ class Game extends React.Component {
     });
   };
 
-  populateGameGrid = grid => {
+  populateGameGrid = (grid) => {
     this.setState({ grid: grid, solvedButton: false, newGame: false });
   };
 
   render() {
     const { isAuthenticated } = this.props.auth0;
-
     return (
       <div className='game'>
         <div className='game-title'>
@@ -100,14 +167,18 @@ class Game extends React.Component {
         <Container className='dr-example-container'>
           <Row>
             <Col>
-              <Button onClick={this.handleCreditsClick} className='navBar'>
-                Credits
-              </Button>
+              <Link to='/credits'>
+                <Button onClick={this.handleCreditsClick} className='navBar'>
+                  Credits
+                </Button>
+              </Link>
             </Col>
             <Col>
-              <Button onClick={this.handleDifficultyClick} className='navBar'>
-                Difficulty
-              </Button>
+              <Link to='/difficulty'>
+                <Button onClick={this.handleDifficultyClick} className='navBar'>
+                  Difficulty
+                </Button>
+              </Link>
             </Col>
             <Col>
               <Button onClick={this.handleSudokuSolver} className='navBar'>
@@ -115,18 +186,20 @@ class Game extends React.Component {
               </Button>
             </Col>
             <Col>
-              <Button onClick={this.handleRulesClick} className='navBar'>
-                How To Play
-              </Button>
+              <Link to='/rules'>
+                <Button onClick={this.handleRulesClick} className='navBar'>
+                  How To Play
+                </Button>
+              </Link>
             </Col>
             <Col>
-              <Button onClick={this.handleNewGameClick} className='navBar'>
-                New Game
-              </Button>
+              <Link to='/newGame'>
+                <Button onClick={this.handleNewGameClick} className='navBar'>
+                  New Game
+                </Button>
+              </Link>
             </Col>
-            <Col>
-              {isAuthenticated ?  <Logout /> : <Login />}
-            </Col>
+            <Col>{isAuthenticated ? <Logout /> : <Login />}</Col>
           </Row>
         </Container>
 
@@ -212,7 +285,8 @@ class Game extends React.Component {
         <Modal open={this.state.openNewGame} toggle={this.handleNewGameClick}>
           <ModalBody>
             <div className='newGameText'>
-              Are you sure?<br></br>
+              Are you sure?
+              <br />
             </div>
             <div className='flexButtons'>
               <Button onClick={this.newGameAccepted}>Yes</Button>
@@ -225,4 +299,4 @@ class Game extends React.Component {
   }
 }
 
-export default withAuth0(Game);
+export default withRouter(withAuth0(Game));
