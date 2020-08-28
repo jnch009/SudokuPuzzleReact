@@ -22,5 +22,6 @@ Auth0 authentication will be added very soon.
 
 **As a warning, DO NOT HIT the back button after logging in to go back to the login screen. You will be met with an Auth0 error that will determine that you are using the system incorrectly.**
 
+I have updated the login box for Auth0 to use the newer lightweight version. It has fixed a few of my troubling/extremely frustrating issues with react-router and preventing back button presses (which did not work). It has notably fixed the bug where a user could hit the back button and relogin again with the system not throwing any errors.
 
 ###### Now built on Netlify: https://competent-aryabhata-ab481d.netlify.app
