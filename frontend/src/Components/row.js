@@ -1,0 +1,64 @@
+import React from 'react';
+import Square from './Square/square';
+import fn from '../helperFn/boardFunctions';
+import cloneDeep from 'lodash.clonedeep';
+
+const renderSquare = (grid, num, row, col, handleKeyPress) => {
+  const gridEntry = num;
+
+  if (gridEntry === null || typeof gridEntry === 'string') {
+    if (typeof gridEntry === 'string') {
+      const clonedArr = cloneDeep(grid);
+      clonedArr[row][col] = null;
+      if (!fn.isValid(clonedArr, row, col, gridEntry)) {
+        return (
+          <Square
+            key={`${row} ${col}`}
+            number={gridEntry}
+            pressKey={handleKeyPress}
+            row={row}
+            col={col}
+            grid={grid}
+            modify={true}
+            valid={false}
+          />
+        );
+      }
+    }
+
+    return (
+      <Square
+        key={`${row} ${col}`}
+        number={gridEntry}
+        pressKey={handleKeyPress}
+        row={row}
+        col={col}
+        grid={grid}
+        modify={true}
+        valid={true}
+      />
+    );
+  } else {
+    return (
+      <Square
+        key={`${row} ${col}`}
+        row={row}
+        col={col}
+        number={gridEntry}
+        modify={false}
+      />
+    );
+  }
+};
+
+const Row = ({ cells = [], rowNum, grid, handleKeyPress }) => {
+  return (
+    <div className='sudoku-row'>
+      {cells.map((cell, cellNum) =>
+        renderSquare(grid, cell, rowNum, cellNum, handleKeyPress)
+      )}
+    </div>
+  );
+};
+
+export default Row;
