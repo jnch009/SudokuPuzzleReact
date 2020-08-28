@@ -2,6 +2,8 @@ import React from 'react';
 import Board from './board';
 import Login from '../Components/Login/Login';
 import Logout from '../Components/Logout/Logout';
+import Profile from '../Components/Profile/Profile';
+
 import {
   Container,
   Row,
@@ -15,58 +17,120 @@ import {
 import fn from '../helperFn/boardFunctions';
 import cloneDeep from 'lodash.clonedeep';
 import { withAuth0 } from '@auth0/auth0-react';
+import { withRouter, Switch } from 'react-router';
+
+import { Link } from 'react-router-dom';
+import PrivateRoute from './PrivateRoute/PrivateRoute';
 
 const shuffled = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+const initialState = {
+  openCredits: false,
+  openDifficulty: false,
+  openRules: false,
+  openNewGame: false,
+  difficulty: 'Normal',
+  newGame: false,
+  solvedButton: false,
+  grid: [],
+};
+
 class Game extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      openCredits: false,
-      openDifficulty: false,
-      openRules: false,
-      openNewGame: false,
-      difficulty: 'Normal',
-      newGame: false,
-      solvedButton: false,
-      grid: [],
-    };
+    this.state = initialState;
   }
 
-  changeDifficulty = diff => {
+  routeChangeHandler = (route) => {
+    switch (route) {
+    case '/credits':
+      this.handleCreditsClick();
+      break;
+    case '/difficulty':
+      this.handleDifficultyClick();
+      break;
+    case '/rules':
+      this.handleRulesClick();
+      break;
+    case '/newGame':
+      this.handleNewGameClick();
+      break;
+    default:
+      this.setState(initialState);
+    }
+  };
+
+  componentDidMount() {
+    this.routeChangeHandler(this.props.location.pathname);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.location.pathname !== this.props.location.pathname &&
+      this.props.history.action === 'POP'
+    ) {
+      this.routeChangeHandler(this.props.location.pathname);
+    }
+  }
+
+  changeDifficulty = (diff) => {
     this.setState(() => ({ difficulty: diff }));
   };
 
+  routeChangeCallback = (stateCondition, route) => {
+    if (stateCondition && this.props.location.pathname === route) {
+      this.props.history.push('/');
+    }
+  };
+
   newGameAccepted = () => {
-    this.setState(() => ({
-      newGame: true,
-      openNewGame: !this.state.openNewGame,
-    }));
+    this.setState(
+      () => ({
+        newGame: true,
+        openNewGame: !this.state.openNewGame,
+      }),
+      () => this.routeChangeCallback(!this.state.openNewGame, '/newGame')
+    );
   };
 
   handleDifficultyClick = () => {
-    this.setState(() => ({ openDifficulty: !this.state.openDifficulty }));
+    this.setState(
+      () => ({ openDifficulty: !this.state.openDifficulty }),
+      () => this.routeChangeCallback(!this.state.openDifficulty, '/difficulty')
+    );
   };
 
   handleCreditsClick = () => {
-    this.setState(() => ({ openCredits: !this.state.openCredits }));
+    this.setState(
+      () => ({
+        openCredits: !this.state.openCredits,
+      }),
+      () => this.routeChangeCallback(!this.state.openCredits, '/credits')
+    );
   };
 
   handleRulesClick = () => {
-    this.setState(() => ({ openRules: !this.state.openRules }));
+    this.setState(
+      () => ({ openRules: !this.state.openRules }),
+      () => this.routeChangeCallback(!this.state.openRules, '/rules')
+    );
   };
 
   handleNewGameClick = () => {
-    this.setState(() => ({ openNewGame: !this.state.openNewGame }));
+    this.setState(
+      () => ({ openNewGame: !this.state.openNewGame }),
+      () => this.routeChangeCallback(!this.state.openNewGame, '/newGame')
+    );
   };
 
   handleSudokuSolver = () => {
     let currentGrid = cloneDeep(this.state.grid);
 
-    currentGrid = currentGrid.map(row =>
-      row.map(el => {
+    currentGrid = currentGrid.map((row) =>
+      row.map((el) => {
         return typeof el === 'string' ? null : el;
-      }),
+      })
     );
     fn.solve(currentGrid, shuffled);
 
@@ -76,12 +140,16 @@ class Game extends React.Component {
     });
   };
 
-  populateGameGrid = grid => {
+  populateGameGrid = (grid) => {
     this.setState({ grid: grid, solvedButton: false, newGame: false });
   };
 
   render() {
-    const { isAuthenticated } = this.props.auth0;
+    const { isAuthenticated, isLoading } = this.props.auth0;
+
+    if (isLoading) {
+      return <h1>Loading</h1>;
+    }
 
     return (
       <div className='game'>
@@ -100,14 +168,18 @@ class Game extends React.Component {
         <Container className='dr-example-container'>
           <Row>
             <Col>
-              <Button onClick={this.handleCreditsClick} className='navBar'>
-                Credits
-              </Button>
+              <Link to='/credits'>
+                <Button onClick={this.handleCreditsClick} className='navBar'>
+                  Credits
+                </Button>
+              </Link>
             </Col>
             <Col>
-              <Button onClick={this.handleDifficultyClick} className='navBar'>
-                Difficulty
-              </Button>
+              <Link to='/difficulty'>
+                <Button onClick={this.handleDifficultyClick} className='navBar'>
+                  Difficulty
+                </Button>
+              </Link>
             </Col>
             <Col>
               <Button onClick={this.handleSudokuSolver} className='navBar'>
@@ -115,19 +187,30 @@ class Game extends React.Component {
               </Button>
             </Col>
             <Col>
-              <Button onClick={this.handleRulesClick} className='navBar'>
-                How To Play
-              </Button>
+              <Link to='/rules'>
+                <Button onClick={this.handleRulesClick} className='navBar'>
+                  How To Play
+                </Button>
+              </Link>
             </Col>
             <Col>
-              <Button onClick={this.handleNewGameClick} className='navBar'>
-                New Game
-              </Button>
+              <Link to='/profile'>
+                <Button className='navBar'>Profile</Button>
+              </Link>
             </Col>
             <Col>
-              {isAuthenticated ?  <Logout /> : <Login />}
+              <Link to='/newGame'>
+                <Button onClick={this.handleNewGameClick} className='navBar'>
+                  New Game
+                </Button>
+              </Link>
             </Col>
+            <Col>{isAuthenticated ? <Logout /> : <Login />}</Col>
           </Row>
+
+          <Switch>
+            <PrivateRoute path='/profile' component={Profile} />
+          </Switch>
         </Container>
 
         <Modal open={this.state.openCredits} toggle={this.handleCreditsClick}>
@@ -212,7 +295,8 @@ class Game extends React.Component {
         <Modal open={this.state.openNewGame} toggle={this.handleNewGameClick}>
           <ModalBody>
             <div className='newGameText'>
-              Are you sure?<br></br>
+              Are you sure?
+              <br />
             </div>
             <div className='flexButtons'>
               <Button onClick={this.newGameAccepted}>Yes</Button>
@@ -225,4 +309,4 @@ class Game extends React.Component {
   }
 }
 
-export default withAuth0(Game);
+export default withRouter(withAuth0(Game));
