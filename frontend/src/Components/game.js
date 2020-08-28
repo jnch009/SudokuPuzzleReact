@@ -56,6 +56,9 @@ class Game extends React.Component {
     case '/newGame':
       this.handleNewGameClick();
       break;
+    case '/profile':
+      this.props.history.replace('/');
+      break;
     default:
       this.setState(initialState);
     }
