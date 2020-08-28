@@ -1,3 +1,7 @@
+.savedGamesSection{
+  width: 500px;
+}
+
 .hide-hover {
   display: none;
 }
@@ -23,12 +27,12 @@
   }
 
   & > .hide-hover:first-of-type {
-    top: 40px;
-    left: 80px;
+    top: 30px;
+    left: 100px;
   }
 
   & > .hide-hover:last-of-type {
-    top: 40px;
-    left: 240px;
+    top: 30px;
+    left: 270px;
   }
 }

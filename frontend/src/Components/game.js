@@ -18,7 +18,7 @@ import {
 import fn from '../helperFn/boardFunctions';
 import cloneDeep from 'lodash.clonedeep';
 import { withAuth0 } from '@auth0/auth0-react';
-import { withRouter, Switch } from 'react-router';
+import { withRouter, Switch, Route } from 'react-router';
 
 import { Link } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute/PrivateRoute';
@@ -33,6 +33,7 @@ const initialState = {
   difficulty: 'Normal',
   newGame: false,
   solvedButton: false,
+  manageGames: false,
   grid: [],
 };
 
@@ -57,22 +58,27 @@ class Game extends React.Component {
     case '/newGame':
       this.handleNewGameClick();
       break;
-    case '/profile':
-      this.props.history.replace('/');
+    case '/manageSaves':
+      this.handleManageSavesClick();
       break;
+    // case '/profile':
+    //   this.props.history.replace('/');
+    //   break;
     default:
       this.setState(initialState);
     }
   };
 
   componentDidMount() {
+    console.log('mount');
     this.routeChangeHandler(this.props.location.pathname);
   }
 
   componentDidUpdate(prevProps) {
+    console.log('update');
     if (
       prevProps.location.pathname !== this.props.location.pathname &&
-      this.props.history.action === 'POP'
+      (this.props.history.action === 'POP' || this.props.history.action === 'REPLACE')
     ) {
       this.routeChangeHandler(this.props.location.pathname);
     }
@@ -121,12 +127,20 @@ class Game extends React.Component {
     );
   };
 
+  handleManageSavesClick = () => {
+    this.setState(
+      () => ({ manageGames: !this.state.manageGames }),
+      () => this.routeChangeCallback(!this.state.manageGames, '/manageSaves')
+    );
+  }
+
   handleNewGameClick = () => {
     this.setState(
       () => ({ openNewGame: !this.state.openNewGame }),
       () => this.routeChangeCallback(!this.state.openNewGame, '/newGame')
     );
   };
+
 
   handleSudokuSolver = () => {
     let currentGrid = cloneDeep(this.state.grid);
@@ -167,7 +181,7 @@ class Game extends React.Component {
         <div className='game-title'>
           <p className='title text-primary'>SUDOKU!</p>
         </div>
-        <div className='game-board'>
+        {/* <div className='game-board'>
           <Board
             difficulty={this.state.difficulty}
             newGame={this.state.newGame}
@@ -175,7 +189,7 @@ class Game extends React.Component {
             solvedButton={this.state.solvedButton}
             solvedGrid={this.state.grid}
           />
-        </div>
+        </div> */}
         <Container className='dr-example-container'>
           <Row>
             <Col>
@@ -209,11 +223,11 @@ class Game extends React.Component {
                 <Button className='navBar'>Profile</Button>
               </Link>
             </Col>
-            {isAuthenticated ? (
-              <Col>
-                <SavedGames />
-              </Col>
-            ) : null}
+            <Col>
+              <Link to='/manageSaves'>
+                <Button onClick={this.handleManageSavesClick} className='navBar'>Manage Games</Button>
+              </Link>
+            </Col>
             <Col>
               <Link to='/newGame'>
                 <Button onClick={this.handleNewGameClick} className='navBar'>
@@ -223,10 +237,6 @@ class Game extends React.Component {
             </Col>
             <Col>{isAuthenticated ? <Logout /> : <Login />}</Col>
           </Row>
-
-          <Switch>
-            <PrivateRoute path='/profile' component={Profile} />
-          </Switch>
         </Container>
 
         <Modal open={this.state.openCredits} toggle={this.handleCreditsClick}>
@@ -320,6 +330,15 @@ class Game extends React.Component {
             </div>
           </ModalBody>
         </Modal>
+        <Switch>
+          <PrivateRoute path='/profile' component={Profile} />
+          <PrivateRoute path='/manageSaves' component={SavedGames} open={this.state.manageGames} toggle={this.handleManageSavesClick} />
+          <Route path='/' render={() => <Board difficulty={this.state.difficulty}
+            newGame={this.state.newGame}
+            populateGameGrid={this.populateGameGrid}
+            solvedButton={this.state.solvedButton}
+            solvedGrid={this.state.grid} />}/>
+        </Switch>
       </div>
     );
   }

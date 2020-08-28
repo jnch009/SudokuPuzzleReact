@@ -130,22 +130,24 @@ class Board extends React.Component {
     const { grid, complete } = this.state;
 
     return (
-      <div className='sudoku'>
-        {error}
-        <div className='winCondition text-primary'>
-          {complete
-            ? 'You have successfully solved the sudoku!'
-            : 'You are not done yet!'}
+      <div className='game-board'>
+        <div className='sudoku'>
+          {error}
+          <div className='winCondition text-primary'>
+            {complete
+              ? 'You have successfully solved the sudoku!'
+              : 'You are not done yet!'}
+          </div>
+          {grid.map((row, rowNum) => (
+            <Row
+              key={rowNum}
+              grid={grid}
+              cells={row}
+              rowNum={rowNum}
+              handleKeyPress={this.handleKeyPress}
+            />
+          ))}
         </div>
-        {grid.map((row, rowNum) => (
-          <Row
-            key={rowNum}
-            grid={grid}
-            cells={row}
-            rowNum={rowNum}
-            handleKeyPress={this.handleKeyPress}
-          />
-        ))}
       </div>
     );
   }
