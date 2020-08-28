@@ -13,24 +13,7 @@ import {
   ModalBody,
   ModalHeader,
   FormRadio,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  FormInput,
-  Collapse,
 } from 'shards-react';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import fn from '../helperFn/boardFunctions';
 import cloneDeep from 'lodash.clonedeep';
 import { withAuth0 } from '@auth0/auth0-react';
@@ -161,24 +144,6 @@ class Game extends React.Component {
     this.setState({ grid: grid, solvedButton: false, newGame: false });
   };
 
-  toggleDropdown() {
-    this.setState({
-      ...this.state,
-      ...{
-        dropdownOpen: !this.state.dropdownOpen,
-      },
-    });
-  }
-
-  toggleNavbar() {
-    this.setState({
-      ...this.state,
-      ...{
-        collapseOpen: !this.state.collapseOpen,
-      },
-    });
-  }
-
   render() {
     const { isAuthenticated, isLoading } = this.props.auth0;
 
@@ -187,183 +152,18 @@ class Game extends React.Component {
     }
 
     return (
-      <>
-        <Navbar type='dark' theme='primary' expand='md'>
-          <NavbarBrand href='#'>Shards React</NavbarBrand>
-          <NavbarToggler onClick={this.toggleNavbar} />
-
-          <Collapse open={this.state.collapseOpen} navbar>
-            {/* <Nav navbar>
-              <NavItem>
-                <NavLink active href='#'>
-                  Active
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href='#' disabled>
-                  Disabled
-                </NavLink>
-              </NavItem>
-              <Dropdown
-                open={this.state.dropdownOpen}
-                toggle={this.toggleDropdown}
-              >
-                <DropdownToggle nav caret>
-                  Dropdown
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem>Action</DropdownItem>
-                  <DropdownItem>Another action</DropdownItem>
-                  <DropdownItem>Something else here</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            </Nav> */}
-
-            <Nav navbar className='ml-auto'>
-              <InputGroup size='sm' seamless>
-                <InputGroupAddon type='prepend'>
-                  <InputGroupText>
-                    <FontAwesomeIcon icon={faSearch} />
-                  </InputGroupText>
-                </InputGroupAddon>
-                <FormInput className='border-0' placeholder='Search...' />
-              </InputGroup>
-            </Nav>
-          </Collapse>
-        </Navbar>
-        <div className='game'>
-          <div className='game-title'>
-            <p className='title'>SUDOKU!</p>
-          </div>
-          <div className='game-board'>
-            <Board
-              difficulty={this.state.difficulty}
-              newGame={this.state.newGame}
-              populateGameGrid={this.populateGameGrid}
-              solvedButton={this.state.solvedButton}
-              solvedGrid={this.state.grid}
-            />
-          </div>
-          <Container className='dr-example-container'>
-            <Row>
-              <Col>
-                <Button onClick={this.handleCreditsClick} className='navBar'>
-                  Credits
-                </Button>
-              </Col>
-              <Col>
-                <Button onClick={this.handleDifficultyClick} className='navBar'>
-                  Difficulty
-                </Button>
-              </Col>
-              <Col>
-                <Button onClick={this.handleSudokuSolver} className='navBar'>
-                  Solve
-                </Button>
-              </Col>
-              <Col>
-                <Button onClick={this.handleRulesClick} className='navBar'>
-                  How To Play
-                </Button>
-              </Col>
-              <Col>
-                <Button onClick={this.handleNewGameClick} className='navBar'>
-                  New Game
-                </Button>
-              </Col>
-            </Row>
-          </Container>
-
-          <Modal open={this.state.openCredits} toggle={this.handleCreditsClick}>
-            <ModalHeader>Credits</ModalHeader>
-            <ModalBody>Developed by: Jeremy Ng Cheng Hin</ModalBody>
-          </Modal>
-
-          <Modal
-            open={this.state.openDifficulty}
-            toggle={this.handleDifficultyClick}
-          >
-            <ModalHeader>Change Difficulty</ModalHeader>
-            <ModalBody>
-              <FormRadio
-                checked={this.state.difficulty === 'Beginner'}
-                onChange={() => {
-                  this.changeDifficulty('Beginner');
-                }}
-              >
-                Beginner
-              </FormRadio>
-              <FormRadio
-                checked={this.state.difficulty === 'Easy'}
-                onChange={() => {
-                  this.changeDifficulty('Easy');
-                }}
-              >
-                Easy
-              </FormRadio>
-              <FormRadio
-                checked={this.state.difficulty === 'Normal'}
-                onChange={() => {
-                  this.changeDifficulty('Normal');
-                }}
-              >
-                Normal
-              </FormRadio>
-              <FormRadio
-                checked={this.state.difficulty === 'Hard'}
-                onChange={() => {
-                  this.changeDifficulty('Hard');
-                }}
-              >
-                Hard
-              </FormRadio>
-              <Button onClick={this.handleDifficultyClick}>Accept</Button>
-            </ModalBody>
-          </Modal>
-
-          <Modal open={this.state.openRules} toggle={this.handleRulesClick}>
-            <ModalHeader>Welcome to Sudoku!</ModalHeader>
-            <ModalBody>
-              <div className='rulesText'>
-                <p>
-                  1. Only one number from 1-9 is allowed on each row<br></br>
-                </p>
-                <p>
-                  2. Only one number from 1-9 is allowed on each column<br></br>
-                </p>
-                <p>
-                  3. Only one number from 1-9 is allowed in each grid<br></br>
-                </p>
-                <p>
-                  The goal of the game is to find the missing numbers in the
-                  grid such that all three of these conditions are satisfied and
-                  if they are then you have successfully completed the puzzle.
-                  <br></br>
-                </p>
-                <p>
-                  If not, then you must backtrack and find out which numbers are
-                  inserted incorrectly.<br></br>
-                </p>
-                <p>
-                  You will know if the number is inserted incorrectly when the
-                  box is highlighted red.<br></br>
-                </p>
-              </div>
-              <Button onClick={this.handleRulesClick}>Got it!</Button>
-            </ModalBody>
-          </Modal>
-
-          <Modal open={this.state.openNewGame} toggle={this.handleNewGameClick}>
-            <ModalBody>
-              <div className='newGameText'>
-                Are you sure?<br></br>
-              </div>
-              <div className='flexButtons'>
-                <Button onClick={this.newGameAccepted}>Yes</Button>
-                <Button onClick={this.handleNewGameClick}>No</Button>
-              </div>
-            </ModalBody>
-          </Modal>
+      <div className='game'>
+        <div className='game-title'>
+          <p className='title'>SUDOKU!</p>
+        </div>
+        <div className='game-board'>
+          <Board
+            difficulty={this.state.difficulty}
+            newGame={this.state.newGame}
+            populateGameGrid={this.populateGameGrid}
+            solvedButton={this.state.solvedButton}
+            solvedGrid={this.state.grid}
+          />
         </div>
         <Container className='dr-example-container'>
           <Row>
