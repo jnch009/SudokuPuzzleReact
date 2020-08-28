@@ -23,6 +23,8 @@
     "object-curly-spacing": ["error", "always"],
     "quotes": ["warn","single"],
     "jsx-quotes": ["warn", "prefer-single"],
-    "semi": ["error", "always"]
+    "semi": ["error", "always"],
+    "react/display-name": [0],
+    "no-console": [1]
   }
 }

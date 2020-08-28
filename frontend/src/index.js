@@ -4,19 +4,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'shards-ui/dist/css/shards.min.css';
 import './index.css';
 import Game from './Components/game';
-import { Auth0Provider } from '@auth0/auth0-react';
 
 import { BrowserRouter as Router } from 'react-router-dom';
+import Auth0ProviderWithHistory from './auth0-provider-with-history';
 
 ReactDOM.render(
   <Router>
-    <Auth0Provider
-      domain={process.env.REACT_APP_AUTH0_DOMAIN}
-      clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
-      redirectUri={window.location.origin}
-    >
+    <Auth0ProviderWithHistory>
       <Game />
-    </Auth0Provider>
+    </Auth0ProviderWithHistory>
   </Router>,
   document.getElementById('root')
 );

@@ -2,6 +2,8 @@ import React from 'react';
 import Board from './board';
 import Login from '../Components/Login/Login';
 import Logout from '../Components/Logout/Logout';
+import Profile from '../Components/Profile/Profile';
+
 import {
   Container,
   Row,
@@ -15,9 +17,10 @@ import {
 import fn from '../helperFn/boardFunctions';
 import cloneDeep from 'lodash.clonedeep';
 import { withAuth0 } from '@auth0/auth0-react';
-import { withRouter } from 'react-router';
+import { withRouter, Switch } from 'react-router';
 
 import { Link } from 'react-router-dom';
+import PrivateRoute from './PrivateRoute/PrivateRoute';
 
 const shuffled = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -76,10 +79,20 @@ class Game extends React.Component {
   };
 
   newGameAccepted = () => {
-    this.setState(() => ({
-      newGame: true,
-      openNewGame: !this.state.openNewGame,
-    }));
+    this.setState(
+      () => ({
+        newGame: true,
+        openNewGame: !this.state.openNewGame,
+      }),
+      () => {
+        if (
+          !this.state.openNewGame === true &&
+          this.props.location.pathname === '/newGame'
+        ) {
+          this.props.history.push('/');
+        }
+      }
+    );
   };
 
   handleDifficultyClick = () => {
@@ -161,7 +174,12 @@ class Game extends React.Component {
   };
 
   render() {
-    const { isAuthenticated } = this.props.auth0;
+    const { isAuthenticated, isLoading } = this.props.auth0;
+
+    if (isLoading) {
+      return <h1>Loading</h1>;
+    }
+
     return (
       <div className='game'>
         <div className='game-title'>
@@ -205,6 +223,11 @@ class Game extends React.Component {
               </Link>
             </Col>
             <Col>
+              <Link to='/profile'>
+                <Button className='navBar'>Profile</Button>
+              </Link>
+            </Col>
+            <Col>
               <Link to='/newGame'>
                 <Button onClick={this.handleNewGameClick} className='navBar'>
                   New Game
@@ -213,6 +236,10 @@ class Game extends React.Component {
             </Col>
             <Col>{isAuthenticated ? <Logout /> : <Login />}</Col>
           </Row>
+
+          <Switch>
+            <PrivateRoute path='/profile' component={Profile} />
+          </Switch>
         </Container>
 
         <Modal open={this.state.openCredits} toggle={this.handleCreditsClick}>
