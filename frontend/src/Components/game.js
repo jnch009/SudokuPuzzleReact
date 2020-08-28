@@ -78,34 +78,26 @@ class Game extends React.Component {
     this.setState(() => ({ difficulty: diff }));
   };
 
+  routeChangeCallback = (stateCondition, route) => {
+    if (stateCondition && this.props.location.pathname === route) {
+      this.props.history.push('/');
+    }
+  };
+
   newGameAccepted = () => {
     this.setState(
       () => ({
         newGame: true,
         openNewGame: !this.state.openNewGame,
       }),
-      () => {
-        if (
-          !this.state.openNewGame === true &&
-          this.props.location.pathname === '/newGame'
-        ) {
-          this.props.history.push('/');
-        }
-      }
+      () => this.routeChangeCallback(!this.state.openNewGame, '/newGame')
     );
   };
 
   handleDifficultyClick = () => {
     this.setState(
       () => ({ openDifficulty: !this.state.openDifficulty }),
-      () => {
-        if (
-          !this.state.openDifficulty &&
-          this.props.location.pathname === '/difficulty'
-        ) {
-          this.props.history.push('/');
-        }
-      }
+      () => this.routeChangeCallback(!this.state.openDifficulty, '/difficulty')
     );
   };
 
@@ -114,42 +106,21 @@ class Game extends React.Component {
       () => ({
         openCredits: !this.state.openCredits,
       }),
-      () => {
-        if (
-          !this.state.openCredits &&
-          this.props.location.pathname === '/credits'
-        ) {
-          this.props.history.push('/');
-        }
-      }
+      () => this.routeChangeCallback(!this.state.openCredits, '/credits')
     );
   };
 
   handleRulesClick = () => {
     this.setState(
       () => ({ openRules: !this.state.openRules }),
-      () => {
-        if (
-          !this.state.openRules &&
-          this.props.location.pathname === '/rules'
-        ) {
-          this.props.history.push('/');
-        }
-      }
+      () => this.routeChangeCallback(!this.state.openRules, '/rules')
     );
   };
 
   handleNewGameClick = () => {
     this.setState(
       () => ({ openNewGame: !this.state.openNewGame }),
-      () => {
-        if (
-          !this.state.openNewGame === true &&
-          this.props.location.pathname === '/newGame'
-        ) {
-          this.props.history.push('/');
-        }
-      }
+      () => this.routeChangeCallback(!this.state.openNewGame, '/newGame')
     );
   };
 
