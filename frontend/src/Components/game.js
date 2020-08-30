@@ -17,6 +17,7 @@ import { withAuth0 } from '@auth0/auth0-react';
 import { withRouter } from 'react-router';
 
 const shuffled = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const protectedRoutes = ['/profile'];
 
 const initialState = {
   openCredits: false,
@@ -52,13 +53,28 @@ class Game extends React.PureComponent {
     case '/newGame':
       this.handleNewGameClick();
       break;
-    case '/profile':
-      this.props.history.replace('/');
-      break;
     default:
-      this.setState(initialState);
+      break;
     }
   };
+
+  componentDidMount() {
+    window.addEventListener('resize',this.setHamburgerVisibility);
+    this.setHamburgerVisibility();
+    this.routeChangeHandler(this.props.location.pathname);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.location.pathname !== this.props.location.pathname && this.props.history.action === 'POP'
+    ) {
+      if (prevProps.location.pathname === '/' || protectedRoutes.includes(prevProps.location.pathname)){
+        this.routeChangeHandler(this.props.location.pathname);
+      } else {
+        this.routeChangeHandler(prevProps.location.pathname);
+      }
+    }
+  }
 
   setHamburgerVisibility = () => {
     if (window.innerWidth <= 550){
@@ -66,9 +82,9 @@ class Game extends React.PureComponent {
         showHamburger: true,
       });
     } else {
-      this.setState({
+      this.setState(() => ({
         showHamburger: false,
-      });
+      }));
     }
   }
 
@@ -76,20 +92,6 @@ class Game extends React.PureComponent {
     this.setState({
       showSideNav: !this.state.showSideNav
     });
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize',this.setHamburgerVisibility);
-    this.routeChangeHandler(this.props.location.pathname);
-  }
-
-  componentDidUpdate(prevProps) {
-    if (
-      prevProps.location.pathname !== this.props.location.pathname &&
-      this.props.history.action === 'POP'
-    ) {
-      this.routeChangeHandler(this.props.location.pathname);
-    }
   }
 
   changeDifficulty = (diff) => {
