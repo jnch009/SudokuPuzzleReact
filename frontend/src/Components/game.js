@@ -1,14 +1,9 @@
 import React from 'react';
 import Board from './board';
-import Login from '../Components/Login/Login';
-import Logout from '../Components/Logout/Logout';
-import Profile from '../Components/Profile/Profile';
 import SideNav from '../Components/SideNav/SideNav';
+import NavBar from '../Components/NavBar/NavBar';
 
 import {
-  Container,
-  Row,
-  Col,
   Button,
   Modal,
   ModalBody,
@@ -18,10 +13,7 @@ import {
 import fn from '../helperFn/boardFunctions';
 import cloneDeep from 'lodash.clonedeep';
 import { withAuth0 } from '@auth0/auth0-react';
-import { withRouter, Switch } from 'react-router';
-
-import { Link } from 'react-router-dom';
-import PrivateRoute from './PrivateRoute/PrivateRoute';
+import { withRouter } from 'react-router';
 
 const shuffled = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -150,6 +142,13 @@ class Game extends React.Component {
 
   render() {
     const { isAuthenticated, isLoading } = this.props.auth0;
+    const navClickHandlers = {
+      handleCreditsClick: this.handleCreditsClick,
+      handleDifficultyClick: this.handleDifficultyClick,
+      handleSudokuSolver: this.handleSudokuSolver,
+      handleRulesClick: this.handleRulesClick,
+      handleNewGameClick: this.handleNewGameClick
+    };
 
     if (isLoading) {
       return <h1>Loading</h1>;
@@ -157,54 +156,8 @@ class Game extends React.Component {
 
     return (
       <>
-        {/* <SideNav /> */}
-        <Container>
-          <Row>
-            <Col>
-              <Link to='/credits'>
-                <Button onClick={this.handleCreditsClick} className='navBar'>
-                  Credits
-                </Button>
-              </Link>
-            </Col>
-            <Col>
-              <Link to='/difficulty'>
-                <Button onClick={this.handleDifficultyClick} className='navBar'>
-                  Difficulty
-                </Button>
-              </Link>
-            </Col>
-            <Col>
-              <Button onClick={this.handleSudokuSolver} className='navBar'>
-                Solve
-              </Button>
-            </Col>
-            <Col>
-              <Link to='/rules'>
-                <Button onClick={this.handleRulesClick} className='navBar'>
-                  How To Play
-                </Button>
-              </Link>
-            </Col>
-            <Col>
-              <Link to='/profile'>
-                <Button className='navBar'>Profile</Button>
-              </Link>
-            </Col>
-            <Col>
-              <Link to='/newGame'>
-                <Button onClick={this.handleNewGameClick} className='navBar'>
-                  New Game
-                </Button>
-              </Link>
-            </Col>
-            <Col>{isAuthenticated ? <Logout /> : <Login />}</Col>
-          </Row>
-
-          <Switch>
-            <PrivateRoute path='/profile' component={Profile} />
-          </Switch>
-        </Container>
+        {/* <SideNav isAuthenticated={isAuthenticated} navClickHandlers={navClickHandlers}/> */}
+        <NavBar isAuthenticated={isAuthenticated} navClickHandlers={navClickHandlers}/>
 
         <Modal open={this.state.openCredits} toggle={this.handleCreditsClick}>
           <ModalHeader>Credits</ModalHeader>
