@@ -2,6 +2,7 @@ import React from 'react';
 import Board from './board';
 import SideNav from '../Components/SideNav/SideNav';
 import NavBar from '../Components/NavBar/NavBar';
+import { CSSTransition } from 'react-transition-group';
 
 import {
   Button,
@@ -25,10 +26,12 @@ const initialState = {
   difficulty: 'Normal',
   newGame: false,
   solvedButton: false,
+  showHamburger: false,
+  showSideNav: false,
   grid: [],
 };
 
-class Game extends React.Component {
+class Game extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -57,7 +60,26 @@ class Game extends React.Component {
     }
   };
 
+  setHamburgerVisibility = () => {
+    if (window.innerWidth <= 550){
+      this.setState({
+        showHamburger: true,
+      });
+    } else {
+      this.setState({
+        showHamburger: false,
+      });
+    }
+  }
+
+  setSidebarVisibility = () => {
+    this.setState({
+      showSideNav: !this.state.showSideNav
+    });
+  }
+
   componentDidMount() {
+    window.addEventListener('resize',this.setHamburgerVisibility);
     this.routeChangeHandler(this.props.location.pathname);
   }
 
@@ -142,6 +164,7 @@ class Game extends React.Component {
 
   render() {
     const { isAuthenticated, isLoading } = this.props.auth0;
+    const { showHamburger, showSideNav } = this.state;
     const navClickHandlers = {
       handleCreditsClick: this.handleCreditsClick,
       handleDifficultyClick: this.handleDifficultyClick,
@@ -156,8 +179,12 @@ class Game extends React.Component {
 
     return (
       <>
-        {/* <SideNav isAuthenticated={isAuthenticated} navClickHandlers={navClickHandlers}/> */}
-        <NavBar isAuthenticated={isAuthenticated} navClickHandlers={navClickHandlers}/>
+        <CSSTransition in={showSideNav} timeout={200} classNames='my-node' unmountOnExit>
+          <SideNav isAuthenticated={isAuthenticated} navClickHandlers={navClickHandlers} setSidebarVisibility={this.setSidebarVisibility} />
+        </CSSTransition>
+        
+        {!showHamburger ? <NavBar isAuthenticated={isAuthenticated} navClickHandlers={navClickHandlers}/> : <div className='d-flex justify-content-center'><Button onClick={this.setSidebarVisibility}>click me!</Button></div>}
+        
 
         <Modal open={this.state.openCredits} toggle={this.handleCreditsClick}>
           <ModalHeader>Credits</ModalHeader>
