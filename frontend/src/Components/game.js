@@ -3,14 +3,10 @@ import Board from './board';
 import SideNav from '../Components/SideNav/SideNav';
 import NavBar from '../Components/NavBar/NavBar';
 import { CSSTransition } from 'react-transition-group';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  FormRadio,
-} from 'shards-react';
+import { Button, Modal, ModalBody, ModalHeader, FormRadio } from 'shards-react';
 import fn from '../helperFn/boardFunctions';
 import cloneDeep from 'lodash.clonedeep';
 import { withAuth0 } from '@auth0/auth0-react';
@@ -53,7 +49,7 @@ class Game extends React.PureComponent {
     case route === '/newGame':
       this.handleNewGameClick();
       break;
-    case (!this.props.auth0.isAuthenticated && protectedRoutes.includes(route)):
+    case !this.props.auth0.isAuthenticated && protectedRoutes.includes(route):
       this.props.history.replace('/');
       break;
     default:
@@ -62,16 +58,20 @@ class Game extends React.PureComponent {
   };
 
   componentDidMount() {
-    window.addEventListener('resize',this.setHamburgerVisibility);
+    window.addEventListener('resize', this.setHamburgerVisibility);
     this.setHamburgerVisibility();
     this.routeChangeHandler(this.props.location.pathname);
   }
 
   componentDidUpdate(prevProps) {
     if (
-      prevProps.location.pathname !== this.props.location.pathname && this.props.history.action === 'POP'
+      prevProps.location.pathname !== this.props.location.pathname &&
+      this.props.history.action === 'POP'
     ) {
-      if (prevProps.location.pathname === '/' || protectedRoutes.includes(prevProps.location.pathname)){
+      if (
+        prevProps.location.pathname === '/' ||
+        protectedRoutes.includes(prevProps.location.pathname)
+      ) {
         this.routeChangeHandler(this.props.location.pathname);
       } else {
         this.routeChangeHandler(prevProps.location.pathname);
@@ -80,7 +80,7 @@ class Game extends React.PureComponent {
   }
 
   setHamburgerVisibility = () => {
-    if (window.innerWidth <= 550){
+    if (window.innerWidth <= 580) {
       this.setState({
         showHamburger: true,
       });
@@ -89,13 +89,13 @@ class Game extends React.PureComponent {
         showHamburger: false,
       }));
     }
-  }
+  };
 
   setSidebarVisibility = () => {
     this.setState({
-      showSideNav: !this.state.showSideNav
+      showSideNav: !this.state.showSideNav,
     });
-  }
+  };
 
   changeDifficulty = (diff) => {
     this.setState(() => ({ difficulty: diff }));
@@ -175,7 +175,7 @@ class Game extends React.PureComponent {
       handleDifficultyClick: this.handleDifficultyClick,
       handleSudokuSolver: this.handleSudokuSolver,
       handleRulesClick: this.handleRulesClick,
-      handleNewGameClick: this.handleNewGameClick
+      handleNewGameClick: this.handleNewGameClick,
     };
 
     if (isLoading) {
@@ -184,12 +184,31 @@ class Game extends React.PureComponent {
 
     return (
       <>
-        <CSSTransition in={showSideNav} timeout={200} classNames='my-node' unmountOnExit>
-          <SideNav isAuthenticated={isAuthenticated} navClickHandlers={navClickHandlers} setSidebarVisibility={this.setSidebarVisibility} />
+        <CSSTransition
+          in={showSideNav}
+          timeout={200}
+          classNames='my-node'
+          unmountOnExit
+        >
+          <SideNav
+            isAuthenticated={isAuthenticated}
+            navClickHandlers={navClickHandlers}
+            setSidebarVisibility={this.setSidebarVisibility}
+          />
         </CSSTransition>
-        
-        {!showHamburger ? <NavBar isAuthenticated={isAuthenticated} navClickHandlers={navClickHandlers}/> : <div className='d-flex justify-content-center'><Button onClick={this.setSidebarVisibility}>click me!</Button></div>}
-        
+
+        {!showHamburger ? (
+          <NavBar
+            isAuthenticated={isAuthenticated}
+            navClickHandlers={navClickHandlers}
+          />
+        ) : (
+          <div className='d-flex justify-content-center'>
+            <Button onClick={this.setSidebarVisibility}>
+              <FontAwesomeIcon icon={faBars} size='3x' />
+            </Button>
+          </div>
+        )}
 
         <Modal open={this.state.openCredits} toggle={this.handleCreditsClick}>
           <ModalHeader>Credits</ModalHeader>
