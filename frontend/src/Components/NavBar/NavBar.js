@@ -17,14 +17,14 @@ const NavBar = ({ isAuthenticated, navClickHandlers, isSideBar }) => {
     <NavBarItem linkTo='/rules' onClick={navClickHandlers.handleRulesClick} name='How To Play'/>
     <NavBarItem linkTo='/profile' name='Profile'/>
     <NavBarItem linkTo='/newGame' onClick={navClickHandlers.handleNewGameClick} name='New Game'/>
-    <NavItem>{isAuthenticated ? <Logout /> : <Login />}</NavItem>
+    <NavItem className='mb-3'>{isAuthenticated ? <Logout /> : <Login />}</NavItem>
 
     <Switch>
       <PrivateRoute path='/profile' component={Profile} />
     </Switch></>;
   
   return (
-    isSideBar ? <Nav className='w-100' justified vertical>{navSection}</Nav> : <Nav justified>{navSection}</Nav>
+    isSideBar ? <Nav className='w-100 flex-nowrap' justified vertical>{navSection}</Nav> : <Nav justified>{navSection}</Nav>
   );
 };
 

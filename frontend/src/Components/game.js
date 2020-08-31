@@ -40,18 +40,21 @@ class Game extends React.PureComponent {
   }
 
   routeChangeHandler = (route) => {
-    switch (route) {
-    case '/credits':
+    switch (true) {
+    case route === '/credits':
       this.handleCreditsClick();
       break;
-    case '/difficulty':
+    case route === '/difficulty':
       this.handleDifficultyClick();
       break;
-    case '/rules':
+    case route === '/rules':
       this.handleRulesClick();
       break;
-    case '/newGame':
+    case route === '/newGame':
       this.handleNewGameClick();
+      break;
+    case (!this.props.auth0.isAuthenticated && protectedRoutes.includes(route)):
+      this.props.history.replace('/');
       break;
     default:
       break;
