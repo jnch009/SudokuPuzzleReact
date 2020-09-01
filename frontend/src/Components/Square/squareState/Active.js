@@ -8,7 +8,7 @@ const squareBtnLight = (componentName, num, handleClick, borderColor) => {
       modify: true,
       borderColor,
     },
-    num,
+    num
   );
 };
 

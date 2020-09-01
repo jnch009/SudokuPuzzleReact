@@ -53,7 +53,12 @@ class Game extends React.PureComponent {
       this.props.history.replace('/');
       break;
     default:
-      break;
+      this.setState({
+        openCredits: false,
+        openDifficulty: false,
+        openRules: false,
+        openNewGame: false,
+      });
     }
   };
 
@@ -68,14 +73,7 @@ class Game extends React.PureComponent {
       prevProps.location.pathname !== this.props.location.pathname &&
       this.props.history.action === 'POP'
     ) {
-      if (
-        prevProps.location.pathname === '/' ||
-        protectedRoutes.includes(prevProps.location.pathname)
-      ) {
-        this.routeChangeHandler(this.props.location.pathname);
-      } else {
-        this.routeChangeHandler(prevProps.location.pathname);
-      }
+      this.routeChangeHandler(this.props.location.pathname);
     }
   }
 
