@@ -1,28 +1,19 @@
 import React from 'react';
 import Board from './board';
-import Login from '../Components/Login/Login';
-import Logout from '../Components/Logout/Logout';
-import Profile from '../Components/Profile/Profile';
+import SideNav from '../Components/SideNav/SideNav';
+import NavBar from '../Components/NavBar/NavBar';
+import { CSSTransition } from 'react-transition-group';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-import {
-  Container,
-  Row,
-  Col,
-  Button,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  FormRadio,
-} from 'shards-react';
+import { Button, Modal, ModalBody, ModalHeader, FormRadio } from 'shards-react';
 import fn from '../helperFn/boardFunctions';
 import cloneDeep from 'lodash.clonedeep';
 import { withAuth0 } from '@auth0/auth0-react';
-import { withRouter, Switch } from 'react-router';
-
-import { Link } from 'react-router-dom';
-import PrivateRoute from './PrivateRoute/PrivateRoute';
+import { withRouter } from 'react-router';
 
 const shuffled = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const protectedRoutes = ['/profile'];
 
 const initialState = {
   openCredits: false,
@@ -32,10 +23,12 @@ const initialState = {
   difficulty: 'Normal',
   newGame: false,
   solvedButton: false,
+  showHamburger: false,
+  showSideNav: false,
   grid: [],
 };
 
-class Game extends React.Component {
+class Game extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -43,28 +36,35 @@ class Game extends React.Component {
   }
 
   routeChangeHandler = (route) => {
-    switch (route) {
-    case '/credits':
+    switch (true) {
+    case route === '/credits':
       this.handleCreditsClick();
       break;
-    case '/difficulty':
+    case route === '/difficulty':
       this.handleDifficultyClick();
       break;
-    case '/rules':
+    case route === '/rules':
       this.handleRulesClick();
       break;
-    case '/newGame':
+    case route === '/newGame':
       this.handleNewGameClick();
       break;
-    case '/profile':
+    case !this.props.auth0.isAuthenticated && protectedRoutes.includes(route):
       this.props.history.replace('/');
       break;
     default:
-      this.setState(initialState);
+      this.setState({
+        openCredits: false,
+        openDifficulty: false,
+        openRules: false,
+        openNewGame: false,
+      });
     }
   };
 
   componentDidMount() {
+    window.addEventListener('resize', this.setHamburgerVisibility);
+    this.setHamburgerVisibility();
     this.routeChangeHandler(this.props.location.pathname);
   }
 
@@ -76,6 +76,24 @@ class Game extends React.Component {
       this.routeChangeHandler(this.props.location.pathname);
     }
   }
+
+  setHamburgerVisibility = () => {
+    if (window.innerWidth <= 580) {
+      this.setState({
+        showHamburger: true,
+      });
+    } else {
+      this.setState(() => ({
+        showHamburger: false,
+      }));
+    }
+  };
+
+  setSidebarVisibility = () => {
+    this.setState({
+      showSideNav: !this.state.showSideNav,
+    });
+  };
 
   changeDifficulty = (diff) => {
     this.setState(() => ({ difficulty: diff }));
@@ -149,72 +167,46 @@ class Game extends React.Component {
 
   render() {
     const { isAuthenticated, isLoading } = this.props.auth0;
+    const { showHamburger, showSideNav } = this.state;
+    const navClickHandlers = {
+      handleCreditsClick: this.handleCreditsClick,
+      handleDifficultyClick: this.handleDifficultyClick,
+      handleSudokuSolver: this.handleSudokuSolver,
+      handleRulesClick: this.handleRulesClick,
+      handleNewGameClick: this.handleNewGameClick,
+    };
 
     if (isLoading) {
       return <h1>Loading</h1>;
     }
 
     return (
-      <div className='game'>
-        <div className='game-title'>
-          <p className='title'>SUDOKU!</p>
-        </div>
-        <div className='game-board'>
-          <Board
-            difficulty={this.state.difficulty}
-            newGame={this.state.newGame}
-            populateGameGrid={this.populateGameGrid}
-            solvedButton={this.state.solvedButton}
-            solvedGrid={this.state.grid}
+      <>
+        <CSSTransition
+          in={showSideNav}
+          timeout={200}
+          classNames='my-node'
+          unmountOnExit
+        >
+          <SideNav
+            isAuthenticated={isAuthenticated}
+            navClickHandlers={navClickHandlers}
+            setSidebarVisibility={this.setSidebarVisibility}
           />
-        </div>
-        <Container className='dr-example-container'>
-          <Row>
-            <Col>
-              <Link to='/credits'>
-                <Button onClick={this.handleCreditsClick} className='navBar'>
-                  Credits
-                </Button>
-              </Link>
-            </Col>
-            <Col>
-              <Link to='/difficulty'>
-                <Button onClick={this.handleDifficultyClick} className='navBar'>
-                  Difficulty
-                </Button>
-              </Link>
-            </Col>
-            <Col>
-              <Button onClick={this.handleSudokuSolver} className='navBar'>
-                Solve
-              </Button>
-            </Col>
-            <Col>
-              <Link to='/rules'>
-                <Button onClick={this.handleRulesClick} className='navBar'>
-                  How To Play
-                </Button>
-              </Link>
-            </Col>
-            <Col>
-              <Link to='/profile'>
-                <Button className='navBar'>Profile</Button>
-              </Link>
-            </Col>
-            <Col>
-              <Link to='/newGame'>
-                <Button onClick={this.handleNewGameClick} className='navBar'>
-                  New Game
-                </Button>
-              </Link>
-            </Col>
-            <Col>{isAuthenticated ? <Logout /> : <Login />}</Col>
-          </Row>
+        </CSSTransition>
 
-          <Switch>
-            <PrivateRoute path='/profile' component={Profile} />
-          </Switch>
-        </Container>
+        {!showHamburger ? (
+          <NavBar
+            isAuthenticated={isAuthenticated}
+            navClickHandlers={navClickHandlers}
+          />
+        ) : (
+          <div className='d-flex justify-content-center'>
+            <Button onClick={this.setSidebarVisibility}>
+              <FontAwesomeIcon icon={faBars} size='3x' />
+            </Button>
+          </div>
+        )}
 
         <Modal open={this.state.openCredits} toggle={this.handleCreditsClick}>
           <ModalHeader>Credits</ModalHeader>
@@ -307,7 +299,19 @@ class Game extends React.Component {
             </div>
           </ModalBody>
         </Modal>
-      </div>
+        <div className='game'>
+          <h1>SUDOKU!</h1>
+          <div className='game-board'>
+            <Board
+              difficulty={this.state.difficulty}
+              newGame={this.state.newGame}
+              populateGameGrid={this.populateGameGrid}
+              solvedButton={this.state.solvedButton}
+              solvedGrid={this.state.grid}
+            />
+          </div>
+        </div>
+      </>
     );
   }
 }

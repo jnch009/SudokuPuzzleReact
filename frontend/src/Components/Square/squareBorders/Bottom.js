@@ -6,5 +6,5 @@ const SquareBorderBottom = styled.button`
 `;
 
 export default {
-  SquareBorderBottom
+  SquareBorderBottom,
 };

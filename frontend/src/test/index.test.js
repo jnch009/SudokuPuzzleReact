@@ -6,7 +6,7 @@ import fn from '../helperFn/boardFunctions';
 //         expect(value).toBeGreaterThanOrEqual(0);
 //         expect(value).toBeLessThan(10);
 //     });
-    
+
 //     value = fn.randomlyGeneratedValue(1,1);
 //     it('Same value test',()=>{
 //         expect(value).toBe(1);
@@ -23,7 +23,7 @@ import fn from '../helperFn/boardFunctions';
 //                             [null,null,null,null,null,null,null,null,null],
 //                             [null,null,null,null,null,null,null,null,null],
 //                             [null,null,null,null,null,null,null,null,null]];
-    
+
 //     const gridViolated = [[null,8,null,null,null,null,8,8,1],
 //                           [null,1,null,null,null,null,4,3,2],
 //                           [null,1,null,null,null,null,5,6,9],
@@ -33,7 +33,7 @@ import fn from '../helperFn/boardFunctions';
 //                           [null,3,null,null,null,null,null,null,null],
 //                           [null,2,null,null,null,null,null,null,null],
 //                           [null,4,null,null,null,null,null,null,null]];
-    
+
 //     const completedGrid = [[1,2,3,4,5,6,7,8,9],
 //                            [4,5,6,7,8,9,1,2,3],
 //                            [7,8,9,1,2,3,4,5,6],
