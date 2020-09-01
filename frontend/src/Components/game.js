@@ -2,6 +2,7 @@ import React from 'react';
 import Board from './board';
 import SideNav from '../Components/SideNav/SideNav';
 import NavBar from '../Components/NavBar/NavBar';
+import ModalCredits from '../Components/Modals/ModalCredits';
 import { CSSTransition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
@@ -208,10 +209,10 @@ class Game extends React.PureComponent {
           </div>
         )}
 
-        <Modal open={this.state.openCredits} toggle={this.handleCreditsClick}>
-          <ModalHeader>Credits</ModalHeader>
-          <ModalBody>Developed by: Jeremy Ng Cheng Hin</ModalBody>
-        </Modal>
+        <ModalCredits
+          openCredits={this.state.openCredits}
+          handleCreditsClick={this.handleCreditsClick}
+        />
 
         <Modal
           open={this.state.openDifficulty}
