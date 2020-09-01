@@ -3,11 +3,13 @@ import Board from './board';
 import SideNav from '../Components/SideNav/SideNav';
 import NavBar from '../Components/NavBar/NavBar';
 import ModalCredits from '../Components/Modals/ModalCredits';
+import ModalDifficulty from '../Components/Modals/ModalDifficulty';
+
 import { CSSTransition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-import { Button, Modal, ModalBody, ModalHeader, FormRadio } from 'shards-react';
+import { Button, Modal, ModalBody, ModalHeader } from 'shards-react';
 import fn from '../helperFn/boardFunctions';
 import cloneDeep from 'lodash.clonedeep';
 import { withAuth0 } from '@auth0/auth0-react';
@@ -214,47 +216,12 @@ class Game extends React.PureComponent {
           handleCreditsClick={this.handleCreditsClick}
         />
 
-        <Modal
-          open={this.state.openDifficulty}
-          toggle={this.handleDifficultyClick}
-        >
-          <ModalHeader>Change Difficulty</ModalHeader>
-          <ModalBody>
-            <FormRadio
-              checked={this.state.difficulty === 'Beginner'}
-              onChange={() => {
-                this.changeDifficulty('Beginner');
-              }}
-            >
-              Beginner
-            </FormRadio>
-            <FormRadio
-              checked={this.state.difficulty === 'Easy'}
-              onChange={() => {
-                this.changeDifficulty('Easy');
-              }}
-            >
-              Easy
-            </FormRadio>
-            <FormRadio
-              checked={this.state.difficulty === 'Normal'}
-              onChange={() => {
-                this.changeDifficulty('Normal');
-              }}
-            >
-              Normal
-            </FormRadio>
-            <FormRadio
-              checked={this.state.difficulty === 'Hard'}
-              onChange={() => {
-                this.changeDifficulty('Hard');
-              }}
-            >
-              Hard
-            </FormRadio>
-            <Button onClick={this.handleDifficultyClick}>Accept</Button>
-          </ModalBody>
-        </Modal>
+        <ModalDifficulty
+          openDifficulty={this.state.openDifficulty}
+          handleDifficultyClick={this.handleDifficultyClick}
+          difficulty={this.state.difficulty}
+          changeDifficulty={this.changeDifficulty}
+        />
 
         <Modal open={this.state.openRules} toggle={this.handleRulesClick}>
           <ModalHeader>Welcome to Sudoku!</ModalHeader>
