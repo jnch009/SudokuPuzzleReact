@@ -32,12 +32,10 @@ const games = [
 ];
 
 const BasicModalExample = ({ open, toggle }) => {
-  // console.log(open,toggle);
-
   return (
     <div>
       <h2 className='text-center text-light'>Saved Games</h2>
-      <div className='pt-2'>
+      <div className='d-flex flex-column align-items-center pt-2'>
         {games.map((game) => (
           <div
             key={game.saveName}

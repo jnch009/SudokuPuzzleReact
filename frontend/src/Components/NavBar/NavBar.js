@@ -6,7 +6,6 @@ import { Nav, NavItem } from 'shards-react';
 import NavBarItem from '../NavBarItem/NavBarItem';
 
 const NavBar = ({ isAuthenticated, navClickHandlers, isSideBar, history }) => {
-  console.log(history);
   const navSection = (
     <>
       <NavBarItem
@@ -29,7 +28,6 @@ const NavBar = ({ isAuthenticated, navClickHandlers, isSideBar, history }) => {
         onClick={navClickHandlers.handleRulesClick}
         name='How To Play'
       />
-      <NavBarItem linkTo='/profile' name='Profile' />
       <NavBarItem linkTo='/manageSaves' name='Manage Saves' />
       <NavBarItem
         linkTo='/newGame'

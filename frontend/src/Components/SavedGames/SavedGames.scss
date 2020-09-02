@@ -1,5 +1,9 @@
-.savedGamesSection{
+.savedGamesSection {
   width: 500px;
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 }
 
 .hide-hover {

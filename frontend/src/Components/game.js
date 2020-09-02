@@ -1,7 +1,6 @@
 import React from 'react';
 import Board from './board';
 import SavedGames from '../Components/SavedGames/SavedGames';
-import Profile from '../Components/Profile/Profile';
 import { Button } from 'shards-react';
 import fn from '../helperFn/boardFunctions';
 import cloneDeep from 'lodash.clonedeep';
@@ -21,7 +20,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 const shuffled = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-const protectedRoutes = ['/profile', '/manageSaves'];
 
 const initialState = {
   openCredits: false,
@@ -83,7 +81,7 @@ class Game extends React.PureComponent {
   }
 
   setHamburgerVisibility = () => {
-    if (window.innerWidth <= 580) {
+    if (window.innerWidth <= 650) {
       this.setState({
         showHamburger: true,
       });
@@ -252,16 +250,6 @@ class Game extends React.PureComponent {
         />
 
         <Switch>
-          <Route
-            path='/profile'
-            render={() =>
-              isAuthenticated ? (
-                <Profile />
-              ) : (
-                <PrivateRoute component={Profile} />
-              )
-            }
-          />
           <Route
             path='/manageSaves'
             render={() =>
