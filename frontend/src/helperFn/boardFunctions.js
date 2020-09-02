@@ -50,10 +50,10 @@ const createGrid = () => {
 // I could be wrong here, but we only need to check one condition
 // If this condition fails, then they all fail
 const verifyRow = (grid, row, val = null) => {
-  const rowOfNums = Array.from(grid[row], x => Number(x));
+  const rowOfNums = Array.from(grid[row], (x) => Number(x));
   if (!val) {
     let verifyArr = [];
-    rowOfNums.forEach(row => {
+    rowOfNums.forEach((row) => {
       if (!verifyArr.includes(row)) {
         verifyArr.push(row);
       }
@@ -101,7 +101,7 @@ const isValid = (grid, row, col, num = null) => {
   return false;
 };
 
-const verifySudoku = grid => {
+const verifySudoku = (grid) => {
   for (let row = 0; row < 9; row++) {
     for (let col = 0; col < 9; col++) {
       if (!isValid(grid, row, col)) {
@@ -113,7 +113,7 @@ const verifySudoku = grid => {
 };
 
 // https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array fisher yates
-const shuffle = a => {
+const shuffle = (a) => {
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
@@ -125,7 +125,7 @@ const solve = (grid, shuffled) => {
   for (let row = 0; row < 9; row++) {
     for (let col = 0; col < 9; col++) {
       if (grid[row][col] === null) {
-        shuffled.forEach(choice => {
+        shuffled.forEach((choice) => {
           if (isValid(grid, row, col, choice)) {
             grid[row][col] = choice;
             solve(grid, shuffled);

@@ -25,7 +25,7 @@ class Board extends React.Component {
     this.clearInterval = this.clearInterval.bind(this);
   }
 
-  generateBoard = populateGameGrid => {
+  generateBoard = (populateGameGrid) => {
     let gridNewly = fn.createGrid();
     fn.solve(gridNewly, fn.shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]));
     fn.removingEntries(gridNewly, this.props.difficulty);
@@ -34,7 +34,7 @@ class Board extends React.Component {
       {
         grid: gridNewly,
       },
-      () => populateGameGrid(this.state.grid),
+      () => populateGameGrid(this.state.grid)
     );
   };
 
@@ -69,7 +69,7 @@ class Board extends React.Component {
       }
     } else if (!isEqual(prevState.grid, grid)) {
       this.setState({ complete: fn.verifySudoku(this.state.grid) }, () =>
-        populateGameGrid(this.state.grid),
+        populateGameGrid(this.state.grid)
       );
     }
   }
@@ -130,24 +130,25 @@ class Board extends React.Component {
     const { grid, complete } = this.state;
 
     return (
-      <div className='game-board'>
-        <div className='sudoku'>
-          {error}
-          <div className='winCondition text-primary'>
-            {complete
-              ? 'You have successfully solved the sudoku!'
-              : 'You are not done yet!'}
-          </div>
-          {grid.map((row, rowNum) => (
-            <Row
-              key={rowNum}
-              grid={grid}
-              cells={row}
-              rowNum={rowNum}
-              handleKeyPress={this.handleKeyPress}
-            />
-          ))}
+      <div className='sudoku'>
+        <div className='game'>
+          <h1>SUDOKU!</h1>
         </div>
+        {error}
+        <div className='winCondition'>
+          {complete
+            ? 'You have successfully solved the sudoku!'
+            : 'You are not done yet!'}
+        </div>
+        {grid.map((row, rowNum) => (
+          <Row
+            key={rowNum}
+            grid={grid}
+            cells={row}
+            rowNum={rowNum}
+            handleKeyPress={this.handleKeyPress}
+          />
+        ))}
       </div>
     );
   }

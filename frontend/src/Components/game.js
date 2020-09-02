@@ -1,29 +1,27 @@
 import React from 'react';
 import Board from './board';
-import Login from '../Components/Login/Login';
-import Logout from '../Components/Logout/Logout';
 import SavedGames from '../Components/SavedGames/SavedGames';
 import Profile from '../Components/Profile/Profile';
-
-import {
-  Container,
-  Row,
-  Col,
-  Button,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  FormRadio,
-} from 'shards-react';
+import { Button } from 'shards-react';
 import fn from '../helperFn/boardFunctions';
 import cloneDeep from 'lodash.clonedeep';
 import { withAuth0 } from '@auth0/auth0-react';
-import { withRouter, Switch, Route } from 'react-router';
+import { withRouter, Switch, Route } from 'react-router-dom';
 
-import { Link } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute/PrivateRoute';
+import SideNav from '../Components/SideNav/SideNav';
+import NavBar from '../Components/NavBar/NavBar';
+import ModalCredits from '../Components/Modals/ModalCredits';
+import ModalDifficulty from '../Components/Modals/ModalDifficulty';
+import ModalRules from '../Components/Modals/ModalRules';
+import ModalNewGame from '../Components/Modals/ModalNewGame';
+
+import { CSSTransition } from 'react-transition-group';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 const shuffled = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const protectedRoutes = ['/profile', '/manageSaves'];
 
 const initialState = {
   openCredits: false,
@@ -34,10 +32,12 @@ const initialState = {
   newGame: false,
   solvedButton: false,
   manageGames: false,
+  showHamburger: false,
+  showSideNav: false,
   grid: [],
 };
 
-class Game extends React.Component {
+class Game extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -45,44 +45,60 @@ class Game extends React.Component {
   }
 
   routeChangeHandler = (route) => {
-    switch (route) {
-    case '/credits':
+    switch (true) {
+    case route === '/credits':
       this.handleCreditsClick();
       break;
-    case '/difficulty':
+    case route === '/difficulty':
       this.handleDifficultyClick();
       break;
-    case '/rules':
+    case route === '/rules':
       this.handleRulesClick();
       break;
-    case '/newGame':
+    case route === '/newGame':
       this.handleNewGameClick();
       break;
-    case '/manageSaves':
-      this.handleManageSavesClick();
-      break;
-    // case '/profile':
-    //   this.props.history.replace('/');
-    //   break;
     default:
-      this.setState(initialState);
+      this.setState({
+        openCredits: false,
+        openDifficulty: false,
+        openRules: false,
+        openNewGame: false,
+      });
     }
   };
 
   componentDidMount() {
-    console.log('mount');
-    this.routeChangeHandler(this.props.location.pathname);
+    window.addEventListener('resize', this.setHamburgerVisibility);
+    this.setHamburgerVisibility();
   }
 
   componentDidUpdate(prevProps) {
-    console.log('update');
     if (
       prevProps.location.pathname !== this.props.location.pathname &&
-      (this.props.history.action === 'POP' || this.props.history.action === 'REPLACE')
+      this.props.history.action === 'POP'
     ) {
       this.routeChangeHandler(this.props.location.pathname);
     }
   }
+
+  setHamburgerVisibility = () => {
+    if (window.innerWidth <= 580) {
+      this.setState({
+        showHamburger: true,
+      });
+    } else {
+      this.setState(() => ({
+        showHamburger: false,
+      }));
+    }
+  };
+
+  setSidebarVisibility = () => {
+    this.setState({
+      showSideNav: !this.state.showSideNav,
+    });
+  };
 
   changeDifficulty = (diff) => {
     this.setState(() => ({ difficulty: diff }));
@@ -132,7 +148,7 @@ class Game extends React.Component {
       () => ({ manageGames: !this.state.manageGames }),
       () => this.routeChangeCallback(!this.state.manageGames, '/manageSaves')
     );
-  }
+  };
 
   handleNewGameClick = () => {
     this.setState(
@@ -140,7 +156,6 @@ class Game extends React.Component {
       () => this.routeChangeCallback(!this.state.openNewGame, '/newGame')
     );
   };
-
 
   handleSudokuSolver = () => {
     let currentGrid = cloneDeep(this.state.grid);
@@ -164,6 +179,14 @@ class Game extends React.Component {
 
   render() {
     const { isLoading, error, isAuthenticated } = this.props.auth0;
+    const { showHamburger, showSideNav } = this.state;
+    const navClickHandlers = {
+      handleCreditsClick: this.handleCreditsClick,
+      handleDifficultyClick: this.handleDifficultyClick,
+      handleSudokuSolver: this.handleSudokuSolver,
+      handleRulesClick: this.handleRulesClick,
+      handleNewGameClick: this.handleNewGameClick,
+    };
 
     if (isLoading) {
       return (
@@ -177,169 +200,99 @@ class Game extends React.Component {
     }
 
     return (
-      <div className='game'>
-        <div className='game-title'>
-          <p className='title text-primary'>SUDOKU!</p>
-        </div>
-        {/* <div className='game-board'>
-          <Board
-            difficulty={this.state.difficulty}
-            newGame={this.state.newGame}
-            populateGameGrid={this.populateGameGrid}
-            solvedButton={this.state.solvedButton}
-            solvedGrid={this.state.grid}
-          />
-        </div> */}
-        <Container className='dr-example-container'>
-          <Row>
-            <Col>
-              <Link to='/credits'>
-                <Button onClick={this.handleCreditsClick} className='navBar'>
-                  Credits
-                </Button>
-              </Link>
-            </Col>
-            <Col>
-              <Link to='/difficulty'>
-                <Button onClick={this.handleDifficultyClick} className='navBar'>
-                  Difficulty
-                </Button>
-              </Link>
-            </Col>
-            <Col>
-              <Button onClick={this.handleSudokuSolver} className='navBar'>
-                Solve
-              </Button>
-            </Col>
-            <Col>
-              <Link to='/rules'>
-                <Button onClick={this.handleRulesClick} className='navBar'>
-                  How To Play
-                </Button>
-              </Link>
-            </Col>
-            <Col>
-              <Link to='/profile'>
-                <Button className='navBar'>Profile</Button>
-              </Link>
-            </Col>
-            <Col>
-              <Link to='/manageSaves'>
-                <Button onClick={this.handleManageSavesClick} className='navBar'>Manage Games</Button>
-              </Link>
-            </Col>
-            <Col>
-              <Link to='/newGame'>
-                <Button onClick={this.handleNewGameClick} className='navBar'>
-                  New Game
-                </Button>
-              </Link>
-            </Col>
-            <Col>{isAuthenticated ? <Logout /> : <Login />}</Col>
-          </Row>
-        </Container>
-
-        <Modal open={this.state.openCredits} toggle={this.handleCreditsClick}>
-          <ModalHeader>Credits</ModalHeader>
-          <ModalBody>Developed by: Jeremy Ng Cheng Hin</ModalBody>
-        </Modal>
-
-        <Modal
-          open={this.state.openDifficulty}
-          toggle={this.handleDifficultyClick}
+      <>
+        <CSSTransition
+          in={showSideNav}
+          timeout={200}
+          classNames='my-node'
+          unmountOnExit
         >
-          <ModalHeader>Change Difficulty</ModalHeader>
-          <ModalBody>
-            <FormRadio
-              checked={this.state.difficulty === 'Beginner'}
-              onChange={() => {
-                this.changeDifficulty('Beginner');
-              }}
-            >
-              Beginner
-            </FormRadio>
-            <FormRadio
-              checked={this.state.difficulty === 'Easy'}
-              onChange={() => {
-                this.changeDifficulty('Easy');
-              }}
-            >
-              Easy
-            </FormRadio>
-            <FormRadio
-              checked={this.state.difficulty === 'Normal'}
-              onChange={() => {
-                this.changeDifficulty('Normal');
-              }}
-            >
-              Normal
-            </FormRadio>
-            <FormRadio
-              checked={this.state.difficulty === 'Hard'}
-              onChange={() => {
-                this.changeDifficulty('Hard');
-              }}
-            >
-              Hard
-            </FormRadio>
-            <Button onClick={this.handleDifficultyClick}>Accept</Button>
-          </ModalBody>
-        </Modal>
+          <SideNav
+            isAuthenticated={isAuthenticated}
+            navClickHandlers={navClickHandlers}
+            setSidebarVisibility={this.setSidebarVisibility}
+          />
+        </CSSTransition>
 
-        <Modal open={this.state.openRules} toggle={this.handleRulesClick}>
-          <ModalHeader>Welcome to Sudoku!</ModalHeader>
-          <ModalBody>
-            <div className='rulesText'>
-              <p>
-                1. Only one number from 1-9 is allowed on each row<br></br>
-              </p>
-              <p>
-                2. Only one number from 1-9 is allowed on each column<br></br>
-              </p>
-              <p>
-                3. Only one number from 1-9 is allowed in each grid<br></br>
-              </p>
-              <p>
-                The goal of the game is to find the missing numbers in the grid
-                such that all three of these conditions are satisfied and if
-                they are then you have successfully completed the puzzle.
-                <br></br>
-              </p>
-              <p>
-                If not, then you must backtrack and find out which numbers are
-                inserted incorrectly.<br></br>
-              </p>
-              <p>
-                You will know if the number is inserted incorrectly when the box
-                is highlighted red.<br></br>
-              </p>
-            </div>
-            <Button onClick={this.handleRulesClick}>Got it!</Button>
-          </ModalBody>
-        </Modal>
+        {!showHamburger ? (
+          <NavBar
+            isAuthenticated={isAuthenticated}
+            navClickHandlers={navClickHandlers}
+            history={this.props.history}
+          />
+        ) : (
+          <div className='d-flex justify-content-center'>
+            <Button onClick={this.setSidebarVisibility}>
+              <FontAwesomeIcon icon={faBars} size='3x' />
+            </Button>
+          </div>
+        )}
 
-        <Modal open={this.state.openNewGame} toggle={this.handleNewGameClick}>
-          <ModalBody>
-            <div className='newGameText'>
-              Are you sure?
-              <br />
-            </div>
-            <div className='flexButtons'>
-              <Button onClick={this.newGameAccepted}>Yes</Button>
-              <Button onClick={this.handleNewGameClick}>No</Button>
-            </div>
-          </ModalBody>
-        </Modal>
+        <ModalCredits
+          openCredits={this.state.openCredits}
+          handleCreditsClick={this.handleCreditsClick}
+        />
+
+        <ModalDifficulty
+          openDifficulty={this.state.openDifficulty}
+          handleDifficultyClick={this.handleDifficultyClick}
+          difficulty={this.state.difficulty}
+          changeDifficulty={this.changeDifficulty}
+        />
+
+        <ModalRules
+          openRules={this.state.openRules}
+          handleRulesClick={this.handleRulesClick}
+        />
+
+        <ModalNewGame
+          openNewGame={this.state.openNewGame}
+          handleNewGameClick={this.handleNewGameClick}
+          newGameAccepted={this.newGameAccepted}
+        />
+
         <Switch>
-          <PrivateRoute path='/profile' component={Profile} />
-          <PrivateRoute path='/manageSaves' component={SavedGames} open={this.state.manageGames} toggle={this.handleManageSavesClick} />
-          <Route path='/' render={() => <Board difficulty={this.state.difficulty}
-            newGame={this.state.newGame}
-            populateGameGrid={this.populateGameGrid}
-            solvedButton={this.state.solvedButton}
-            solvedGrid={this.state.grid} />}/>
+          <Route
+            path='/profile'
+            render={() =>
+              isAuthenticated ? (
+                <Profile />
+              ) : (
+                <PrivateRoute component={Profile} />
+              )
+            }
+          />
+          <Route
+            path='/manageSaves'
+            render={() =>
+              isAuthenticated ? (
+                <SavedGames
+                  open={this.state.manageGames}
+                  toggle={this.handleManageSavesClick}
+                />
+              ) : (
+                <PrivateRoute
+                  component={SavedGames}
+                  open={this.state.manageGames}
+                  toggle={this.handleManageSavesClick}
+                />
+              )
+            }
+          />
+          <Route
+            path='/'
+            render={() => (
+              <Board
+                difficulty={this.state.difficulty}
+                newGame={this.state.newGame}
+                populateGameGrid={this.populateGameGrid}
+                solvedButton={this.state.solvedButton}
+                solvedGrid={this.state.grid}
+              />
+            )}
+          />
         </Switch>
-      </div>
+      </>
     );
   }
 }

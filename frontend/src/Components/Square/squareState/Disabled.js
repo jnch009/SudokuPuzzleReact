@@ -3,7 +3,7 @@ const disabledBtn = (componentName, num, borderColor) => {
   return React.createElement(
     componentName,
     { className: 'square primary', borderColor },
-    num,
+    num
   );
 };
 

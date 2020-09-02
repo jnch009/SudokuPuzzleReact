@@ -16,7 +16,7 @@ import squareBtnDanger from './squareState/Danger';
 import disabledBtn from './squareState/Disabled';
 
 const initialSquare = {
-  edit: false
+  edit: false,
 };
 
 const rowTopLeft = [0, 3, 6];
@@ -94,7 +94,7 @@ class Square extends React.Component {
     this.state = initialSquare;
   }
 
-  handleKeyPress = async e => {
+  handleKeyPress = async (e) => {
     const { row, col } = this.props;
     const number = e.key;
 

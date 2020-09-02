@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Modal, ModalBody, ModalHeader } from 'shards-react';
+import React from 'react';
+import { Button } from 'shards-react';
 
 import './SavedGames.scss';
 
