@@ -64,7 +64,6 @@ const boxConditionLookup = () => {
   );
 
   boxLookupAssignment(boxLookup, topBorder, rowTopLeft, l.SquareBorderLeft);
-
   boxLookupAssignment(boxLookup, topBorder, topRightRange, r.SquareBorderRight);
 
   return boxLookup;
@@ -82,7 +81,6 @@ const borderColorLookup = (row, col) => {
 };
 
 const setBorderColor = (row, col) => {
-  //box 1,5 or 9
   return borderColorLookup(row, col) || '#c700ff';
 };
 
@@ -95,13 +93,13 @@ class Square extends React.Component {
   }
 
   handleKeyPress = async (e) => {
-    const { row, col } = this.props;
+    const { squareProps } = this.props;
     const number = e.key;
 
     if (number === 'Backspace' || number === 'Delete') {
-      this.props.pressKey(null, row, col);
+      squareProps.pressKey(null, squareProps.row, squareProps.col);
     } else {
-      this.props.pressKey(number, row, col);
+      squareProps.pressKey(number, squareProps.row, squareProps.col);
       this.handleClick();
     }
   };
@@ -111,20 +109,20 @@ class Square extends React.Component {
   };
 
   render() {
-    const { row, col, number, modify, valid } = this.props;
-    const startRow = parseInt(row / 3) * 3;
-    const startCol = parseInt(col / 3) * 3;
+    const { squareProps, modify, valid } = this.props;
+    const startRow = parseInt(squareProps.row / 3) * 3;
+    const startCol = parseInt(squareProps.col / 3) * 3;
     const boxColor = setBorderColor(startRow, startCol);
-    const boxLookup = boxConditionLookup()[`${row} ${col}`] || none.noBorder;
+    const boxLookup = boxConditionLookup()[`${squareProps.row} ${squareProps.col}`] || none.noBorder;
 
     if (!modify) {
-      btn = disabledBtn(boxLookup, number, boxColor);
+      btn = disabledBtn(boxLookup, squareProps.number, boxColor);
     } else {
       if (!this.state.edit) {
-        if (!valid && this.props.number !== null) {
-          btn = squareBtnDanger(boxLookup, number, this.handleClick, boxColor);
+        if (!valid && squareProps.number !== null) {
+          btn = squareBtnDanger(boxLookup, squareProps.number, this.handleClick, boxColor);
         } else {
-          btn = squareBtnLight(boxLookup, number, this.handleClick, boxColor);
+          btn = squareBtnLight(boxLookup, squareProps.number, this.handleClick, boxColor);
         }
       } else {
         btn = (
@@ -134,9 +132,8 @@ class Square extends React.Component {
             type='text'
             pattern='[0-9]*'
             inputMode='numeric'
-            onChange={this.handleKeyPress}
+            onKeyDown={this.handleKeyPress}
             className='square'
-            value={this.props.number !== null ? this.props.number : ''}
           />
         );
       }

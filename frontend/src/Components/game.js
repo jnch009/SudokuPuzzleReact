@@ -21,10 +21,6 @@ import { withRouter } from 'react-router';
 const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const protectedRoutes = ['/profile'];
 
-//Need to figure out how am I going to solve the sudoku
-//1. we could bring the grid array all the way to the top
-//2.
-
 const initialState = {
   openCredits: false,
   openDifficulty: false,
