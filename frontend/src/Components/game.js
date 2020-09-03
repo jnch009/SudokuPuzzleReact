@@ -74,16 +74,23 @@ class Game extends React.PureComponent {
 
   componentDidMount() {
     window.addEventListener('resize', this.setHamburgerVisibility);
-    this.generateBoard();
+    if (
+      sessionStorage.getItem('grid') &&
+      sessionStorage.getItem('difficulty')
+    ) {
+      this.setState({
+        grid: JSON.parse(sessionStorage.getItem('grid')),
+        difficulty: sessionStorage.getItem('difficulty'),
+      });
+    } else {
+      this.generateBoard();
+    }
+
     this.setHamburgerVisibility();
     this.routeChangeHandler(this.props.location.pathname);
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (!sessionStorage.getItem('grid')) {
-      sessionStorage.setItem('grid', JSON.stringify(this.state.grid));
-    }
-
     if (
       prevProps.location.pathname !== this.props.location.pathname &&
       this.props.history.action === 'POP'
@@ -92,7 +99,7 @@ class Game extends React.PureComponent {
     }
 
     if (
-      prevState.difficulty !== this.state.difficulty ||
+      (prevState.difficulty !== this.state.difficulty && !sessionStorage.getItem('difficulty')) ||
       this.state.newGame === true
     ) {
       this.setState(
@@ -106,6 +113,7 @@ class Game extends React.PureComponent {
       );
     } else if (prevState.grid !== this.state.grid) {
       sessionStorage.setItem('grid', JSON.stringify(this.state.grid));
+      sessionStorage.setItem('difficulty', this.state.difficulty);
       this.setState({ complete: fn.verifySudoku(this.state.grid) });
     }
   }
@@ -129,6 +137,7 @@ class Game extends React.PureComponent {
   };
 
   changeDifficulty = (diff) => {
+    sessionStorage.removeItem('difficulty');
     this.setState(() => ({ difficulty: diff }));
   };
 
@@ -222,19 +231,13 @@ class Game extends React.PureComponent {
   };
 
   generateBoard = () => {
-    if (sessionStorage.getItem('grid')) {
-      this.setState({
-        grid: JSON.parse(sessionStorage.getItem('grid')),
-      });
-    } else {
-      let gridNewly = fn.createGrid();
-      fn.solve(gridNewly, fn.shuffle(digits));
-      fn.removingEntries(gridNewly, this.state.difficulty);
+    let gridNewly = fn.createGrid();
+    fn.solve(gridNewly, fn.shuffle(digits));
+    fn.removingEntries(gridNewly, this.state.difficulty);
 
-      this.setState({
-        grid: gridNewly,
-      });
-    }
+    this.setState({
+      grid: gridNewly,
+    });
   };
 
   clearInterval = () => {
