@@ -17,6 +17,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { Alert } from 'shards-react';
 import { withAuth0 } from '@auth0/auth0-react';
 import { withRouter } from 'react-router';
+import queryString from 'query-string';
 
 const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const protectedRoutes = ['/profile'];
@@ -81,6 +82,11 @@ class Game extends React.PureComponent {
       this.setState({
         grid: JSON.parse(sessionStorage.getItem('grid')),
         difficulty: sessionStorage.getItem('difficulty'),
+      },() => {
+        const queryDifficulty = queryString.parse(this.props.location.search)[
+          'd'
+        ];
+        this.props.history.replace(`/?d=${queryDifficulty || this.state.difficulty}`);
       });
     } else {
       this.generateBoard();
@@ -91,15 +97,33 @@ class Game extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (
-      prevProps.location.pathname !== this.props.location.pathname &&
-      this.props.history.action === 'POP'
-    ) {
-      this.routeChangeHandler(this.props.location.pathname);
+    const queryDifficulty = queryString.parse(this.props.location.search)[
+      'd'
+    ];
+    if (this.props.history.action === 'POP') {
+      if (
+        queryDifficulty !== sessionStorage.getItem('difficulty') &&
+        queryDifficulty !== undefined
+      ) {
+        sessionStorage.removeItem('difficulty');
+        this.setState(
+          {
+            difficulty: queryString.parse(this.props.location.search)['d'],
+          },
+          () => {
+            sessionStorage.setItem('difficulty', this.state.difficulty);
+          }
+        );
+      }
+
+      if (prevProps.location.pathname !== this.props.location.pathname) {
+        this.routeChangeHandler(this.props.location.pathname);
+      }
     }
 
     if (
-      (prevState.difficulty !== this.state.difficulty && !sessionStorage.getItem('difficulty')) ||
+      (prevState.difficulty !== this.state.difficulty &&
+        !sessionStorage.getItem('difficulty')) ||
       this.state.newGame === true
     ) {
       this.setState(
@@ -108,12 +132,12 @@ class Game extends React.PureComponent {
           newGame: false,
         },
         () => {
-          sessionStorage.setItem('difficulty', this.state.difficulty);
           this.generateBoard();
         }
       );
     } else if (prevState.grid !== this.state.grid) {
       sessionStorage.setItem('grid', JSON.stringify(this.state.grid));
+      sessionStorage.setItem('difficulty', this.state.difficulty);
       this.setState({ complete: fn.verifySudoku(this.state.grid) });
     }
   }
@@ -138,12 +162,17 @@ class Game extends React.PureComponent {
 
   changeDifficulty = (diff) => {
     sessionStorage.removeItem('difficulty');
-    this.setState(() => ({ difficulty: diff }));
+    this.setState(
+      () => ({ difficulty: diff }),
+      () => {
+        this.props.history.push(`/difficulty?d=${this.state.difficulty}`);
+      }
+    );
   };
 
   routeChangeCallback = (stateCondition, route) => {
     if (stateCondition && this.props.location.pathname === route) {
-      this.props.history.push('/');
+      this.props.history.push(`/?d=${this.state.difficulty}`);
     }
   };
 
@@ -253,7 +282,13 @@ class Game extends React.PureComponent {
 
   render() {
     const { isAuthenticated, isLoading } = this.props.auth0;
-    const { showHamburger, showSideNav, grid, displayError } = this.state;
+    const {
+      showHamburger,
+      showSideNav,
+      grid,
+      displayError,
+      difficulty,
+    } = this.state;
     const navClickHandlers = {
       handleCreditsClick: this.handleCreditsClick,
       handleDifficultyClick: this.handleDifficultyClick,
@@ -285,6 +320,7 @@ class Game extends React.PureComponent {
           <NavBar
             isAuthenticated={isAuthenticated}
             navClickHandlers={navClickHandlers}
+            difficulty={difficulty}
           />
         ) : (
           <div className='d-flex justify-content-center'>
