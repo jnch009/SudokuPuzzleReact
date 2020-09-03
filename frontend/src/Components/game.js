@@ -108,12 +108,12 @@ class Game extends React.PureComponent {
           newGame: false,
         },
         () => {
+          sessionStorage.setItem('difficulty', this.state.difficulty);
           this.generateBoard();
         }
       );
     } else if (prevState.grid !== this.state.grid) {
       sessionStorage.setItem('grid', JSON.stringify(this.state.grid));
-      sessionStorage.setItem('difficulty', this.state.difficulty);
       this.setState({ complete: fn.verifySudoku(this.state.grid) });
     }
   }
