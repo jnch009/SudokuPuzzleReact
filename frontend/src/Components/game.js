@@ -74,7 +74,18 @@ class Game extends React.PureComponent {
 
   componentDidMount() {
     window.addEventListener('resize', this.setHamburgerVisibility);
-    this.generateBoard();
+    if (
+      sessionStorage.getItem('grid') &&
+      sessionStorage.getItem('difficulty')
+    ) {
+      this.setState({
+        grid: JSON.parse(sessionStorage.getItem('grid')),
+        difficulty: sessionStorage.getItem('difficulty'),
+      });
+    } else {
+      this.generateBoard();
+    }
+
     this.setHamburgerVisibility();
     this.routeChangeHandler(this.props.location.pathname);
   }
@@ -88,7 +99,7 @@ class Game extends React.PureComponent {
     }
 
     if (
-      prevState.difficulty !== this.state.difficulty ||
+      (prevState.difficulty !== this.state.difficulty && !sessionStorage.getItem('difficulty')) ||
       this.state.newGame === true
     ) {
       this.setState(
@@ -97,10 +108,12 @@ class Game extends React.PureComponent {
           newGame: false,
         },
         () => {
+          sessionStorage.setItem('difficulty', this.state.difficulty);
           this.generateBoard();
         }
       );
     } else if (prevState.grid !== this.state.grid) {
+      sessionStorage.setItem('grid', JSON.stringify(this.state.grid));
       this.setState({ complete: fn.verifySudoku(this.state.grid) });
     }
   }
@@ -124,6 +137,7 @@ class Game extends React.PureComponent {
   };
 
   changeDifficulty = (diff) => {
+    sessionStorage.removeItem('difficulty');
     this.setState(() => ({ difficulty: diff }));
   };
 
