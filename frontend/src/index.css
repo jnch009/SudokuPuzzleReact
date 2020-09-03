@@ -75,7 +75,7 @@ ul {
 
 .alertConstraint {
   position: fixed;
-  top: 0;
+  top: 50px;
   z-index: 1;
 }
 
