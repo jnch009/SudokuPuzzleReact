@@ -80,6 +80,10 @@ class Game extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (!sessionStorage.getItem('grid')) {
+      sessionStorage.setItem('grid', JSON.stringify(this.state.grid));
+    }
+
     if (
       prevProps.location.pathname !== this.props.location.pathname &&
       this.props.history.action === 'POP'
@@ -101,6 +105,7 @@ class Game extends React.PureComponent {
         }
       );
     } else if (prevState.grid !== this.state.grid) {
+      sessionStorage.setItem('grid', JSON.stringify(this.state.grid));
       this.setState({ complete: fn.verifySudoku(this.state.grid) });
     }
   }
@@ -217,13 +222,19 @@ class Game extends React.PureComponent {
   };
 
   generateBoard = () => {
-    let gridNewly = fn.createGrid();
-    fn.solve(gridNewly, fn.shuffle(digits));
-    fn.removingEntries(gridNewly, this.state.difficulty);
+    if (sessionStorage.getItem('grid')) {
+      this.setState({
+        grid: JSON.parse(sessionStorage.getItem('grid')),
+      });
+    } else {
+      let gridNewly = fn.createGrid();
+      fn.solve(gridNewly, fn.shuffle(digits));
+      fn.removingEntries(gridNewly, this.state.difficulty);
 
-    this.setState({
-      grid: gridNewly,
-    });
+      this.setState({
+        grid: gridNewly,
+      });
+    }
   };
 
   clearInterval = () => {
