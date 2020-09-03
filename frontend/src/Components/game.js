@@ -262,7 +262,7 @@ class Game extends React.PureComponent {
       handleNewGameClick: this.handleNewGameClick,
     };
 
-    if (isLoading && grid.length === 0) {
+    if (isLoading) {
       return <h1>Loading</h1>;
     }
 
