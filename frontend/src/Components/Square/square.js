@@ -129,12 +129,12 @@ class Square extends React.Component {
       } else {
         btn = (
           <FormInput
-            autoFocus={true}
+            autoFocus
             onBlur={this.handleClick}
             type='text'
             pattern='[0-9]*'
             inputMode='numeric'
-            onKeyDown={this.handleKeyPress}
+            onChange={this.handleKeyPress}
             className='square'
             value={this.props.number !== null ? this.props.number : ''}
           />

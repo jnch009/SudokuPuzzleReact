@@ -14,11 +14,16 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { Button } from 'shards-react';
 import fn from '../helperFn/boardFunctions';
 import cloneDeep from 'lodash.clonedeep';
+import { Alert } from 'shards-react';
 import { withAuth0 } from '@auth0/auth0-react';
 import { withRouter } from 'react-router';
 
-const shuffled = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const protectedRoutes = ['/profile'];
+
+//Need to figure out how am I going to solve the sudoku
+//1. we could bring the grid array all the way to the top
+//2.
 
 const initialState = {
   openCredits: false,
@@ -27,16 +32,20 @@ const initialState = {
   openNewGame: false,
   difficulty: 'Normal',
   newGame: false,
-  solvedButton: false,
   showHamburger: false,
   showSideNav: false,
   grid: [],
+  displayError: false,
+  beginTimer: 0,
+  timeUntilDismissed: 3,
+  complete: false,
 };
 
 class Game extends React.PureComponent {
   constructor(props) {
     super(props);
 
+    this.interval = null;
     this.state = initialState;
   }
 
@@ -69,16 +78,34 @@ class Game extends React.PureComponent {
 
   componentDidMount() {
     window.addEventListener('resize', this.setHamburgerVisibility);
+    this.generateBoard();
     this.setHamburgerVisibility();
     this.routeChangeHandler(this.props.location.pathname);
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (
       prevProps.location.pathname !== this.props.location.pathname &&
       this.props.history.action === 'POP'
     ) {
       this.routeChangeHandler(this.props.location.pathname);
+    }
+
+    if (
+      prevState.difficulty !== this.state.difficulty ||
+      this.state.newGame === true
+    ) {
+      this.setState(
+        {
+          complete: false,
+          newGame: false,
+        },
+        () => {
+          this.generateBoard();
+        }
+      );
+    } else if (prevState.grid !== this.state.grid) {
+      this.setState({ complete: fn.verifySudoku(this.state.grid) });
     }
   }
 
@@ -158,21 +185,65 @@ class Game extends React.PureComponent {
         return typeof el === 'string' ? null : el;
       })
     );
-    fn.solve(currentGrid, shuffled);
+    fn.solve(currentGrid, digits);
 
     this.setState({
       grid: currentGrid,
-      solvedButton: true,
     });
   };
 
-  populateGameGrid = (grid) => {
-    this.setState({ grid: grid, solvedButton: false, newGame: false });
+  handleTimeChange = () => {
+    if (this.state.beginTimer < this.state.timeUntilDismissed - 1) {
+      this.setState({
+        ...this.state,
+        ...{ beginTimer: this.state.beginTimer + 1 },
+      });
+      return;
+    }
+
+    this.setState({ ...this.state, ...{ displayError: false } });
+    this.clearInterval();
+  };
+
+  handleKeyPress = (key, row, col) => {
+    const gridCopy = cloneDeep(this.state.grid);
+    if (key === null) {
+      gridCopy[row].splice(col, 1, key);
+      this.setState({ grid: gridCopy });
+    } else {
+      if (digits.indexOf(parseInt(key)) === -1) {
+        this.showInvalidKeyPress();
+      } else {
+        gridCopy[row].splice(col, 1, key);
+        this.setState({ grid: gridCopy });
+      }
+    }
+  };
+
+  generateBoard = () => {
+    let gridNewly = fn.createGrid();
+    fn.solve(gridNewly, fn.shuffle(digits));
+    fn.removingEntries(gridNewly, this.state.difficulty);
+
+    this.setState({
+      grid: gridNewly,
+    });
+  };
+
+  clearInterval = () => {
+    clearInterval(this.interval);
+    this.interval = null;
+  };
+
+  showInvalidKeyPress = () => {
+    this.clearInterval();
+    this.setState({ displayError: true, beginTimer: 0, timeUntilDismissed: 3 });
+    this.interval = setInterval(this.handleTimeChange, 1000);
   };
 
   render() {
     const { isAuthenticated, isLoading } = this.props.auth0;
-    const { showHamburger, showSideNav } = this.state;
+    const { showHamburger, showSideNav, grid, displayError } = this.state;
     const navClickHandlers = {
       handleCreditsClick: this.handleCreditsClick,
       handleDifficultyClick: this.handleDifficultyClick,
@@ -181,7 +252,7 @@ class Game extends React.PureComponent {
       handleNewGameClick: this.handleNewGameClick,
     };
 
-    if (isLoading) {
+    if (isLoading && grid.length === 0) {
       return <h1>Loading</h1>;
     }
 
@@ -238,13 +309,19 @@ class Game extends React.PureComponent {
 
         <div className='game'>
           <h1>SUDOKU!</h1>
+          {displayError ? (
+            <div className='alertConstraint'>
+              <Alert theme='danger' open={displayError}>
+                Must type a number between 1 and 9
+              </Alert>
+            </div>
+          ) : null}
           <div className='game-board'>
             <Board
-              difficulty={this.state.difficulty}
-              newGame={this.state.newGame}
-              populateGameGrid={this.populateGameGrid}
-              solvedButton={this.state.solvedButton}
-              solvedGrid={this.state.grid}
+              grid={grid}
+              complete={this.state.complete}
+              displayError={this.state.displayError}
+              handleKeyPress={this.handleKeyPress}
             />
           </div>
         </div>
