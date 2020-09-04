@@ -8,41 +8,46 @@ import { Nav, NavItem } from 'shards-react';
 import NavBarItem from '../NavBarItem/NavBarItem';
 import { Switch } from 'react-router';
 
-const NavBar = ({ isAuthenticated, navClickHandlers, isSideBar }) => {
+const NavBar = ({ isAuthenticated, navClickHandlers, isSideBar, difficulty }) => {
   const navSection = (
     <>
       <NavBarItem
         linkTo='/credits'
         onClick={navClickHandlers.handleCreditsClick}
         name='Credits'
+        difficulty={difficulty}
       />
       <NavBarItem
         linkTo='/difficulty'
         onClick={navClickHandlers.handleDifficultyClick}
         name='Difficulty'
+        difficulty={difficulty}
       />
       <NavBarItem
         linkTo='/solve'
         onClick={navClickHandlers.handleSudokuSolver}
         name='Solve'
+        difficulty={difficulty}
       />
       <NavBarItem
         linkTo='/rules'
         onClick={navClickHandlers.handleRulesClick}
         name='How To Play'
+        difficulty={difficulty}
       />
       <NavBarItem linkTo='/profile' name='Profile' />
       <NavBarItem
         linkTo='/newGame'
         onClick={navClickHandlers.handleNewGameClick}
         name='New Game'
+        difficulty={difficulty}
       />
       <NavItem className='mb-3'>
         {isAuthenticated ? <Logout /> : <Login />}
       </NavItem>
 
       <Switch>
-        <PrivateRoute path='/profile' component={Profile} />
+        <PrivateRoute path='/profile' component={Profile}/>
       </Switch>
     </>
   );
