@@ -32,7 +32,7 @@ const NavBar = ({ isAuthenticated, navClickHandlers, isSideBar, difficulty }) =>
         name='How To Play'
         difficulty={difficulty}
       />
-      <NavBarItem linkTo='/manageSaves' name='Manage Saves' />
+      <NavBarItem linkTo='/manageSaves' name='Manage Saves' difficulty={difficulty}/>
       <NavBarItem
         linkTo='/newGame'
         onClick={navClickHandlers.handleNewGameClick}

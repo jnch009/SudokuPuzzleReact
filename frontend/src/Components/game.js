@@ -4,6 +4,7 @@ import SavedGames from '../Components/SavedGames/SavedGames';
 import { Button } from 'shards-react';
 import fn from '../helperFn/boardFunctions';
 import cloneDeep from 'lodash.clonedeep';
+import queryString from 'query-string';
 import { withAuth0 } from '@auth0/auth0-react';
 import { withRouter, Switch, Route } from 'react-router-dom';
 
@@ -18,12 +19,6 @@ import ModalNewGame from '../Components/Modals/ModalNewGame';
 import { CSSTransition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-
-import fn from '../helperFn/boardFunctions';
-import cloneDeep from 'lodash.clonedeep';
-import { withAuth0 } from '@auth0/auth0-react';
-import { withRouter } from 'react-router';
-import queryString from 'query-string';
 
 const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -55,25 +50,25 @@ class Game extends React.PureComponent {
 
   routeChangeHandler = (route) => {
     switch (true) {
-      case route === '/credits':
-        this.handleCreditsClick();
-        break;
-      case route === '/difficulty':
-        this.handleDifficultyClick();
-        break;
-      case route === '/rules':
-        this.handleRulesClick();
-        break;
-      case route === '/newGame':
-        this.handleNewGameClick();
-        break;
-      default:
-        this.setState({
-          openCredits: false,
-          openDifficulty: false,
-          openRules: false,
-          openNewGame: false,
-        });
+    case route === '/credits':
+      this.handleCreditsClick();
+      break;
+    case route === '/difficulty':
+      this.handleDifficultyClick();
+      break;
+    case route === '/rules':
+      this.handleRulesClick();
+      break;
+    case route === '/newGame':
+      this.handleNewGameClick();
+      break;
+    default:
+      this.setState({
+        openCredits: false,
+        openDifficulty: false,
+        openRules: false,
+        openNewGame: false,
+      });
     }
   };
 
@@ -289,7 +284,7 @@ class Game extends React.PureComponent {
   };
 
   render() {
-    const { isAuthenticated, isLoading } = this.props.auth0;
+    const { isAuthenticated, isLoading, error } = this.props.auth0;
     const {
       showHamburger,
       showSideNav,
@@ -307,7 +302,7 @@ class Game extends React.PureComponent {
 
     if (isLoading) {
       return (
-        <h1 className='h-100 m-0 d-flex justify-content-center align-items-center text-primary'>
+        <h1 className='h-100 m-0 d-flex justify-content-center align-items-center text-white'>
           Loading...
         </h1>
       );
@@ -392,7 +387,7 @@ class Game extends React.PureComponent {
               <Board
                 grid={grid}
                 complete={this.state.complete}
-                displayError={this.state.displayError}
+                displayError={displayError}
                 handleKeyPress={this.handleKeyPress}
               />
             )}
