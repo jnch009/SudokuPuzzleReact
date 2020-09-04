@@ -90,6 +90,7 @@ class Game extends React.PureComponent {
       });
     } else {
       this.generateBoard();
+      this.props.history.replace(`/?d=${this.state.difficulty}`);
     }
 
     this.setHamburgerVisibility();
