@@ -6,6 +6,7 @@ import ModalCredits from '../Components/Modals/ModalCredits';
 import ModalDifficulty from '../Components/Modals/ModalDifficulty';
 import ModalRules from '../Components/Modals/ModalRules';
 import ModalNewGame from '../Components/Modals/ModalNewGame';
+import Difficulties from '../helperFn/difficultyLookup';
 
 import { CSSTransition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,11 +17,10 @@ import fn from '../helperFn/boardFunctions';
 import cloneDeep from 'lodash.clonedeep';
 import { Alert } from 'shards-react';
 import { withAuth0 } from '@auth0/auth0-react';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import queryString from 'query-string';
 
 const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-const protectedRoutes = ['/profile'];
 
 const initialState = {
   openCredits: false,
@@ -46,7 +46,10 @@ class Game extends React.PureComponent {
     this.state = initialState;
   }
 
-  routeChangeHandler = (route) => {
+  routeChangeHandler = (route, queryDifficulty) => {
+    this.props.history.replace(
+      `${route}?d=${queryDifficulty || this.state.difficulty}`
+    );
     switch (true) {
     case route === '/credits':
       this.handleCreditsClick();
@@ -60,9 +63,6 @@ class Game extends React.PureComponent {
     case route === '/newGame':
       this.handleNewGameClick();
       break;
-    case !this.props.auth0.isAuthenticated && protectedRoutes.includes(route):
-      this.props.history.replace('/');
-      break;
     default:
       this.setState({
         openCredits: false,
@@ -75,37 +75,34 @@ class Game extends React.PureComponent {
 
   componentDidMount() {
     window.addEventListener('resize', this.setHamburgerVisibility);
-    if (
-      sessionStorage.getItem('grid') &&
-      sessionStorage.getItem('difficulty')
-    ) {
+    const route = this.props.location.pathname;
+    let queryDifficulty = queryString.parse(this.props.location.search)[
+      'd'
+    ];
+    queryDifficulty = Difficulties.includes(queryDifficulty) ? queryDifficulty : sessionStorage.getItem('difficulty');
+    if (sessionStorage.getItem('grid') && sessionStorage.getItem('difficulty')) {
       this.setState(
         {
           grid: JSON.parse(sessionStorage.getItem('grid')),
           difficulty: sessionStorage.getItem('difficulty'),
         },
         () => {
-          const queryDifficulty = queryString.parse(this.props.location.search)[
-            'd'
-          ];
           this.props.history.replace(
-            `/?d=${queryDifficulty || this.state.difficulty}`
+            `${route}?d=${queryDifficulty || this.state.difficulty}`
           );
         }
       );
     } else {
       this.generateBoard();
-      this.props.history.replace(`/?d=${this.state.difficulty}`);
+      this.setHamburgerVisibility();
+      this.routeChangeHandler(this.props.location.pathname, queryDifficulty);
     }
-
-    this.setHamburgerVisibility();
-    this.routeChangeHandler(this.props.location.pathname);
   }
 
   componentDidUpdate(prevProps, prevState) {
     const queryDifficulty = queryString.parse(this.props.location.search)['d'];
     if (this.props.history.action === 'POP') {
-      if (queryDifficulty !== sessionStorage.getItem('difficulty')) {
+      if (Difficulties.includes(queryDifficulty) && queryDifficulty !== sessionStorage.getItem('difficulty')) {
         sessionStorage.removeItem('difficulty');
         this.setState(
           {
@@ -118,11 +115,10 @@ class Game extends React.PureComponent {
       }
 
       if (prevProps.location.pathname !== this.props.location.pathname) {
-        this.routeChangeHandler(this.props.location.pathname);
+        this.routeChangeHandler(this.props.location.pathname, queryDifficulty);
       }
     } else if (
-      prevState.difficulty !== this.state.difficulty ||
-      this.state.newGame === true
+      prevState.difficulty !== this.state.difficulty || this.state.newGame === true
     ) {
       this.setState(
         {

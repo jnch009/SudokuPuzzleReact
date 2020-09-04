@@ -6,7 +6,7 @@ import PrivateRoute from '../PrivateRoute/PrivateRoute';
 
 import { Nav, NavItem } from 'shards-react';
 import NavBarItem from '../NavBarItem/NavBarItem';
-import { Switch } from 'react-router';
+import { Switch } from 'react-router-dom';
 
 const NavBar = ({ isAuthenticated, navClickHandlers, isSideBar, difficulty }) => {
   const navSection = (
@@ -35,7 +35,7 @@ const NavBar = ({ isAuthenticated, navClickHandlers, isSideBar, difficulty }) =>
         name='How To Play'
         difficulty={difficulty}
       />
-      <NavBarItem linkTo='/profile' name='Profile' />
+      <NavBarItem linkTo='/profile' name='Profile' difficulty={difficulty} />
       <NavBarItem
         linkTo='/newGame'
         onClick={navClickHandlers.handleNewGameClick}
