@@ -5,6 +5,13 @@ import cloneDeep from 'lodash.clonedeep';
 
 const renderSquare = (grid, num, row, col, handleKeyPress) => {
   const gridEntry = num;
+  const commonProps = {
+    number: gridEntry,
+    pressKey: handleKeyPress,
+    row: row,
+    col: col,
+    grid: grid,
+  };
 
   if (gridEntry === null || typeof gridEntry === 'string') {
     if (typeof gridEntry === 'string') {
@@ -14,11 +21,7 @@ const renderSquare = (grid, num, row, col, handleKeyPress) => {
         return (
           <Square
             key={`${row} ${col}`}
-            number={gridEntry}
-            pressKey={handleKeyPress}
-            row={row}
-            col={col}
-            grid={grid}
+            squareProps={commonProps}
             modify={true}
             valid={false}
           />
@@ -29,24 +32,14 @@ const renderSquare = (grid, num, row, col, handleKeyPress) => {
     return (
       <Square
         key={`${row} ${col}`}
-        number={gridEntry}
-        pressKey={handleKeyPress}
-        row={row}
-        col={col}
-        grid={grid}
+        squareProps={commonProps}
         modify={true}
         valid={true}
       />
     );
   } else {
     return (
-      <Square
-        key={`${row} ${col}`}
-        row={row}
-        col={col}
-        number={gridEntry}
-        modify={false}
-      />
+      <Square key={`${row} ${col}`} squareProps={commonProps} modify={false} />
     );
   }
 };

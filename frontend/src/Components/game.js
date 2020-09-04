@@ -19,7 +19,13 @@ import { CSSTransition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-const shuffled = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+import fn from '../helperFn/boardFunctions';
+import cloneDeep from 'lodash.clonedeep';
+import { withAuth0 } from '@auth0/auth0-react';
+import { withRouter } from 'react-router';
+import queryString from 'query-string';
+
+const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const initialState = {
   openCredits: false,
@@ -33,50 +39,107 @@ const initialState = {
   showHamburger: false,
   showSideNav: false,
   grid: [],
+  displayError: false,
+  beginTimer: 0,
+  timeUntilDismissed: 3,
+  complete: false,
 };
 
 class Game extends React.PureComponent {
   constructor(props) {
     super(props);
 
+    this.interval = null;
     this.state = initialState;
   }
 
   routeChangeHandler = (route) => {
     switch (true) {
-    case route === '/credits':
-      this.handleCreditsClick();
-      break;
-    case route === '/difficulty':
-      this.handleDifficultyClick();
-      break;
-    case route === '/rules':
-      this.handleRulesClick();
-      break;
-    case route === '/newGame':
-      this.handleNewGameClick();
-      break;
-    default:
-      this.setState({
-        openCredits: false,
-        openDifficulty: false,
-        openRules: false,
-        openNewGame: false,
-      });
+      case route === '/credits':
+        this.handleCreditsClick();
+        break;
+      case route === '/difficulty':
+        this.handleDifficultyClick();
+        break;
+      case route === '/rules':
+        this.handleRulesClick();
+        break;
+      case route === '/newGame':
+        this.handleNewGameClick();
+        break;
+      default:
+        this.setState({
+          openCredits: false,
+          openDifficulty: false,
+          openRules: false,
+          openNewGame: false,
+        });
     }
   };
 
   componentDidMount() {
     window.addEventListener('resize', this.setHamburgerVisibility);
+    if (
+      sessionStorage.getItem('grid') &&
+      sessionStorage.getItem('difficulty')
+    ) {
+      this.setState(
+        {
+          grid: JSON.parse(sessionStorage.getItem('grid')),
+          difficulty: sessionStorage.getItem('difficulty'),
+        },
+        () => {
+          const queryDifficulty = queryString.parse(this.props.location.search)[
+            'd'
+          ];
+          this.props.history.replace(
+            `/?d=${queryDifficulty || this.state.difficulty}`
+          );
+        }
+      );
+    } else {
+      this.generateBoard();
+      this.props.history.replace(`/?d=${this.state.difficulty}`);
+    }
+
     this.setHamburgerVisibility();
   }
 
-  componentDidUpdate(prevProps) {
-    if (
-      prevProps.location.pathname !== this.props.location.pathname &&
-      this.props.history.action === 'POP'
+  componentDidUpdate(prevProps, prevState) {
+    const queryDifficulty = queryString.parse(this.props.location.search)['d'];
+    if (this.props.history.action === 'POP') {
+      if (queryDifficulty !== sessionStorage.getItem('difficulty')) {
+        sessionStorage.removeItem('difficulty');
+        this.setState(
+          {
+            difficulty: queryString.parse(this.props.location.search)['d'],
+          },
+          () => {
+            sessionStorage.setItem('difficulty', this.state.difficulty);
+          }
+        );
+      }
+
+      if (prevProps.location.pathname !== this.props.location.pathname) {
+        this.routeChangeHandler(this.props.location.pathname);
+      }
+    } else if (
+      prevState.difficulty !== this.state.difficulty ||
+      this.state.newGame === true
     ) {
-      this.routeChangeHandler(this.props.location.pathname);
+      this.setState(
+        {
+          complete: false,
+          newGame: false,
+        },
+        () => {
+          this.generateBoard();
+        }
+      );
+    } else if (prevState.grid !== this.state.grid) {
+      sessionStorage.setItem('grid', JSON.stringify(this.state.grid));
+      sessionStorage.setItem('difficulty', this.state.difficulty);
+      this.setState({ complete: fn.verifySudoku(this.state.grid) });
     }
   }
 
@@ -99,12 +162,18 @@ class Game extends React.PureComponent {
   };
 
   changeDifficulty = (diff) => {
-    this.setState(() => ({ difficulty: diff }));
+    sessionStorage.removeItem('difficulty');
+    this.setState(
+      () => ({ difficulty: diff }),
+      () => {
+        this.props.history.push(`/difficulty?d=${this.state.difficulty}`);
+      }
+    );
   };
 
   routeChangeCallback = (stateCondition, route) => {
     if (stateCondition && this.props.location.pathname === route) {
-      this.props.history.push('/');
+      this.props.history.push(`/?d=${this.state.difficulty}`);
     }
   };
 
@@ -163,21 +232,71 @@ class Game extends React.PureComponent {
         return typeof el === 'string' ? null : el;
       })
     );
-    fn.solve(currentGrid, shuffled);
+    fn.solve(currentGrid, digits);
 
     this.setState({
       grid: currentGrid,
-      solvedButton: true,
     });
   };
 
-  populateGameGrid = (grid) => {
-    this.setState({ grid: grid, solvedButton: false, newGame: false });
+  handleTimeChange = () => {
+    if (this.state.beginTimer < this.state.timeUntilDismissed - 1) {
+      this.setState({
+        ...this.state,
+        ...{ beginTimer: this.state.beginTimer + 1 },
+      });
+      return;
+    }
+
+    this.setState({ ...this.state, ...{ displayError: false } });
+    this.clearInterval();
+  };
+
+  handleKeyPress = (key, row, col) => {
+    const gridCopy = cloneDeep(this.state.grid);
+    if (key === null) {
+      gridCopy[row].splice(col, 1, key);
+      this.setState({ grid: gridCopy });
+    } else {
+      if (digits.indexOf(parseInt(key)) === -1) {
+        this.showInvalidKeyPress();
+      } else {
+        gridCopy[row].splice(col, 1, key);
+        this.setState({ grid: gridCopy });
+      }
+    }
+  };
+
+  generateBoard = () => {
+    let gridNewly = fn.createGrid();
+    fn.solve(gridNewly, fn.shuffle(digits));
+    fn.removingEntries(gridNewly, this.state.difficulty);
+
+    this.setState({
+      grid: gridNewly,
+    });
+  };
+
+  clearInterval = () => {
+    clearInterval(this.interval);
+    this.interval = null;
+  };
+
+  showInvalidKeyPress = () => {
+    this.clearInterval();
+    this.setState({ displayError: true, beginTimer: 0, timeUntilDismissed: 3 });
+    this.interval = setInterval(this.handleTimeChange, 1000);
   };
 
   render() {
-    const { isLoading, error, isAuthenticated } = this.props.auth0;
-    const { showHamburger, showSideNav } = this.state;
+    const { isAuthenticated, isLoading } = this.props.auth0;
+    const {
+      showHamburger,
+      showSideNav,
+      grid,
+      displayError,
+      difficulty,
+    } = this.state;
     const navClickHandlers = {
       handleCreditsClick: this.handleCreditsClick,
       handleDifficultyClick: this.handleDifficultyClick,
@@ -216,7 +335,7 @@ class Game extends React.PureComponent {
           <NavBar
             isAuthenticated={isAuthenticated}
             navClickHandlers={navClickHandlers}
-            history={this.props.history}
+            difficulty={difficulty}
           />
         ) : (
           <div className='d-flex justify-content-center'>
@@ -271,11 +390,10 @@ class Game extends React.PureComponent {
             path='/'
             render={() => (
               <Board
-                difficulty={this.state.difficulty}
-                newGame={this.state.newGame}
-                populateGameGrid={this.populateGameGrid}
-                solvedButton={this.state.solvedButton}
-                solvedGrid={this.state.grid}
+                grid={grid}
+                complete={this.state.complete}
+                displayError={this.state.displayError}
+                handleKeyPress={this.handleKeyPress}
               />
             )}
           />
