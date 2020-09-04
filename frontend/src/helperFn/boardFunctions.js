@@ -92,9 +92,7 @@ const verifyBox = (grid, row, col, val = null) => {
 
 const isValid = (grid, row, col, num = null) => {
   if (
-    verifyBox(grid, row, col, num) &&
-    verifyCol(grid, col, num) &&
-    verifyRow(grid, row, num)
+    verifyBox(grid, row, col, num) && verifyCol(grid, col, num) && verifyRow(grid, row, num)
   ) {
     return true;
   }

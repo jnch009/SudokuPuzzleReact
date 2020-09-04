@@ -75,15 +75,12 @@ class Game extends React.PureComponent {
 
   componentDidMount() {
     window.addEventListener('resize', this.setHamburgerVisibility);
-    let route = this.props.location.pathname;
+    const route = this.props.location.pathname;
     let queryDifficulty = queryString.parse(this.props.location.search)[
       'd'
     ];
     queryDifficulty = Difficulties.includes(queryDifficulty) ? queryDifficulty : sessionStorage.getItem('difficulty');
-    if (
-      sessionStorage.getItem('grid') &&
-      sessionStorage.getItem('difficulty')
-    ) {
+    if (sessionStorage.getItem('grid') && sessionStorage.getItem('difficulty')) {
       this.setState(
         {
           grid: JSON.parse(sessionStorage.getItem('grid')),
@@ -121,8 +118,7 @@ class Game extends React.PureComponent {
         this.routeChangeHandler(this.props.location.pathname, queryDifficulty);
       }
     } else if (
-      prevState.difficulty !== this.state.difficulty ||
-      this.state.newGame === true
+      prevState.difficulty !== this.state.difficulty || this.state.newGame === true
     ) {
       this.setState(
         {

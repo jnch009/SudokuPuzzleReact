@@ -26,6 +26,8 @@
     "semi": ["error", "always"],
     "react/display-name": [0],
     "no-console": [1],
-    "eol-last": ["error", "always"]
+    "eol-last": ["error", "always"],
+    "operator-linebreak": ["error", "none"],
+    "no-multi-spaces": ["error"]
   }
 }
