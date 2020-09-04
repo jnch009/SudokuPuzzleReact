@@ -79,15 +79,20 @@ class Game extends React.PureComponent {
       sessionStorage.getItem('grid') &&
       sessionStorage.getItem('difficulty')
     ) {
-      this.setState({
-        grid: JSON.parse(sessionStorage.getItem('grid')),
-        difficulty: sessionStorage.getItem('difficulty'),
-      },() => {
-        const queryDifficulty = queryString.parse(this.props.location.search)[
-          'd'
-        ];
-        this.props.history.replace(`/?d=${queryDifficulty || this.state.difficulty}`);
-      });
+      this.setState(
+        {
+          grid: JSON.parse(sessionStorage.getItem('grid')),
+          difficulty: sessionStorage.getItem('difficulty'),
+        },
+        () => {
+          const queryDifficulty = queryString.parse(this.props.location.search)[
+            'd'
+          ];
+          this.props.history.replace(
+            `/?d=${queryDifficulty || this.state.difficulty}`
+          );
+        }
+      );
     } else {
       this.generateBoard();
       this.props.history.replace(`/?d=${this.state.difficulty}`);
@@ -98,14 +103,9 @@ class Game extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const queryDifficulty = queryString.parse(this.props.location.search)[
-      'd'
-    ];
+    const queryDifficulty = queryString.parse(this.props.location.search)['d'];
     if (this.props.history.action === 'POP') {
-      if (
-        queryDifficulty !== sessionStorage.getItem('difficulty') &&
-        queryDifficulty !== undefined
-      ) {
+      if (queryDifficulty !== sessionStorage.getItem('difficulty')) {
         sessionStorage.removeItem('difficulty');
         this.setState(
           {
@@ -120,11 +120,8 @@ class Game extends React.PureComponent {
       if (prevProps.location.pathname !== this.props.location.pathname) {
         this.routeChangeHandler(this.props.location.pathname);
       }
-    }
-
-    if (
-      (prevState.difficulty !== this.state.difficulty &&
-        !sessionStorage.getItem('difficulty')) ||
+    } else if (
+      prevState.difficulty !== this.state.difficulty ||
       this.state.newGame === true
     ) {
       this.setState(
