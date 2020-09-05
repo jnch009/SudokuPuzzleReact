@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from 'shards-react';
 import { useHistory, Link } from 'react-router-dom';
+
+import queryString from 'query-string';
 
 import './SavedGames.scss';
 
@@ -30,11 +32,48 @@ const games = [
     userName: 'Jeremy',
     date: curDate,
   },
+  {
+    saveName: '4',
+    userName: 'Jeremy',
+    date: curDate,
+  },
+  {
+    saveName: '5',
+    userName: 'Jeremy',
+    date: curDate,
+  },
+  {
+    saveName: '6',
+    userName: 'Jeremy',
+    date: curDate,
+  },
+  {
+    saveName: '7',
+    userName: 'Jeremy',
+    date: curDate,
+  },
+  {
+    saveName: '8',
+    userName: 'Jeremy',
+    date: curDate,
+  },
+  {
+    saveName: '9',
+    userName: 'Jeremy',
+    date: curDate,
+  },
 ];
 
-const BasicModalExample = ({ open, toggle }) => {
+const BasicModalExample = () => {
   const history = useHistory();
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    const saveNumber = Number(queryString.parse(history.location.search)[
+      'saves'
+    ]);
+    setCurrentPage(saveNumber);
+  },[history.location]);
 
   const disabledNavigation = (navigation) => {
     const navigationDirection = navigation === 'back' ? currentPage-1 : currentPage+1; 
@@ -55,12 +94,14 @@ const BasicModalExample = ({ open, toggle }) => {
       return paginationNav;
     }
   };
+  const startSave = (currentPage-1)*3;
+  const endSave = startSave+3;
 
   return (
     <div className='mt-4'>
       <h2 className='text-center text-light'>Saved Games</h2>
       <div className='d-flex flex-column align-items-center pt-2'>
-        {games.map((game) => (
+        {games.slice(startSave,endSave).map((game) => (
           <div
             key={game.saveName}
             className='position-relative save-container savedGamesSection'

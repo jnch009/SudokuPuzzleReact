@@ -49,40 +49,50 @@ class Game extends React.PureComponent {
     this.state = initialState;
   }
 
-  routeChangeHandler = (route, queryDifficulty) => {
-    this.props.history.replace(
-      `${route}?d=${queryDifficulty || this.state.difficulty}`
-    );
-    switch (true) {
+  routeChangeHandler = (route, queryDifficulty, querySaves) => {
+    const routeToRedirect = `${route}?d=${queryDifficulty || this.state.difficulty}`;
+    this.setState({
+      openCredits: false,
+      openDifficulty: false,
+      openRules: false,
+      openNewGame: false,
+    },() => { switch (true) {
     case route === '/credits':
+      this.props.history.replace(routeToRedirect);
       this.handleCreditsClick();
       break;
     case route === '/difficulty':
+      this.props.history.replace(routeToRedirect);
       this.handleDifficultyClick();
       break;
     case route === '/rules':
+      this.props.history.replace(routeToRedirect);
       this.handleRulesClick();
       break;
     case route === '/newGame':
+      this.props.history.replace(routeToRedirect);
       this.handleNewGameClick();
       break;
+    case route === '/manageSaves':
+      this.props.history.replace(
+        `${route}?d=${queryDifficulty || this.state.difficulty}&saves=${querySaves || 1}`
+      );
+      break;
     default:
-      this.setState({
-        openCredits: false,
-        openDifficulty: false,
-        openRules: false,
-        openNewGame: false,
-      });
-    }
+      this.props.history.replace(`?d=${queryDifficulty || this.state.difficulty}`);
+    }});
   };
 
   componentDidMount() {
     window.addEventListener('resize', this.setHamburgerVisibility);
-    const route = this.props.location.pathname;
+    const querySaves = Number(queryString.parse(this.props.location.search)[
+      'saves'
+    ]);
     let queryDifficulty = queryString.parse(this.props.location.search)[
       'd'
     ];
     queryDifficulty = Difficulties.includes(queryDifficulty) ? queryDifficulty : sessionStorage.getItem('difficulty');
+
     if (sessionStorage.getItem('grid') && sessionStorage.getItem('difficulty')) {
       this.setState(
         {
@@ -90,20 +100,22 @@ class Game extends React.PureComponent {
           difficulty: sessionStorage.getItem('difficulty'),
         },
         () => {
-          this.props.history.replace(
-            `${route}?d=${queryDifficulty || this.state.difficulty}`
-          );
+          this.routeChangeHandler(this.props.location.pathname, queryDifficulty, querySaves);
         }
       );
     } else {
       this.generateBoard();
-      this.routeChangeHandler(this.props.location.pathname, queryDifficulty);
+      this.routeChangeHandler(this.props.location.pathname, queryDifficulty, querySaves);
     }
     this.setHamburgerVisibility();
   }
 
   componentDidUpdate(prevProps, prevState) {
     const queryDifficulty = queryString.parse(this.props.location.search)['d'];
+    const querySaves = Number(queryString.parse(this.props.location.search)[
+      'saves'
+    ]);
+
     if (this.props.history.action === 'POP') {
       if (Difficulties.includes(queryDifficulty) && queryDifficulty !== sessionStorage.getItem('difficulty')) {
         sessionStorage.removeItem('difficulty');
@@ -118,7 +130,7 @@ class Game extends React.PureComponent {
       }
 
       if (prevProps.location.pathname !== this.props.location.pathname) {
-        this.routeChangeHandler(this.props.location.pathname, queryDifficulty);
+        this.routeChangeHandler(this.props.location.pathname, queryDifficulty, querySaves);
       }
     } else if (
       prevState.difficulty !== this.state.difficulty || this.state.newGame === true
