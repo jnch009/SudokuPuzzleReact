@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'shards-react';
+import { useHistory, Link } from 'react-router-dom';
 
 import './SavedGames.scss';
 
@@ -32,8 +33,31 @@ const games = [
 ];
 
 const BasicModalExample = ({ open, toggle }) => {
+  const history = useHistory();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const disabledNavigation = (navigation) => {
+    const navigationDirection = navigation === 'back' ? currentPage-1 : currentPage+1; 
+    const paginationNav = <Link className='page-item' to={{ search: `?saves=${navigationDirection}` }}>
+      <span className='page-link' aria-hidden='true'>{navigation === 'back' ? '«' : '»' }</span>
+    </Link>;
+
+    if (currentPage === 1 && navigation === 'back'){
+      return <span className='page-item disabled'>
+        <span className='page-link' aria-hidden='true'>&laquo;</span>
+      </span>;
+    // using 3 for now, because we can only have a max of 9 saved games
+    } else if (currentPage === 3 && navigation === 'forward') {
+      return <span className='page-item disabled'>
+        <span className='page-link' aria-hidden='true'>&raquo;</span>
+      </span>;
+    } else {
+      return paginationNav;
+    }
+  };
+
   return (
-    <div>
+    <div className='mt-4'>
       <h2 className='text-center text-light'>Saved Games</h2>
       <div className='d-flex flex-column align-items-center pt-2'>
         {games.map((game) => (
@@ -52,86 +76,20 @@ const BasicModalExample = ({ open, toggle }) => {
         ))}
         <nav aria-label='Page navigation example'>
           <ul className='pagination justify-content-center'>
-            <li className='page-item'>
-              <a className='page-link' href='#' aria-label='Previous'>
-                <span aria-hidden='true'>&laquo;</span>
-              </a>
-            </li>
-            <li className='page-item'>
-              <a className='page-link' href='?saves=1'>
-                  1
-              </a>
-            </li>
-            <li className='page-item'>
-              <a className='page-link' href='?saves=2'>
-                  2
-              </a>
-            </li>
-            <li className='page-item'>
-              <a className='page-link' href='?saves=3'>
-                  3
-              </a>
-            </li>
-            <li className='page-item'>
-              <a className='page-link' href='#' aria-label='Next'>
-                <span aria-hidden='true'>&raquo;</span>
-              </a>
-            </li>
+            {disabledNavigation('back')}
+            <Link className='page-item' to={{ search: '?saves=1' }}>
+              <span className='page-link'>1</span>
+            </Link>
+            <Link className='page-item' to={{ search: '?saves=2' }}>
+              <span className='page-link'>2</span>
+            </Link>
+            <Link className='page-item' to={{ search: '?saves=3' }}>
+              <span className='page-link'>3</span>
+            </Link>
+            {disabledNavigation('forward')}
           </ul>
         </nav>
       </div>
-
-      {/* <Modal open={open} toggle={toggle}>
-        <ModalHeader>
-          Saved Games
-          <Button>Save Game</Button>
-        </ModalHeader>
-        <ModalBody className='pt-2 px-3'>
-          {games.map((game) => (
-            <div
-              key={game.saveName}
-              className='position-relative save-container'
-            >
-              <div className='text-left mb-2 bg-primary p-3 save-styling rounded'>
-                <h6 className='mb-0 text-light'>{`Save Name: ${game.saveName}`}</h6>
-                <h6 className='mb-0 text-light'>{`User Name: ${game.userName}`}</h6>
-                <h6 className='mb-0 text-light'>{`Date Saved: ${game.date}`}</h6>
-              </div>
-              <Button className='hide-hover'>Load</Button>
-              <Button className='hide-hover'>Delete</Button>
-            </div>
-          ))}
-          <nav aria-label='Page navigation example'>
-            <ul className='pagination justify-content-center'>
-              <li className='page-item'>
-                <a className='page-link' href='#' aria-label='Previous'>
-                  <span aria-hidden='true'>&laquo;</span>
-                </a>
-              </li>
-              <li className='page-item'>
-                <a className='page-link' href='?saves=1'>
-                  1
-                </a>
-              </li>
-              <li className='page-item'>
-                <a className='page-link' href='?saves=2'>
-                  2
-                </a>
-              </li>
-              <li className='page-item'>
-                <a className='page-link' href='?saves=3'>
-                  3
-                </a>
-              </li>
-              <li className='page-item'>
-                <a className='page-link' href='#' aria-label='Next'>
-                  <span aria-hidden='true'>&raquo;</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </ModalBody>
-      </Modal> */}
     </div>
   );
 };

@@ -97,9 +97,9 @@ class Game extends React.PureComponent {
       );
     } else {
       this.generateBoard();
-      this.setHamburgerVisibility();
       this.routeChangeHandler(this.props.location.pathname, queryDifficulty);
     }
+    this.setHamburgerVisibility();
   }
 
   componentDidUpdate(prevProps, prevState) {

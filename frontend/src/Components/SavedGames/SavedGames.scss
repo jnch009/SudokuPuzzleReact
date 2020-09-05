@@ -2,7 +2,7 @@
   width: 500px;
 
   @media (max-width: 500px) {
-    width: 100%;
+    width: 320px;
   }
 }
 
@@ -37,6 +37,22 @@
 
   & > .hide-hover:last-of-type {
     top: 30px;
-    left: 270px;
+    left: 260px;
+  }
+
+  @media (max-width: 500px) {
+    & > .hide-hover {
+      width: 100px;
+    }
+
+    & > .hide-hover:first-of-type {
+      top: 30px;
+      left: 55px;
+    }
+  
+    & > .hide-hover:last-of-type {
+      top: 30px;
+      left: 160px;
+    }
   }
 }
