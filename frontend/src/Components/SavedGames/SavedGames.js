@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'shards-react';
 import { useHistory, Link } from 'react-router-dom';
-
 import queryString from 'query-string';
+
+import ModalSaveGame from '../Modals/ModalSaveGame';
 
 import './SavedGames.scss';
 
@@ -67,6 +68,7 @@ const games = [
 const BasicModalExample = () => {
   const history = useHistory();
   const [currentPage, setCurrentPage] = useState(1);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const saveNumber = Number(queryString.parse(history.location.search)[
@@ -98,8 +100,10 @@ const BasicModalExample = () => {
   const endSave = startSave+3;
 
   return (
-    <div className='mt-4'>
+    <div className='mt-4 d-flex align-items-center flex-column'>
+      <ModalSaveGame open={open} setOpen={setOpen}/>
       <h2 className='text-center text-light'>Saved Games</h2>
+      <Button className='w-25' onClick={() => setOpen(true)}>Save a new game</Button>
       <div className='d-flex flex-column align-items-center pt-2'>
         {games.slice(startSave,endSave).map((game) => (
           <div
@@ -112,6 +116,7 @@ const BasicModalExample = () => {
               <h6 className='mb-0 text-light'>{`Date Saved: ${game.date}`}</h6>
             </div>
             <Button className='hide-hover'>Load</Button>
+            <Button className='hide-hover'>Overwrite</Button>
             <Button className='hide-hover'>Delete</Button>
           </div>
         ))}
