@@ -69,13 +69,23 @@ const BasicModalExample = () => {
   const history = useHistory();
   const [currentPage, setCurrentPage] = useState(1);
   const [open, setOpen] = useState(false);
+  const [openLoadModal, setOpenLoadModal] = useState(false);
 
+  //useEffect for handling page changes
   useEffect(() => {
     const saveNumber = Number(queryString.parse(history.location.search)[
       'saves'
     ]);
     setCurrentPage(saveNumber);
   },[history.location]);
+
+  //useEffect for handling save game success
+
+  //useEffect for handling save game load
+
+  //useEffect for handling save game delete
+
+  //useEffect for handling save game overwrite
 
   const disabledNavigation = (navigation) => {
     const navigationDirection = navigation === 'back' ? currentPage-1 : currentPage+1; 
