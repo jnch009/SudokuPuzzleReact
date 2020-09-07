@@ -117,24 +117,20 @@ class Game extends React.PureComponent {
     ]);
 
     if (this.props.history.action === 'POP') {
-      if (Difficulties.includes(queryDifficulty) && queryDifficulty !== sessionStorage.getItem('difficulty')) {
-        sessionStorage.removeItem('difficulty');
-        this.setState(
-          {
-            difficulty: queryString.parse(this.props.location.search)['d'],
-          },
-          () => {
-            sessionStorage.setItem('difficulty', this.state.difficulty);
-          }
-        );
+      if (Difficulties.includes(queryDifficulty) && queryDifficulty !== sessionStorage.getItem('difficulty')){
+        this.setState({
+          difficulty: queryDifficulty
+        }, () => {
+          this.generateBoard();
+        });
       }
 
       if (prevProps.location.pathname !== this.props.location.pathname) {
         this.routeChangeHandler(this.props.location.pathname, queryDifficulty, querySaves);
       }
-    } else if (
-      prevState.difficulty !== this.state.difficulty || this.state.newGame === true
-    ) {
+    } 
+    
+    else if (prevState.difficulty !== this.state.difficulty || this.state.newGame === true) {
       this.setState(
         {
           complete: false,
@@ -144,9 +140,9 @@ class Game extends React.PureComponent {
           this.generateBoard();
         }
       );
-    } else if (prevState.grid !== this.state.grid) {
-      sessionStorage.setItem('grid', JSON.stringify(this.state.grid));
-      sessionStorage.setItem('difficulty', this.state.difficulty);
+    }
+    
+    else if (prevState.grid !== this.state.grid) {
       this.setState({ complete: fn.verifySudoku(this.state.grid) });
     }
   }
@@ -170,7 +166,6 @@ class Game extends React.PureComponent {
   };
 
   changeDifficulty = (diff) => {
-    sessionStorage.removeItem('difficulty');
     this.setState(
       () => ({ difficulty: diff }),
       () => {
@@ -282,6 +277,9 @@ class Game extends React.PureComponent {
 
     this.setState({
       grid: gridNewly,
+    }, () => {
+      sessionStorage.setItem('grid', JSON.stringify(this.state.grid));
+      sessionStorage.setItem('difficulty', this.state.difficulty);
     });
   };
 
