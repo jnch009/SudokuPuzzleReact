@@ -4,6 +4,7 @@ import { useHistory, Link } from 'react-router-dom';
 import queryString from 'query-string';
 
 import ModalSaveGame from '../Modals/ModalSaveGame';
+import ModalLoadGame from '../Modals/ModalLoadGame';
 
 import './SavedGames.scss';
 
@@ -88,8 +89,8 @@ const BasicModalExample = () => {
   //useEffect for handling save game overwrite
 
   const disabledNavigation = (navigation) => {
-    const navigationDirection = navigation === 'back' ? currentPage-1 : currentPage+1; 
-    const paginationNav = <Link className='page-item' to={{ search: `?saves=${navigationDirection}` }}>
+    const navigationPage = navigation === 'back' ? currentPage-1 : currentPage+1; 
+    const paginationNav = <Link className='page-item' to={{ search: `?d=${sessionStorage.getItem('difficulty')}&saves=${navigationPage}` }}>
       <span className='page-link' aria-hidden='true'>{navigation === 'back' ? '«' : '»' }</span>
     </Link>;
 
@@ -112,6 +113,8 @@ const BasicModalExample = () => {
   return (
     <div className='mt-4 d-flex align-items-center flex-column'>
       <ModalSaveGame open={open} setOpen={setOpen}/>
+      <ModalLoadGame openLoadGame={openLoadModal} setOpenLoadGame={setOpenLoadModal}/>
+
       <h2 className='text-center text-light'>Saved Games</h2>
       <Button className='w-25' onClick={() => setOpen(true)}>Save a new game</Button>
       <div className='d-flex flex-column align-items-center pt-2'>
@@ -125,7 +128,7 @@ const BasicModalExample = () => {
               <h6 className='mb-0 text-light'>{`User Name: ${game.userName}`}</h6>
               <h6 className='mb-0 text-light'>{`Date Saved: ${game.date}`}</h6>
             </div>
-            <Button className='hide-hover'>Load</Button>
+            <Button className='hide-hover' onClick={() => setOpenLoadModal(true)}>Load</Button>
             <Button className='hide-hover'>Overwrite</Button>
             <Button className='hide-hover'>Delete</Button>
           </div>
@@ -133,13 +136,13 @@ const BasicModalExample = () => {
         <nav aria-label='Page navigation example'>
           <ul className='pagination justify-content-center'>
             {disabledNavigation('back')}
-            <Link className='page-item' to={{ search: '?saves=1' }}>
+            <Link className='page-item' to={{ search: `?d=${sessionStorage.getItem('difficulty')}&saves=1` }}>
               <span className='page-link'>1</span>
             </Link>
-            <Link className='page-item' to={{ search: '?saves=2' }}>
+            <Link className='page-item' to={{ search: `?d=${sessionStorage.getItem('difficulty')}&saves=2` }}>
               <span className='page-link'>2</span>
             </Link>
-            <Link className='page-item' to={{ search: '?saves=3' }}>
+            <Link className='page-item' to={{ search: `?d=${sessionStorage.getItem('difficulty')}&saves=3` }}>
               <span className='page-link'>3</span>
             </Link>
             {disabledNavigation('forward')}
