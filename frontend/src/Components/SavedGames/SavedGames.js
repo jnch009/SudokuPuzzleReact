@@ -72,6 +72,7 @@ const BasicModalExample = () => {
   const [open, setOpen] = useState(false);
   const [openLoadModal, setOpenLoadModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openOverwriteModal, setOpenOverwriteModal] = useState(false);
 
   //useEffect for handling page changes
   useEffect(() => {
@@ -114,8 +115,9 @@ const BasicModalExample = () => {
   return (
     <div className='mt-4 d-flex align-items-center flex-column'>
       <ModalSaveGame open={open} setOpen={setOpen}/>
-      <ModalModifyGame open={openLoadModal} setOpen={setOpenLoadModal} title='Load Game' header='Do you want to load this game?'/>
-      <ModalModifyGame open={openDeleteModal} setOpen={setOpenDeleteModal} title='Delete Game' header='Do you want to delete this game?'/>
+      <ModalModifyGame open={openLoadModal} setOpen={setOpenLoadModal} title='Load Game' action='load'/>
+      <ModalModifyGame open={openDeleteModal} setOpen={setOpenDeleteModal} title='Delete Game' action='delete'/>
+      <ModalModifyGame open={openOverwriteModal} setOpen={setOpenOverwriteModal} title='Overwrite' action='overwrite'/>
 
       <h2 className='text-center text-light'>Saved Games</h2>
       <Button className='w-25' onClick={() => setOpen(true)}>Save a new game</Button>
@@ -131,7 +133,7 @@ const BasicModalExample = () => {
               <h6 className='mb-0 text-light'>{`Date Saved: ${game.date}`}</h6>
             </div>
             <Button className='hide-hover' onClick={() => setOpenLoadModal(true)}>Load</Button>
-            <Button className='hide-hover'>Overwrite</Button>
+            <Button className='hide-hover' onClick={() => setOpenOverwriteModal(true)}>Overwrite</Button>
             <Button className='hide-hover' onClick={() => setOpenDeleteModal(true)}>Delete</Button>
           </div>
         ))}
