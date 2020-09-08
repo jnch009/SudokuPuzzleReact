@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody, Button } from 'shards-react';
 
-const ModalLoadGame = ({ openLoadGame, setOpenLoadGame }) => {
+const ModalModifyGame = ({ open, setOpen, title, header }) => {
   return (
-    <Modal open={openLoadGame} toggle={() => setOpenLoadGame(!openLoadGame)}>
-      <ModalHeader>Load Game</ModalHeader>
+    <Modal open={open} toggle={() => setOpen(!open)}>
+      <ModalHeader>{title}</ModalHeader>
       <ModalBody>
-        <h5>Do you want to load this game?</h5>
+        <h5>{header}</h5>
         <div className='d-flex justify-content-around'>
           <Button className='w-25'>Yes</Button>
           <Button className='w-25'>No</Button>
@@ -16,4 +16,4 @@ const ModalLoadGame = ({ openLoadGame, setOpenLoadGame }) => {
   );
 };
 
-export default ModalLoadGame;
+export default ModalModifyGame;

@@ -4,7 +4,7 @@ import { useHistory, Link } from 'react-router-dom';
 import queryString from 'query-string';
 
 import ModalSaveGame from '../Modals/ModalSaveGame';
-import ModalLoadGame from '../Modals/ModalLoadGame';
+import ModalModifyGame from '../Modals/ModalModifyGame';
 
 import './SavedGames.scss';
 
@@ -71,6 +71,7 @@ const BasicModalExample = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [open, setOpen] = useState(false);
   const [openLoadModal, setOpenLoadModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   //useEffect for handling page changes
   useEffect(() => {
@@ -113,7 +114,8 @@ const BasicModalExample = () => {
   return (
     <div className='mt-4 d-flex align-items-center flex-column'>
       <ModalSaveGame open={open} setOpen={setOpen}/>
-      <ModalLoadGame openLoadGame={openLoadModal} setOpenLoadGame={setOpenLoadModal}/>
+      <ModalModifyGame open={openLoadModal} setOpen={setOpenLoadModal} title='Load Game' header='Do you want to load this game?'/>
+      <ModalModifyGame open={openDeleteModal} setOpen={setOpenDeleteModal} title='Delete Game' header='Do you want to delete this game?'/>
 
       <h2 className='text-center text-light'>Saved Games</h2>
       <Button className='w-25' onClick={() => setOpen(true)}>Save a new game</Button>
@@ -130,7 +132,7 @@ const BasicModalExample = () => {
             </div>
             <Button className='hide-hover' onClick={() => setOpenLoadModal(true)}>Load</Button>
             <Button className='hide-hover'>Overwrite</Button>
-            <Button className='hide-hover'>Delete</Button>
+            <Button className='hide-hover' onClick={() => setOpenDeleteModal(true)}>Delete</Button>
           </div>
         ))}
         <nav aria-label='Page navigation example'>
