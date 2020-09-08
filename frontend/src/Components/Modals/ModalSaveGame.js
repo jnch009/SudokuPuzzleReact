@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Modal,
   ModalHeader,
@@ -8,12 +8,8 @@ import {
   Button
 } from 'shards-react';
 
-const ModalSaveGame = ({ open, setOpen }) => {
-  const [saveName, setSaveName] = useState('');
-
-  useEffect(() => {
-    // console.log(saveName);
-  }, [saveName]);
+const ModalSaveGame = ({ open, setOpen, setSaveName, choice }) => {
+  // const [saveName, setSaveName] = useState('');
 
   return (
     <Modal open={open} toggle={() => setOpen(!open)}>
@@ -26,7 +22,7 @@ const ModalSaveGame = ({ open, setOpen }) => {
         />
       </ModalBody>
       <ModalFooter>
-        <Button>Save</Button>
+        <Button onClick={() => choice(true)}>Save</Button>
       </ModalFooter>
     </Modal>
   );

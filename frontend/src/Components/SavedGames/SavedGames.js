@@ -5,6 +5,7 @@ import queryString from 'query-string';
 
 import ModalSaveGame from '../Modals/ModalSaveGame';
 import ModalModifyGame from '../Modals/ModalModifyGame';
+import validateSaveName from '../../helperFn/validation';
 
 import './SavedGames.scss';
 
@@ -70,6 +71,7 @@ const BasicModalExample = () => {
   const history = useHistory();
   const [currentPage, setCurrentPage] = useState(1);
   const [open, setOpen] = useState(false);
+  const [saveName, setSaveName] = useState('');
   const [saveGame, setSaveGame] = useState();
   
   const [openLoadModal, setOpenLoadModal] = useState(false);
@@ -85,16 +87,16 @@ const BasicModalExample = () => {
     if (choice !== undefined){
       if (choice){
         console.log('accepted');
+        if (name === 'Overwrite'){
+          setOpen(true);
+        }
       } else {
         console.log('cancelled');
       }
       setChoice();
       setModal(false);
-      if (name === 'Overwrite'){
-        setOpen(true);
-      }
     }
-  }
+  };
 
   //useEffect for handling page changes
   useEffect(() => {
@@ -107,7 +109,15 @@ const BasicModalExample = () => {
   //useEffect for handling save game success
   useEffect(() => {
     //fetch call along with validation of name
-  },[saveGame])
+    if (saveGame !== undefined){
+      if (!validateSaveName(saveName)){
+        alert('did not pass validation');
+      } else {
+        setOpen(false);
+      }
+      setSaveGame();
+    }
+  },[saveGame, saveName]);
 
   //useEffect for handling save game load
   useEffect(() => {
@@ -148,7 +158,7 @@ const BasicModalExample = () => {
 
   return (
     <div className='mt-4 d-flex align-items-center flex-column'>
-      <ModalSaveGame open={open} setOpen={setOpen}/>
+      <ModalSaveGame open={open} setOpen={setOpen} setSaveName={setSaveName} choice={setSaveGame}/>
       <ModalModifyGame open={openLoadModal} setOpen={setOpenLoadModal} title='Load Game' action='load' choice={setLoadGame}/>
       <ModalModifyGame open={openDeleteModal} setOpen={setOpenDeleteModal} title='Delete Game' action='delete' choice={setDeleteGame}/>
       <ModalModifyGame open={openOverwriteModal} setOpen={setOpenOverwriteModal} title='Overwrite' action='overwrite' choice={setOverwriteGame}/>

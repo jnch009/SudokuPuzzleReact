@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Modal, ModalHeader, ModalBody, Button } from 'shards-react';
 
 const ModalModifyGame = ({ open, setOpen, title, action, choice }) => {
