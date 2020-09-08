@@ -70,9 +70,31 @@ const BasicModalExample = () => {
   const history = useHistory();
   const [currentPage, setCurrentPage] = useState(1);
   const [open, setOpen] = useState(false);
+  const [saveGame, setSaveGame] = useState();
+  
   const [openLoadModal, setOpenLoadModal] = useState(false);
+  const [loadGame, setLoadGame] = useState();
+
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [deleteGame, setDeleteGame] = useState();
+
   const [openOverwriteModal, setOpenOverwriteModal] = useState(false);
+  const [overwriteGame, setOverwriteGame] = useState();
+
+  const handleModalSelection = (choice, setChoice, setModal, name) => {
+    if (choice !== undefined){
+      if (choice){
+        console.log('accepted');
+      } else {
+        console.log('cancelled');
+      }
+      setChoice();
+      setModal(false);
+      if (name === 'Overwrite'){
+        setOpen(true);
+      }
+    }
+  }
 
   //useEffect for handling page changes
   useEffect(() => {
@@ -83,12 +105,24 @@ const BasicModalExample = () => {
   },[history.location]);
 
   //useEffect for handling save game success
+  useEffect(() => {
+    //fetch call along with validation of name
+  },[saveGame])
 
   //useEffect for handling save game load
+  useEffect(() => {
+    handleModalSelection(loadGame, setLoadGame, setOpenLoadModal);
+  },[loadGame]);
 
   //useEffect for handling save game delete
+  useEffect(() => {
+    handleModalSelection(deleteGame, setDeleteGame, setOpenDeleteModal);
+  },[deleteGame]);
 
   //useEffect for handling save game overwrite
+  useEffect(() => {
+    handleModalSelection(overwriteGame, setOverwriteGame, setOpenOverwriteModal, 'Overwrite');
+  },[overwriteGame]);
 
   const disabledNavigation = (navigation) => {
     const navigationPage = navigation === 'back' ? currentPage-1 : currentPage+1; 
@@ -115,9 +149,9 @@ const BasicModalExample = () => {
   return (
     <div className='mt-4 d-flex align-items-center flex-column'>
       <ModalSaveGame open={open} setOpen={setOpen}/>
-      <ModalModifyGame open={openLoadModal} setOpen={setOpenLoadModal} title='Load Game' action='load'/>
-      <ModalModifyGame open={openDeleteModal} setOpen={setOpenDeleteModal} title='Delete Game' action='delete'/>
-      <ModalModifyGame open={openOverwriteModal} setOpen={setOpenOverwriteModal} title='Overwrite' action='overwrite'/>
+      <ModalModifyGame open={openLoadModal} setOpen={setOpenLoadModal} title='Load Game' action='load' choice={setLoadGame}/>
+      <ModalModifyGame open={openDeleteModal} setOpen={setOpenDeleteModal} title='Delete Game' action='delete' choice={setDeleteGame}/>
+      <ModalModifyGame open={openOverwriteModal} setOpen={setOpenOverwriteModal} title='Overwrite' action='overwrite' choice={setOverwriteGame}/>
 
       <h2 className='text-center text-light'>Saved Games</h2>
       <Button className='w-25' onClick={() => setOpen(true)}>Save a new game</Button>
