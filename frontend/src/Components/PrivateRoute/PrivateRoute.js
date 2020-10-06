@@ -6,7 +6,7 @@ const PrivateRoute = ({ component, ...args }) => {
   return (
     <Route
       component={withAuthenticationRequired(component, {
-        returnTo: `${args.path}/?d=${sessionStorage.getItem('difficulty')}`,
+        returnTo: `${args.path}`,
       })}
       {...args}
     />
