@@ -98,6 +98,7 @@ const errorMessages = {
   INAPPROPRIATE: 'Inappropriate words found, please be courteous',
   MAX_SAVES: 'Maximum saves is 9, please overwrite or delete a save file',
   USER_NON_EXISTENT: 'User does not exist',
+  USER_ALREADY_REGISTERED: 'User has already been registered'
 };
 
 const testConstants = {
