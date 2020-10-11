@@ -8,6 +8,7 @@ import ModalModifyGame from '../Modals/ModalModifyGame';
 import validateSaveName from '../../helperFn/validation';
 
 import './SavedGames.scss';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const curDate = new Intl.DateTimeFormat('default', {
   year: 'numeric',
@@ -69,6 +70,8 @@ const games = [
 
 const BasicModalExample = () => {
   const history = useHistory();
+  const { getAccessTokenSilently } = useAuth0();
+
   const [currentPage, setCurrentPage] = useState(1);
   const [open, setOpen] = useState(false);
   const [saveName, setSaveName] = useState('');
@@ -97,6 +100,25 @@ const BasicModalExample = () => {
       setModal(false);
     }
   };
+
+  //useEffect to get token
+  useEffect(() => {
+    const getToken = async () => {
+      try {
+        const accessToken = await getAccessTokenSilently({
+          audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+          scope: process.env.REACT_APP_AUTH0_SCOPE
+        });
+
+        
+
+        // console.log(accessToken);
+      } catch (e){
+        console.log(e.message);
+      }
+    };
+    getToken();
+  },[]);
 
   //useEffect for handling page changes
   useEffect(() => {
