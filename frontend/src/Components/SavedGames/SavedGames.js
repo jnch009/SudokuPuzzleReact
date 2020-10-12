@@ -110,8 +110,6 @@ const BasicModalExample = () => {
           scope: process.env.REACT_APP_AUTH0_SCOPE
         });
 
-        
-
         // console.log(accessToken);
       } catch (e){
         console.log(e.message);

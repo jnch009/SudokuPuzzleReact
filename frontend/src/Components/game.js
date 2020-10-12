@@ -83,6 +83,30 @@ class Game extends React.PureComponent {
     }});
   };
 
+  userRegistration = async () => {
+    const { getAccessTokenSilently, user } = this.props.auth0;
+
+    try {
+      const accessToken = await getAccessTokenSilently({
+        audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+        scope: process.env.REACT_APP_AUTH0_SCOPE
+      });
+
+      await fetch('http://localhost:3001/sudoku/register', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({ user_id: user.sub })
+      });
+
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
+
   componentDidMount() {
     window.addEventListener('resize', this.setHamburgerVisibility);
     const querySaves = Number(queryString.parse(this.props.location.search)[
@@ -115,6 +139,10 @@ class Game extends React.PureComponent {
     const querySaves = Number(queryString.parse(this.props.location.search)[
       'saves'
     ]);
+
+    if (this.props.auth0.isAuthenticated){
+      this.userRegistration();
+    }
 
     if (this.props.history.action === 'POP') {
       if (Difficulties.includes(queryDifficulty) && queryDifficulty !== sessionStorage.getItem('difficulty')){
