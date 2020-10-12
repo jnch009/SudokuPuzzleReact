@@ -38,7 +38,7 @@ const initialState = {
   displayError: false,
   beginTimer: 0,
   timeUntilDismissed: 3,
-  complete: false
+  complete: false,
 };
 
 class Game extends React.PureComponent {
@@ -51,86 +51,110 @@ class Game extends React.PureComponent {
 
   routeChangeHandler = (route, queryDifficulty, querySaves) => {
     const routeToRedirect = `${route}?d=${queryDifficulty || this.state.difficulty}`;
-    this.setState({
-      openCredits: false,
-      openDifficulty: false,
-      openRules: false,
-      openNewGame: false,
-    },() => { switch (true) {
-    case route === '/credits':
-      this.props.history.replace(routeToRedirect);
-      this.handleCreditsClick();
-      break;
-    case route === '/difficulty':
-      this.props.history.replace(routeToRedirect);
-      this.handleDifficultyClick();
-      break;
-    case route === '/rules':
-      this.props.history.replace(routeToRedirect);
-      this.handleRulesClick();
-      break;
-    case route === '/newGame':
-      this.props.history.replace(routeToRedirect);
-      this.handleNewGameClick();
-      break;
-    case route === '/manageSaves':
-      this.props.history.replace(
-        `${route}?d=${queryDifficulty || this.state.difficulty}&saves=${querySaves || 1}`
-      );
-      break;
-    default:
-      this.props.history.replace(`?d=${queryDifficulty || this.state.difficulty}`);
-    }});
+    this.setState(
+      {
+        openCredits: false,
+        openDifficulty: false,
+        openRules: false,
+        openNewGame: false,
+      },
+      () => {
+        switch (true) {
+        case route === '/credits':
+          this.props.history.replace(routeToRedirect);
+          this.handleCreditsClick();
+          break;
+        case route === '/difficulty':
+          this.props.history.replace(routeToRedirect);
+          this.handleDifficultyClick();
+          break;
+        case route === '/rules':
+          this.props.history.replace(routeToRedirect);
+          this.handleRulesClick();
+          break;
+        case route === '/newGame':
+          this.props.history.replace(routeToRedirect);
+          this.handleNewGameClick();
+          break;
+        case route === '/manageSaves':
+          this.props.history.replace(
+            `${route}?d=${queryDifficulty || this.state.difficulty}&saves=${querySaves || 1}`
+          );
+          break;
+        default:
+          this.props.history.replace(
+            `?d=${queryDifficulty || this.state.difficulty}`
+          );
+        }
+      }
+    );
   };
 
   componentDidMount() {
     window.addEventListener('resize', this.setHamburgerVisibility);
-    const querySaves = Number(queryString.parse(this.props.location.search)[
-      'saves'
-    ]);
-    let queryDifficulty = queryString.parse(this.props.location.search)[
-      'd'
-    ];
+    const querySaves = Number(
+      queryString.parse(this.props.location.search)['saves']
+    );
+    let queryDifficulty = queryString.parse(this.props.location.search)['d'];
     queryDifficulty = Difficulties.includes(queryDifficulty) ? queryDifficulty : sessionStorage.getItem('difficulty');
 
-    if (sessionStorage.getItem('grid') && sessionStorage.getItem('difficulty')) {
+    if (
+      sessionStorage.getItem('grid') && sessionStorage.getItem('difficulty')
+    ) {
       this.setState(
         {
           grid: JSON.parse(sessionStorage.getItem('grid')),
           difficulty: sessionStorage.getItem('difficulty'),
         },
         () => {
-          this.routeChangeHandler(this.props.location.pathname, queryDifficulty, querySaves);
+          this.routeChangeHandler(
+            this.props.location.pathname,
+            queryDifficulty,
+            querySaves
+          );
         }
       );
     } else {
       this.generateBoard();
-      this.routeChangeHandler(this.props.location.pathname, queryDifficulty, querySaves);
+      this.routeChangeHandler(
+        this.props.location.pathname,
+        queryDifficulty,
+        querySaves
+      );
     }
     this.setHamburgerVisibility();
   }
 
   componentDidUpdate(prevProps, prevState) {
     const queryDifficulty = queryString.parse(this.props.location.search)['d'];
-    const querySaves = Number(queryString.parse(this.props.location.search)[
-      'saves'
-    ]);
+    const querySaves = Number(
+      queryString.parse(this.props.location.search)['saves']
+    );
 
     if (this.props.history.action === 'POP') {
-      if (Difficulties.includes(queryDifficulty) && queryDifficulty !== sessionStorage.getItem('difficulty')){
-        this.setState({
-          difficulty: queryDifficulty
-        }, () => {
-          this.generateBoard();
-        });
+      if (
+        Difficulties.includes(queryDifficulty) && queryDifficulty !== sessionStorage.getItem('difficulty')
+      ) {
+        this.setState(
+          {
+            difficulty: queryDifficulty,
+          },
+          () => {
+            this.generateBoard();
+          }
+        );
       }
 
       if (prevProps.location.pathname !== this.props.location.pathname) {
-        this.routeChangeHandler(this.props.location.pathname, queryDifficulty, querySaves);
+        this.routeChangeHandler(
+          this.props.location.pathname,
+          queryDifficulty,
+          querySaves
+        );
       }
-    } 
-    
-    else if (prevState.difficulty !== this.state.difficulty || this.state.newGame === true) {
+    } else if (
+      prevState.difficulty !== this.state.difficulty || this.state.newGame === true
+    ) {
       this.setState(
         {
           complete: false,
@@ -140,9 +164,7 @@ class Game extends React.PureComponent {
           this.generateBoard();
         }
       );
-    }
-    
-    else if (prevState.grid !== this.state.grid) {
+    } else if (prevState.grid !== this.state.grid) {
       this.setState({ complete: fn.verifySudoku(this.state.grid) });
     }
   }
@@ -275,12 +297,15 @@ class Game extends React.PureComponent {
     fn.solve(gridNewly, fn.shuffle(digits));
     fn.removingEntries(gridNewly, this.state.difficulty);
 
-    this.setState({
-      grid: gridNewly,
-    }, () => {
-      sessionStorage.setItem('grid', JSON.stringify(this.state.grid));
-      sessionStorage.setItem('difficulty', this.state.difficulty);
-    });
+    this.setState(
+      {
+        grid: gridNewly,
+      },
+      () => {
+        sessionStorage.setItem('grid', JSON.stringify(this.state.grid));
+        sessionStorage.setItem('difficulty', this.state.difficulty);
+      }
+    );
   };
 
   clearInterval = () => {
@@ -317,84 +342,83 @@ class Game extends React.PureComponent {
           Loading...
         </h1>
       );
-    }
-    if (error) {
+    } else if (error) {
       return <div>Oops... {error.message}</div>;
+    } else {
+      return (
+        <>
+          <CSSTransition
+            in={showSideNav}
+            timeout={200}
+            classNames='my-node'
+            unmountOnExit
+          >
+            <SideNav
+              isAuthenticated={isAuthenticated}
+              navClickHandlers={navClickHandlers}
+              setSidebarVisibility={this.setSidebarVisibility}
+            />
+          </CSSTransition>
+
+          {!showHamburger ? (
+            <NavBar
+              isAuthenticated={isAuthenticated}
+              navClickHandlers={navClickHandlers}
+              difficulty={difficulty}
+            />
+          ) : (
+            <div className='d-flex justify-content-center'>
+              <Button onClick={this.setSidebarVisibility}>
+                <FontAwesomeIcon icon={faBars} size='3x' />
+              </Button>
+            </div>
+          )}
+
+          <ModalCredits
+            openCredits={this.state.openCredits}
+            handleCreditsClick={this.handleCreditsClick}
+          />
+
+          <ModalDifficulty
+            openDifficulty={this.state.openDifficulty}
+            handleDifficultyClick={this.handleDifficultyClick}
+            difficulty={this.state.difficulty}
+            changeDifficulty={this.changeDifficulty}
+          />
+
+          <ModalRules
+            openRules={this.state.openRules}
+            handleRulesClick={this.handleRulesClick}
+          />
+
+          <ModalNewGame
+            openNewGame={this.state.openNewGame}
+            handleNewGameClick={this.handleNewGameClick}
+            newGameAccepted={this.newGameAccepted}
+          />
+
+          <Switch>
+            <PrivateRoute
+              path='/manageSaves'
+              component={SavedGames}
+              open={this.state.manageGames}
+              toggle={this.handleManageSavesClick}
+            />
+            <Route
+              path='/'
+              render={() => (
+                <Board
+                  grid={grid}
+                  complete={this.state.complete}
+                  displayError={displayError}
+                  handleKeyPress={this.handleKeyPress}
+                />
+              )}
+            />
+          </Switch>
+        </>
+      );
     }
-
-    return (
-      <>
-        <CSSTransition
-          in={showSideNav}
-          timeout={200}
-          classNames='my-node'
-          unmountOnExit
-        >
-          <SideNav
-            isAuthenticated={isAuthenticated}
-            navClickHandlers={navClickHandlers}
-            setSidebarVisibility={this.setSidebarVisibility}
-          />
-        </CSSTransition>
-
-        {!showHamburger ? (
-          <NavBar
-            isAuthenticated={isAuthenticated}
-            navClickHandlers={navClickHandlers}
-            difficulty={difficulty}
-          />
-        ) : (
-          <div className='d-flex justify-content-center'>
-            <Button onClick={this.setSidebarVisibility}>
-              <FontAwesomeIcon icon={faBars} size='3x' />
-            </Button>
-          </div>
-        )}
-
-        <ModalCredits
-          openCredits={this.state.openCredits}
-          handleCreditsClick={this.handleCreditsClick}
-        />
-
-        <ModalDifficulty
-          openDifficulty={this.state.openDifficulty}
-          handleDifficultyClick={this.handleDifficultyClick}
-          difficulty={this.state.difficulty}
-          changeDifficulty={this.changeDifficulty}
-        />
-
-        <ModalRules
-          openRules={this.state.openRules}
-          handleRulesClick={this.handleRulesClick}
-        />
-
-        <ModalNewGame
-          openNewGame={this.state.openNewGame}
-          handleNewGameClick={this.handleNewGameClick}
-          newGameAccepted={this.newGameAccepted}
-        />
-
-        <Switch>
-          <PrivateRoute
-            path='/manageSaves'
-            component={SavedGames}
-            open={this.state.manageGames}
-            toggle={this.handleManageSavesClick}
-          />
-          <Route
-            path='/'
-            render={() => (
-              <Board
-                grid={grid}
-                complete={this.state.complete}
-                displayError={displayError}
-                handleKeyPress={this.handleKeyPress}
-              />
-            )}
-          />
-        </Switch>
-      </>
-    );
   }
 }
 

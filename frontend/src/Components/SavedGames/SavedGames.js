@@ -6,6 +6,7 @@ import queryString from 'query-string';
 import ModalSaveGame from '../Modals/ModalSaveGame';
 import ModalModifyGame from '../Modals/ModalModifyGame';
 import validateSaveName from '../../helperFn/validation';
+import SavedNavigationLink from '../SavedNavigationLink/SavedNavigationLink';
 
 import './SavedGames.scss';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -102,7 +103,7 @@ const BasicModalExample = () => {
   };
 
   //useEffect to request user and their games
-  useEffect(() => {
+  useEffect(() => {    
     const loadUser = async () => {
       try {
         const accessToken = await getAccessTokenSilently({
@@ -120,13 +121,13 @@ const BasicModalExample = () => {
           body: JSON.stringify({ user_id: user.sub })
         });
   
-        console.log(regResponse);
+        //console.log(regResponse);
       } catch (e) {
         console.log(e.message);
       }
     };
     loadUser();
-  },[]);
+  }, []);
 
   //useEffect for handling page changes
   useEffect(() => {
@@ -214,15 +215,9 @@ const BasicModalExample = () => {
         <nav aria-label='Page navigation example'>
           <ul className='pagination justify-content-center'>
             {disabledNavigation('back')}
-            <Link className='page-item' to={{ search: `?d=${sessionStorage.getItem('difficulty')}&saves=1` }}>
-              <span className='page-link'>1</span>
-            </Link>
-            <Link className='page-item' to={{ search: `?d=${sessionStorage.getItem('difficulty')}&saves=2` }}>
-              <span className='page-link'>2</span>
-            </Link>
-            <Link className='page-item' to={{ search: `?d=${sessionStorage.getItem('difficulty')}&saves=3` }}>
-              <span className='page-link'>3</span>
-            </Link>
+            <SavedNavigationLink searchQuery={`?d=${sessionStorage.getItem('difficulty')}&saves=1`} pageNumber={1} />
+            <SavedNavigationLink searchQuery={`?d=${sessionStorage.getItem('difficulty')}&saves=2`} pageNumber={2} />
+            <SavedNavigationLink searchQuery={`?d=${sessionStorage.getItem('difficulty')}&saves=3`} pageNumber={3} />
             {disabledNavigation('forward')}
           </ul>
         </nav>
