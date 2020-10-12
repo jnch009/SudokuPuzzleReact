@@ -70,7 +70,7 @@ const games = [
 
 const BasicModalExample = () => {
   const history = useHistory();
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently, user } = useAuth0();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [open, setOpen] = useState(false);
@@ -101,21 +101,31 @@ const BasicModalExample = () => {
     }
   };
 
-  //useEffect to get token
+  //useEffect to request user and their games
   useEffect(() => {
-    const getToken = async () => {
+    const loadUser = async () => {
       try {
         const accessToken = await getAccessTokenSilently({
           audience: process.env.REACT_APP_AUTH0_AUDIENCE,
           scope: process.env.REACT_APP_AUTH0_SCOPE
         });
-
-        // console.log(accessToken);
-      } catch (e){
+  
+        const regResponse = await fetch('http://localhost:3001/sudoku/register', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include',
+          body: JSON.stringify({ user_id: user.sub })
+        });
+  
+        console.log(regResponse);
+      } catch (e) {
         console.log(e.message);
       }
     };
-    getToken();
+    loadUser();
   },[]);
 
   //useEffect for handling page changes
