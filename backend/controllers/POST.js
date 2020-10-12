@@ -4,13 +4,18 @@ async function handleRegistration(req, res, client, dbName) {
   try {
     const db = client.db(process.env['NODE_ENV'] === 'test' ? 'test' : dbName);
     const col = db.collection('saves');
-    const userDocument = {
-      _id: req.body.user_id,
-      saves: [],
-    };
 
-    await col.insertOne(userDocument);
-    res.json(await col.findOne({ _id: req.body.user_id }));
+    if (await col.findOne({ _id: req.body.user_id }) !== null) {
+      res.status(200).json(errorMessages.USER_ALREADY_REGISTERED);
+    } else {
+      const userDocument = {
+        _id: req.body.user_id,
+        saves: [],
+      };
+
+      await col.insertOne(userDocument);
+      res.status(201).json(await col.findOne({ _id: req.body.user_id }));
+    }
   } catch (err) {
     res.status(400).json(err.stack);
   }
@@ -49,5 +54,5 @@ async function handleAddSave(req, res, client, dbName) {
 
 module.exports = {
   handleRegistration,
-  handleAddSave
+  handleAddSave,
 };

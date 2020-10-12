@@ -25,6 +25,30 @@ function PostRegister() {
       await cleanUp();
     });
 
+    it('Testing register user which already registered', async function() {
+      const getUser = await getUserByEmail(
+        process.env.MOCK_EMAIL,
+        await getManagementAPIToken()
+      );
+
+      await chai
+        .request(app)
+        .post(`/sudoku/register`)
+        .set('Authorization', `Bearer ${process.env.SUDOKU_TOKEN}`)
+        .type('form')
+        .send({ user_id: getUser[0].user_id });
+
+      const postRegistration = await chai
+        .request(app)
+        .post(`/sudoku/register`)
+        .set('Authorization', `Bearer ${process.env.SUDOKU_TOKEN}`)
+        .type('form')
+        .send({ user_id: getUser[0].user_id });
+
+      expect(postRegistration).to.have.status(200);
+      expect(postRegistration.body).to.equal(errorMessages.USER_ALREADY_REGISTERED);
+    })
+
     it('Testing new entry added for user', async function () {
       const getUser = await getUserByEmail(
         process.env.MOCK_EMAIL,
@@ -38,7 +62,7 @@ function PostRegister() {
         .type('form')
         .send({ user_id: getUser[0].user_id });
 
-      expect(postRegistration).to.have.status(200);
+      expect(postRegistration).to.have.status(201);
       expect(postRegistration.body._id).to.be.a('string');
       expect(postRegistration.body.saves).to.be.a('array');
     });
