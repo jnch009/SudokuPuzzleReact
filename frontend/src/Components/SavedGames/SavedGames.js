@@ -6,7 +6,7 @@ import queryString from 'query-string';
 import ModalSaveGame from '../Modals/ModalSaveGame';
 import ModalModifyGame from '../Modals/ModalModifyGame';
 import validateSaveName from '../../helperFn/validation';
-import SavedNavigationLink from '../SavedNavigationLink/SavedNavigationLink';
+import SavedGamesPagination from '../SavedGamesPagination/SavedGamesPagination';
 
 import './SavedGames.scss';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -74,6 +74,9 @@ const BasicModalExample = () => {
   const { getAccessTokenSilently, user } = useAuth0();
 
   const [currentPage, setCurrentPage] = useState(1);
+  //TODO add logic to get the games and set the total pages = Math.ceil(games / 3)
+  const [totalPages, setTotalPages] = useState();
+
   const [open, setOpen] = useState(false);
   const [saveName, setSaveName] = useState('');
   const [saveGame, setSaveGame] = useState();
@@ -165,25 +168,6 @@ const BasicModalExample = () => {
     handleModalSelection(overwriteGame, setOverwriteGame, setOpenOverwriteModal, 'Overwrite');
   },[overwriteGame]);
 
-  const disabledNavigation = (navigation) => {
-    const navigationPage = navigation === 'back' ? currentPage-1 : currentPage+1; 
-    const paginationNav = <Link className='page-item' to={{ search: `?d=${sessionStorage.getItem('difficulty')}&saves=${navigationPage}` }}>
-      <span className='page-link' aria-hidden='true'>{navigation === 'back' ? '«' : '»' }</span>
-    </Link>;
-
-    if (currentPage === 1 && navigation === 'back'){
-      return <span className='page-item disabled'>
-        <span className='page-link' aria-hidden='true'>&laquo;</span>
-      </span>;
-    // using 3 for now, because we can only have a max of 9 saved games
-    } else if (currentPage === 3 && navigation === 'forward') {
-      return <span className='page-item disabled'>
-        <span className='page-link' aria-hidden='true'>&raquo;</span>
-      </span>;
-    } else {
-      return paginationNav;
-    }
-  };
   const startSave = (currentPage-1)*3;
   const endSave = startSave+3;
 
@@ -212,15 +196,7 @@ const BasicModalExample = () => {
             <Button className='hide-hover' onClick={() => setOpenDeleteModal(true)}>Delete</Button>
           </div>
         ))}
-        <nav aria-label='Page navigation example'>
-          <ul className='pagination justify-content-center'>
-            {disabledNavigation('back')}
-            <SavedNavigationLink searchQuery={`?d=${sessionStorage.getItem('difficulty')}&saves=1`} pageNumber={1} />
-            <SavedNavigationLink searchQuery={`?d=${sessionStorage.getItem('difficulty')}&saves=2`} pageNumber={2} />
-            <SavedNavigationLink searchQuery={`?d=${sessionStorage.getItem('difficulty')}&saves=3`} pageNumber={3} />
-            {disabledNavigation('forward')}
-          </ul>
-        </nav>
+        <SavedGamesPagination currentPage={currentPage} firstPage />
       </div>
     </div>
   );
