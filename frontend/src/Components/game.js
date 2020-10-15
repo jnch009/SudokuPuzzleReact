@@ -69,7 +69,7 @@ class Game extends React.PureComponent {
   }
 
   setHamburgerVisibility = () => {
-    if (window.innerWidth <= 650) {
+    if (window.innerWidth <= 680) {
       this.setState({ showHamburger: true });
     } else {
       this.setState(() => ({ showHamburger: false }));
