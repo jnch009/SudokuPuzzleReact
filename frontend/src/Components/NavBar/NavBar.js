@@ -24,7 +24,7 @@ const NavBar = ({ isAuthenticated, navClickHandlers, isSideBar }) => {
         onClick={navClickHandlers.handleRulesClick}
         name='How To Play'
       />
-      <NavBarItem linkTo='/save' name='Save Game' />
+      <NavBarItem linkTo='/save' name='Save Game' onClick={navClickHandlers.handleSaveGameClick} />
       <NavBarItem linkTo='/manageSaves' name='Manage Saves' />
       <NavBarItem
         onClick={navClickHandlers.handleNewGameClick}

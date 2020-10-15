@@ -14,6 +14,7 @@ import ModalCredits from '../Components/Modals/ModalCredits';
 import ModalDifficulty from '../Components/Modals/ModalDifficulty';
 import ModalRules from '../Components/Modals/ModalRules';
 import ModalNewGame from '../Components/Modals/ModalNewGame';
+import ModalSaveGame from '../Components/Modals/ModalSaveGame';
 
 import { CSSTransition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -26,6 +27,7 @@ const initialState = {
   openDifficulty: false,
   openRules: false,
   openNewGame: false,
+  openSaveGame: false,
   difficulty: 'Normal',
   newGame: false,
   solvedButton: false,
@@ -146,6 +148,12 @@ class Game extends React.PureComponent {
     this.setState({ grid: currentGrid });
   };
 
+  handleSaveGameClick = () => {
+    this.setState(() => ({ openSaveGame: !this.state.openSaveGame }), () => {
+      this.redirectToGrid();
+    });
+  }
+
   handleTimeChange = () => {
     if (this.state.beginTimer < this.state.timeUntilDismissed - 1) {
       this.setState({ ...this.state, ...{ beginTimer: this.state.beginTimer + 1 } });
@@ -205,6 +213,7 @@ class Game extends React.PureComponent {
       handleSudokuSolver: this.handleSudokuSolver,
       handleRulesClick: this.handleRulesClick,
       handleNewGameClick: this.handleNewGameClick,
+      handleSaveGameClick: this.handleSaveGameClick
     };
 
     if (isLoading) {
@@ -267,6 +276,8 @@ class Game extends React.PureComponent {
             handleNewGameClick={this.handleNewGameClick}
             newGameAccepted={this.newGameAccepted}
           />
+
+          <ModalSaveGame open={this.state.openSaveGame} setOpen={this.handleSaveGameClick} />
 
           <Switch>
             <PrivateRoute
