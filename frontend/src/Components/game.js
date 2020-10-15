@@ -259,6 +259,14 @@ class Game extends React.PureComponent {
               open={this.state.manageGames}
               toggle={this.handleManageSavesClick}
             />
+            <PrivateRoute
+              path='/save'
+              component={Board}
+              grid={grid}
+              complete={this.state.complete}
+              displayError={displayError}
+              handleKeyPress={this.handleKeyPress}
+            />
             <Route
               path='/'
               render={() => (

@@ -11,7 +11,7 @@ const NavBarItem = ({ linkTo, onClick, name }) => {
 
   return (
     <NavItem className='mb-3'>
-      linkTo ? <Link to={{ pathname: linkTo }}>{navBtn}</Link> : {navBtn}
+      { linkTo ? <Link to={{ pathname: linkTo }}>{navBtn}</Link> : navBtn }
     </NavItem>
   );
 };
