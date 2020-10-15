@@ -1,16 +1,17 @@
 import React from 'react';
-import { Button, NavItem } from 'shards-react';
 import { Link } from 'react-router-dom';
+import { Button, NavItem } from 'shards-react';
 
-const NavBarItem = ({ linkTo, onClick, name, difficulty, saves }) => {
-  const queryString = `?d=${difficulty || ''}${saves ? `&saves=${saves}` : ''}`;
+const NavBarItem = ({ linkTo, onClick, name }) => {
+  const navBtn = (
+    <Button onClick={onClick} className='navBar'>
+      {name}
+    </Button>
+  );
+
   return (
     <NavItem className='mb-3'>
-      <Link to={{ pathname: linkTo, search: queryString }}>
-        <Button onClick={onClick} className='navBar'>
-          {name}
-        </Button>
-      </Link>
+      linkTo ? <Link to={{ pathname: linkTo }}>{navBtn}</Link> : {navBtn}
     </NavItem>
   );
 };
