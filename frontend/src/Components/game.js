@@ -63,6 +63,12 @@ class Game extends React.PureComponent {
   }
 
   componentDidUpdate(prevState) {
+    if (this.props.location.pathname === '/save'){
+      this.setState({ openSaveGame: true }, () => {
+        this.props.history.replace('/');
+      });
+    }
+
     if (prevState.grid !== this.state.grid) {
       sessionStorage.setItem('grid', JSON.stringify(this.state.grid));
       sessionStorage.setItem('difficulty', this.state.difficulty);
@@ -97,7 +103,7 @@ class Game extends React.PureComponent {
   };
 
   redirectToGrid = () => {
-    if (this.props.location.pathname !== '/'){
+    if (this.props.location.pathname !== '/save' && this.props.location.pathname !== '/'){
       this.props.history.push('/');
     } 
   }
