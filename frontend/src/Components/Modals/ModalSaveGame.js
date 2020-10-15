@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Modal,
   ModalHeader,
@@ -7,12 +7,27 @@ import {
   ModalFooter,
   Button
 } from 'shards-react';
+import validateSaveName from '../../helperFn/validation';
 
-const ModalSaveGame = ({ open, setOpen, setSaveName, choice }) => {
-  // const [saveName, setSaveName] = useState('');
+const ModalSaveGame = ({ open, setOpen }) => {
+  const [saveName, setSaveName] = useState('');
+  const [saveGame, setSaveGame] = useState(false);
 
+  //useEffect for handling save game success
+  useEffect(() => {
+    //fetch call along with validation of name
+    if (saveGame){
+      if (!validateSaveName(saveName)) {
+        alert('did not pass validation');
+      } else {
+        setOpen(false);
+      }
+    }
+    setSaveGame(false);
+  }, [saveGame]);
+  
   return (
-    <Modal open={open} toggle={() => setOpen(!open)}>
+    <Modal open={open} toggle={setOpen}>
       <ModalHeader>Save Game</ModalHeader>
       <ModalBody>
         <h5>Please enter the name of the save</h5>
@@ -22,7 +37,7 @@ const ModalSaveGame = ({ open, setOpen, setSaveName, choice }) => {
         />
       </ModalBody>
       <ModalFooter>
-        <Button onClick={() => choice(true)}>Save</Button>
+        <Button onClick={() => setSaveGame(true)}>Save</Button>
       </ModalFooter>
     </Modal>
   );
