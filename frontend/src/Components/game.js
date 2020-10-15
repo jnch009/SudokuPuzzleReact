@@ -94,30 +94,46 @@ class Game extends React.PureComponent {
       });
   };
 
+  redirectToGrid = () => {
+    if (this.props.location.pathname !== '/'){
+      this.props.history.push('/');
+    } 
+  }
+
   handleDifficultyClick = () => {
-    this.setState(() => ({ openDifficulty: !this.state.openDifficulty }));
+    this.setState(() => ({ openDifficulty: !this.state.openDifficulty }), () => {
+      this.redirectToGrid();
+    });
   };
 
   handleCreditsClick = () => {
-    this.setState(() => ({ openCredits: !this.state.openCredits }));
+    this.setState(() => ({ openCredits: !this.state.openCredits }), () => {
+      this.redirectToGrid();
+    });
   };
 
   handleRulesClick = () => {
-    this.setState(() => ({ openRules: !this.state.openRules }));
+    this.setState(() => ({ openRules: !this.state.openRules }), () => {
+      this.redirectToGrid();
+    });
   };
 
   handleManageSavesClick = () => {
     this.setState(
-      () => ({ manageGames: !this.state.manageGames }),
-      () => this.routeChangeCallback(!this.state.manageGames, '/manageSaves')
+      () => ({ manageGames: !this.state.manageGames }), () => {
+        this.redirectToGrid();
+      }
     );
   };
 
   handleNewGameClick = () => {
-    this.setState(() => ({ openNewGame: !this.state.openNewGame }));
+    this.setState(() => ({ openNewGame: !this.state.openNewGame }), () => {
+      this.redirectToGrid();
+    });
   };
 
   handleSudokuSolver = () => {
+    this.redirectToGrid();
     let currentGrid = cloneDeep(this.state.grid);
 
     currentGrid = currentGrid.map((row) =>
