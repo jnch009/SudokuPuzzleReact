@@ -29,6 +29,6 @@
     "eol-last": ["error", "always"],
     "operator-linebreak": ["error", "none"],
     "no-multi-spaces": ["error"],
-    "react-hooks/exhaustive-deps": ["never"]
+    "react-hooks/exhaustive-deps": ["off"]
   }
 }

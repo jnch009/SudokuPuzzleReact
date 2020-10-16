@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const SavedNavigationButton = ({ navigation, navigationPage, disabled }) => {
-  const difficulty = sessionStorage.getItem('difficulty');
   return disabled ? (
     <span className='page-item disabled'>
       <span className='page-link' aria-hidden='true'>
@@ -13,7 +12,7 @@ const SavedNavigationButton = ({ navigation, navigationPage, disabled }) => {
     <Link
       className='page-item'
       to={{
-        search: `?d=${difficulty}&saves=${navigationPage}`,
+        search: `?saves=${navigationPage}`,
       }}
     >
       <span className='page-link' aria-hidden='true'>

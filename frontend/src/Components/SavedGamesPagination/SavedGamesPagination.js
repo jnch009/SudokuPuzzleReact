@@ -8,17 +8,17 @@ const SavedGamesPagination = ({ currentPage, firstPage, lastPage }) => {
       <ul className='pagination justify-content-center'>
         <SavedNavigationButton navigation='«' navigationPage={currentPage-1} disabled={firstPage} />
         <SavedNavigationLink
-          searchQuery={`?d=${sessionStorage.getItem('difficulty')}&saves=1`}
+          searchQuery={'?saves=1'}
           pageNumber={1}
           active={currentPage === 1}
         />
         <SavedNavigationLink
-          searchQuery={`?d=${sessionStorage.getItem('difficulty')}&saves=2`}
+          searchQuery={'?saves=2'}
           pageNumber={2}
           active={currentPage === 2}
         />
         <SavedNavigationLink
-          searchQuery={`?d=${sessionStorage.getItem('difficulty')}&saves=3`}
+          searchQuery={'?saves=3'}
           pageNumber={3}
           active={currentPage === 3}
         />

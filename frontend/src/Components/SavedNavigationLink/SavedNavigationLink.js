@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const SavedNavigationLink = ({ searchQuery, pageNumber, active }) => {
   return (
     <Link
-      className={`page-item ${active ? 'active' : '' }`}
+      className={`page-item ${active ? 'active' : '' } text-decoration-none`}
       to={searchQuery}
     >
       <span className='page-link'>{pageNumber}</span>
