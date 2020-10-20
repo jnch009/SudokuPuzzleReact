@@ -20,55 +20,7 @@ const curDate = new Intl.DateTimeFormat('default', {
   hour12: true,
 }).format(new Date(Date.now()));
 
-const games = [
-  // {
-  //   saveName: '1',
-  //   userName: 'Jeremy',
-  //   date: curDate,
-  // },
-  // {
-  //   saveName: '2',
-  //   userName: 'Jeremy',
-  //   date: curDate,
-  // },
-  // {
-  //   saveName: '3',
-  //   userName: 'Jeremy',
-  //   date: curDate,
-  // },
-  // {
-  //   saveName: '4',
-  //   userName: 'Jeremy',
-  //   date: curDate,
-  // },
-  // {
-  //   saveName: '5',
-  //   userName: 'Jeremy',
-  //   date: curDate,
-  // },
-  // {
-  //   saveName: '6',
-  //   userName: 'Jeremy',
-  //   date: curDate,
-  // },
-  // {
-  //   saveName: '7',
-  //   userName: 'Jeremy',
-  //   date: curDate,
-  // },
-  // {
-  //   saveName: '8',
-  //   userName: 'Jeremy',
-  //   date: curDate,
-  // },
-  // {
-  //   saveName: '9',
-  //   userName: 'Jeremy',
-  //   date: curDate,
-  // },
-];
-
-const BasicModalExample = () => {
+const BasicModalExample = ({ handleGridUpdate }) => {
   const history = useHistory();
   const { getAccessTokenSilently, user } = useAuth0();
 
@@ -77,31 +29,31 @@ const BasicModalExample = () => {
   const [totalPages, setTotalPages] = useState();
   const [userGames, setUserGames] = useState([]);
 
-  const [open, setOpen] = useState(false);
+  const [gameId, setGameId] = useState();
 
   const [openLoadModal, setOpenLoadModal] = useState(false);
-  const [loadGame, setLoadGame] = useState();
+  // const [loadGame, setLoadGame] = useState();
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [deleteGame, setDeleteGame] = useState();
+  // const [deleteGame, setDeleteGame] = useState();
 
   const [openOverwriteModal, setOpenOverwriteModal] = useState(false);
-  const [overwriteGame, setOverwriteGame] = useState();
+  // const [overwriteGame, setOverwriteGame] = useState();
 
-  const handleModalSelection = (choice, setChoice, setModal, name) => {
-    if (choice !== undefined) {
-      if (choice) {
-        console.log('accepted');
-        if (name === 'Overwrite') {
-          setOpen(true);
-        }
-      } else {
-        console.log('cancelled');
-      }
-      setChoice();
-      setModal(false);
-    }
-  };
+  // const handleModalSelection = (choice, setChoice, setModal, name) => {
+  //   if (choice !== undefined) {
+  //     if (choice) {
+  //       console.log('accepted');
+  //       if (name === 'Overwrite') {
+  //         setOpen(true);
+  //       }
+  //     } else {
+  //       console.log('cancelled');
+  //     }
+  //     setChoice();
+  //     setModal(false);
+  //   }
+  // };
 
   //useEffect to request user and their games
   useEffect(() => {
@@ -147,24 +99,24 @@ const BasicModalExample = () => {
   }, [history.location]);
 
   //useEffect for handling save game load
-  useEffect(() => {
-    handleModalSelection(loadGame, setLoadGame, setOpenLoadModal);
-  }, [loadGame]);
+  // useEffect(() => {
+  //   handleModalSelection(loadGame, setLoadGame, setOpenLoadModal);
+  // }, [loadGame]);
 
-  //useEffect for handling save game delete
-  useEffect(() => {
-    handleModalSelection(deleteGame, setDeleteGame, setOpenDeleteModal);
-  }, [deleteGame]);
+  // //useEffect for handling save game delete
+  // useEffect(() => {
+  //   handleModalSelection(deleteGame, setDeleteGame, setOpenDeleteModal);
+  // }, [deleteGame]);
 
-  //useEffect for handling save game overwrite
-  useEffect(() => {
-    handleModalSelection(
-      overwriteGame,
-      setOverwriteGame,
-      setOpenOverwriteModal,
-      'Overwrite'
-    );
-  }, [overwriteGame]);
+  // //useEffect for handling save game overwrite
+  // useEffect(() => {
+  //   handleModalSelection(
+  //     overwriteGame,
+  //     setOverwriteGame,
+  //     setOpenOverwriteModal,
+  //     'Overwrite'
+  //   );
+  // }, [overwriteGame]);
 
   const startSave = (currentPage - 1) * 3;
   const endSave = startSave + 3;
@@ -176,21 +128,20 @@ const BasicModalExample = () => {
         setOpen={setOpenLoadModal}
         title='Load Game'
         action='load'
-        choice={setLoadGame}
+        id={gameId}
+        handleGridUpdate={handleGridUpdate}
       />
       <ModalModifyGame
         open={openDeleteModal}
         setOpen={setOpenDeleteModal}
         title='Delete Game'
         action='delete'
-        choice={setDeleteGame}
       />
       <ModalModifyGame
         open={openOverwriteModal}
         setOpen={setOpenOverwriteModal}
         title='Overwrite'
         action='overwrite'
-        choice={setOverwriteGame}
       />
 
       {userGames.length === 0 ? (
@@ -212,7 +163,7 @@ const BasicModalExample = () => {
                 </div>
                 <Button
                   className='hide-hover'
-                  onClick={() => setOpenLoadModal(true)}
+                  onClick={() => {setGameId(index); setOpenLoadModal(true);}}
                 >
                   Load
                 </Button>

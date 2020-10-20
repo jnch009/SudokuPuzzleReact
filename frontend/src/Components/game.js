@@ -62,13 +62,13 @@ class Game extends React.PureComponent {
     this.setHamburgerVisibility();
   }
 
-  componentDidUpdate(prevState) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.props.location.pathname === '/save'){
       this.setState({ openSaveGame: true }, () => {
         this.props.history.replace('/');
       });
     }
-
+    
     if (prevState.grid !== this.state.grid) {
       sessionStorage.setItem('grid', JSON.stringify(this.state.grid));
       sessionStorage.setItem('difficulty', this.state.difficulty);
@@ -106,6 +106,13 @@ class Game extends React.PureComponent {
     if (this.props.location.pathname !== '/save' && this.props.location.pathname !== '/'){
       this.props.history.push('/');
     } 
+  }
+
+  handleGridUpdate = (newGrid, difficulty) => {
+    this.setState({
+      grid: newGrid,
+      difficulty: difficulty
+    });
   }
 
   handleDifficultyClick = () => {
@@ -219,7 +226,7 @@ class Game extends React.PureComponent {
       handleSudokuSolver: this.handleSudokuSolver,
       handleRulesClick: this.handleRulesClick,
       handleNewGameClick: this.handleNewGameClick,
-      handleSaveGameClick: this.handleSaveGameClick
+      handleSaveGameClick: this.handleSaveGameClick,
     };
 
     if (isLoading) {
@@ -291,6 +298,7 @@ class Game extends React.PureComponent {
               component={SavedGames}
               open={this.state.manageGames}
               toggle={this.handleManageSavesClick}
+              handleGridUpdate={this.handleGridUpdate}
             />
             <PrivateRoute
               path='/save'
