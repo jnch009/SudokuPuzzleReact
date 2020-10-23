@@ -3,7 +3,7 @@ import { Button } from 'shards-react';
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 
-import ModalSaveGame from '../Modals/ModalSaveGame';
+import ModalOverwriteGame from '../Modals/ModalOverwriteGame';
 import ModalModifyGame from '../Modals/ModalModifyGame';
 import SavedGamesPagination from '../SavedGamesPagination/SavedGamesPagination';
 
@@ -38,6 +38,7 @@ const BasicModalExample = ({ handleGridUpdate }) => {
   // const [deleteGame, setDeleteGame] = useState();
 
   const [openOverwriteModal, setOpenOverwriteModal] = useState(false);
+  const [openOverwriteSave, setOpenOverwriteSaveModal] = useState(false);
   // const [overwriteGame, setOverwriteGame] = useState();
 
   // const handleModalSelection = (choice, setChoice, setModal, name) => {
@@ -142,7 +143,10 @@ const BasicModalExample = ({ handleGridUpdate }) => {
         setOpen={setOpenOverwriteModal}
         title='Overwrite'
         action='overwrite'
+        id={gameId}
+        handleOverwriteClick={setOpenOverwriteSaveModal}
       />
+      <ModalOverwriteGame open={openOverwriteSave} setOpen={setOpenOverwriteSaveModal} id={gameId} />
 
       {userGames.length === 0 ? (
         <h1>Loading...</h1>
@@ -163,13 +167,19 @@ const BasicModalExample = ({ handleGridUpdate }) => {
                 </div>
                 <Button
                   className='hide-hover'
-                  onClick={() => {setGameId(index); setOpenLoadModal(true);}}
+                  onClick={() => {
+                    setGameId(index); 
+                    setOpenLoadModal(true);
+                  }}
                 >
                   Load
                 </Button>
                 <Button
                   className='hide-hover'
-                  onClick={() => setOpenOverwriteModal(true)}
+                  onClick={() => {
+                    setGameId(index);
+                    setOpenOverwriteModal(true);
+                  }}
                 >
                   Overwrite
                 </Button>

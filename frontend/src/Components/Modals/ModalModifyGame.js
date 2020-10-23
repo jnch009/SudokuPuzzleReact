@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Modal, ModalHeader, ModalBody, Button } from 'shards-react';
 
-const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate }) => {
+const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, handleOverwriteClick }) => {
   const history = useHistory();
   const [accepted, setAccepted] = useState(false);
   const { getAccessTokenSilently, user } = useAuth0();
@@ -44,9 +44,19 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate })
       setAccepted(false);
     };
 
+    const saveGameOverwrite = async () => {
+      if (accepted){
+        setOpen(false);
+        handleOverwriteClick(true);
+      }
+    };
+
     switch (action) {
     case 'load':
       saveGameLoad();
+      break;
+    case 'overwrite':
+      saveGameOverwrite();
       break;
     default:
       break;
