@@ -107,6 +107,8 @@ const BasicModalExample = ({ handleGridUpdate }) => {
         setOpen={setOpenDeleteModal}
         title='Delete Game'
         action='delete'
+        id={gameId}
+        setUserGamesUpdated={setUserGamesUpdated}
       />
       <ModalModifyGame
         open={openOverwriteModal}
@@ -155,7 +157,10 @@ const BasicModalExample = ({ handleGridUpdate }) => {
                 </Button>
                 <Button
                   className='hide-hover'
-                  onClick={() => setOpenDeleteModal(true)}
+                  onClick={() => {
+                    setGameId(index);
+                    setOpenDeleteModal(true);
+                  }}
                 >
                   Delete
                 </Button>

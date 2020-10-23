@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Modal, ModalHeader, ModalBody, Button } from 'shards-react';
 
-const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, handleOverwriteClick }) => {
+const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, handleOverwriteClick, setUserGamesUpdated }) => {
   const history = useHistory();
   const [accepted, setAccepted] = useState(false);
   const { getAccessTokenSilently, user } = useAuth0();
@@ -13,6 +13,12 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, h
       setOpen(false);
       setAccepted(false);
       history.push('/');
+    }
+
+    function cleanUpAfterDelete() {
+      setOpen(false);
+      setAccepted(false);
+      setUserGamesUpdated(true);
     }
 
     const saveGameLoad = async () => {
@@ -52,12 +58,40 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, h
       }
     };
 
+    const saveGameDelete = async () => {
+      if (accepted){
+        try {
+          const accessToken = await getAccessTokenSilently({
+            audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+            scope: process.env.REACT_APP_AUTH0_SCOPE,
+          });
+      
+          await fetch(`http://localhost:3001/sudoku/${user.sub}/${id}`, {
+            method: 'DELETE',
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            },
+            credentials: 'include',
+          });
+
+        } catch (e) {
+          console.log(e.message);
+        }
+  
+        return cleanUpAfterDelete();
+      }
+      setAccepted(false);
+    };
+
     switch (action) {
     case 'load':
       saveGameLoad();
       break;
     case 'overwrite':
       saveGameOverwrite();
+      break;
+    case 'delete':
+      saveGameDelete();
       break;
     default:
       break;
