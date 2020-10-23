@@ -36,40 +36,50 @@ const BasicModalExample = ({ handleGridUpdate }) => {
   const [openOverwriteModal, setOpenOverwriteModal] = useState(false);
   const [openOverwriteSave, setOpenOverwriteSaveModal] = useState(false);
 
-  //useEffect to request user and their games
+  const [userGamesUpdated, setUserGamesUpdated] = useState(false);
+
+  //useEffect to request user and their games  
+  const loadUser = async () => {
+    try {
+      const accessToken = await getAccessTokenSilently({
+        audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+        scope: process.env.REACT_APP_AUTH0_SCOPE,
+      });
+
+      await fetch('http://localhost:3001/sudoku/register', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ user_id: user.sub }),
+      });
+
+      const res = await fetch(`http://localhost:3001/sudoku/${user.sub}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        credentials: 'include',
+      });
+      const data = await res.json();
+      setUserGames(data);
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
   useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const accessToken = await getAccessTokenSilently({
-          audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-          scope: process.env.REACT_APP_AUTH0_SCOPE,
-        });
-
-        await fetch('http://localhost:3001/sudoku/register', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
-          body: JSON.stringify({ user_id: user.sub }),
-        });
-
-        const res = await fetch(`http://localhost:3001/sudoku/${user.sub}`, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-          credentials: 'include',
-        });
-        const data = await res.json();
-        setUserGames(data);
-      } catch (e) {
-        console.log(e.message);
-      }
-    };
     loadUser();
   }, []);
+
+  useEffect(() => {
+    if (userGamesUpdated){
+      loadUser();
+      setUserGamesUpdated(false);
+    }
+  }, [userGamesUpdated]);
 
   //useEffect for handling page changes
   useEffect(() => {
@@ -106,7 +116,7 @@ const BasicModalExample = ({ handleGridUpdate }) => {
         id={gameId}
         handleOverwriteClick={setOpenOverwriteSaveModal}
       />
-      <ModalOverwriteGame open={openOverwriteSave} setOpen={setOpenOverwriteSaveModal} id={gameId} />
+      <ModalOverwriteGame open={openOverwriteSave} setOpen={setOpenOverwriteSaveModal} id={gameId} setUserGamesUpdated={setUserGamesUpdated} />
 
       {userGames.length === 0 ? (
         <h1>Loading...</h1>

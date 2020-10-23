@@ -10,13 +10,18 @@ import {
 } from 'shards-react';
 import validateSaveName from '../../helperFn/validation';
 
-const ModalOverwriteGame = ({ open, setOpen, id }) => {
+const ModalOverwriteGame = ({ open, setOpen, id, setUserGamesUpdated }) => {
   const [saveName, setSaveName] = useState('');
   const [overwriteGameAccepted, setOverwriteGameAccepted] = useState(false);
   const { getAccessTokenSilently, user } = useAuth0();
 
   //useEffect for handling save overwrite
   useEffect(() => {
+    function cleanUp() {
+      setOpen(false);
+      setUserGamesUpdated(true);
+    }
+    
     //fetch call along with validation of name
     const savingGame = async () => {
       if (overwriteGameAccepted) {
@@ -58,7 +63,7 @@ const ModalOverwriteGame = ({ open, setOpen, id }) => {
             console.log(e.message);
           }
 
-          setOpen(false);
+          return cleanUp();
         }
       }
       setOverwriteGameAccepted(false);
