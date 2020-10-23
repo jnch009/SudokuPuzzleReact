@@ -47,6 +47,7 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, h
     const saveGameOverwrite = async () => {
       if (accepted){
         setOpen(false);
+        setAccepted(false);
         handleOverwriteClick(true);
       }
     };

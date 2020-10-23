@@ -32,29 +32,9 @@ const BasicModalExample = ({ handleGridUpdate }) => {
   const [gameId, setGameId] = useState();
 
   const [openLoadModal, setOpenLoadModal] = useState(false);
-  // const [loadGame, setLoadGame] = useState();
-
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  // const [deleteGame, setDeleteGame] = useState();
-
   const [openOverwriteModal, setOpenOverwriteModal] = useState(false);
   const [openOverwriteSave, setOpenOverwriteSaveModal] = useState(false);
-  // const [overwriteGame, setOverwriteGame] = useState();
-
-  // const handleModalSelection = (choice, setChoice, setModal, name) => {
-  //   if (choice !== undefined) {
-  //     if (choice) {
-  //       console.log('accepted');
-  //       if (name === 'Overwrite') {
-  //         setOpen(true);
-  //       }
-  //     } else {
-  //       console.log('cancelled');
-  //     }
-  //     setChoice();
-  //     setModal(false);
-  //   }
-  // };
 
   //useEffect to request user and their games
   useEffect(() => {
@@ -98,26 +78,6 @@ const BasicModalExample = ({ handleGridUpdate }) => {
     );
     setCurrentPage(saveNumber);
   }, [history.location]);
-
-  //useEffect for handling save game load
-  // useEffect(() => {
-  //   handleModalSelection(loadGame, setLoadGame, setOpenLoadModal);
-  // }, [loadGame]);
-
-  // //useEffect for handling save game delete
-  // useEffect(() => {
-  //   handleModalSelection(deleteGame, setDeleteGame, setOpenDeleteModal);
-  // }, [deleteGame]);
-
-  // //useEffect for handling save game overwrite
-  // useEffect(() => {
-  //   handleModalSelection(
-  //     overwriteGame,
-  //     setOverwriteGame,
-  //     setOpenOverwriteModal,
-  //     'Overwrite'
-  //   );
-  // }, [overwriteGame]);
 
   const startSave = (currentPage - 1) * 3;
   const endSave = startSave + 3;
