@@ -77,6 +77,10 @@ const BasicModalExample = ({ handleGridUpdate }) => {
   }, [userGamesUpdated]);
 
   useEffect(() => {
+    if (totalPages !== undefined && currentPage > Math.ceil(userGames.length / gamesPerPage)){
+      history.replace(`/manageSaves?saves=${currentPage-1}`);
+    }
+    
     setTotalPages(Math.ceil(userGames.length / gamesPerPage));
   },[userGames]);
 
@@ -85,7 +89,10 @@ const BasicModalExample = ({ handleGridUpdate }) => {
     const saveNumber = Number(
       queryString.parse(history.location.search)['saves']
     );
-    setCurrentPage(saveNumber);
+
+    if (saveNumber <= totalPages){
+      setCurrentPage(saveNumber);
+    }
   }, [history.location]);
 
   const startSave = (currentPage - 1) * gamesPerPage;
