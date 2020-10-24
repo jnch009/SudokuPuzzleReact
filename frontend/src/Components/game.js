@@ -299,6 +299,7 @@ class Game extends React.PureComponent {
               open={this.state.manageGames}
               toggle={this.handleManageSavesClick}
               handleGridUpdate={this.handleGridUpdate}
+              redirectToGrid={this.redirectToGrid}
             />
             <PrivateRoute
               path='/save'

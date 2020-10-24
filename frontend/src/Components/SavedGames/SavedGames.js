@@ -12,7 +12,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 
 const gamesPerPage = 3;
 
-const BasicModalExample = ({ handleGridUpdate }) => {
+const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
   const history = useHistory();
   const { getAccessTokenSilently, user } = useAuth0();
 
@@ -99,7 +99,7 @@ const BasicModalExample = ({ handleGridUpdate }) => {
   const endSave = startSave + gamesPerPage;
 
   return (
-    <div className='mt-4 d-flex align-items-center flex-column'>
+    <div className='mt-1 d-flex align-items-center flex-column'>
       <ModalModifyGame
         open={openLoadModal}
         setOpen={setOpenLoadModal}
@@ -130,6 +130,7 @@ const BasicModalExample = ({ handleGridUpdate }) => {
         <h1>Loading...</h1>
       ) : (
         <>
+          <Button className='mb-2' onClick={redirectToGrid}>Back to the game</Button>
           <h2 className='text-center text-light'>Saved Games</h2>
           {userGames.length === 0 ? <h1>There are no saved games</h1> : <div className='d-flex flex-column align-items-center pt-2'>
             {userGames.slice(startSave, endSave).map((game, index) => (
@@ -179,4 +180,4 @@ const BasicModalExample = ({ handleGridUpdate }) => {
   );
 };
 
-export default BasicModalExample;
+export default SavedGames;
