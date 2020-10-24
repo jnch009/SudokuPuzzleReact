@@ -138,7 +138,7 @@ const BasicModalExample = ({ handleGridUpdate }) => {
                 <Button
                   className='hide-hover'
                   onClick={() => {
-                    setGameId(index); 
+                    setGameId(index+((currentPage-1)*gamesPerPage)); 
                     setOpenLoadModal(true);
                   }}
                 >
@@ -147,7 +147,7 @@ const BasicModalExample = ({ handleGridUpdate }) => {
                 <Button
                   className='hide-hover'
                   onClick={() => {
-                    setGameId(index);
+                    setGameId(index+((currentPage-1)*gamesPerPage));
                     setOpenOverwriteModal(true);
                   }}
                 >
@@ -156,7 +156,7 @@ const BasicModalExample = ({ handleGridUpdate }) => {
                 <Button
                   className='hide-hover'
                   onClick={() => {
-                    setGameId(index);
+                    setGameId(index+((currentPage-1)*gamesPerPage));
                     setOpenDeleteModal(true);
                   }}
                 >
