@@ -10,24 +10,16 @@ import SavedGamesPagination from '../SavedGamesPagination/SavedGamesPagination';
 import './SavedGames.scss';
 import { useAuth0 } from '@auth0/auth0-react';
 
-const curDate = new Intl.DateTimeFormat('default', {
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-  hour: 'numeric',
-  minute: 'numeric',
-  second: 'numeric',
-  hour12: true,
-}).format(new Date(Date.now()));
+const gamesPerPage = 3;
 
 const BasicModalExample = ({ handleGridUpdate }) => {
   const history = useHistory();
   const { getAccessTokenSilently, user } = useAuth0();
 
   const [currentPage, setCurrentPage] = useState(1);
-  //TODO add logic to get the games and set the total pages = Math.ceil(games / 3)
   const [totalPages, setTotalPages] = useState();
   const [userGames, setUserGames] = useState([]);
+  const [userGamesRetrieved, setUserGamesRetrieved] = useState(false);
 
   const [gameId, setGameId] = useState();
 
@@ -40,6 +32,7 @@ const BasicModalExample = ({ handleGridUpdate }) => {
 
   //useEffect to request user and their games  
   const loadUser = async () => {
+    setUserGamesRetrieved(false);
     try {
       const accessToken = await getAccessTokenSilently({
         audience: process.env.REACT_APP_AUTH0_AUDIENCE,
@@ -63,8 +56,10 @@ const BasicModalExample = ({ handleGridUpdate }) => {
         },
         credentials: 'include',
       });
+
       const data = await res.json();
-      setUserGames(data);
+      setUserGames(Array.isArray(data) ? data : []);
+      setUserGamesRetrieved(true);
     } catch (e) {
       console.log(e.message);
     }
@@ -81,6 +76,10 @@ const BasicModalExample = ({ handleGridUpdate }) => {
     }
   }, [userGamesUpdated]);
 
+  useEffect(() => {
+    setTotalPages(Math.ceil(userGames.length / gamesPerPage));
+  },[userGames]);
+
   //useEffect for handling page changes
   useEffect(() => {
     const saveNumber = Number(
@@ -89,8 +88,8 @@ const BasicModalExample = ({ handleGridUpdate }) => {
     setCurrentPage(saveNumber);
   }, [history.location]);
 
-  const startSave = (currentPage - 1) * 3;
-  const endSave = startSave + 3;
+  const startSave = (currentPage - 1) * gamesPerPage;
+  const endSave = startSave + gamesPerPage;
 
   return (
     <div className='mt-4 d-flex align-items-center flex-column'>
@@ -120,13 +119,12 @@ const BasicModalExample = ({ handleGridUpdate }) => {
       />
       <ModalOverwriteGame open={openOverwriteSave} setOpen={setOpenOverwriteSaveModal} id={gameId} setUserGamesUpdated={setUserGamesUpdated} />
 
-      {userGames.length === 0 ? (
+      {!userGamesRetrieved ? (
         <h1>Loading...</h1>
       ) : (
         <>
           <h2 className='text-center text-light'>Saved Games</h2>
-          <div className='d-flex flex-column align-items-center pt-2'>
-            {/* <h1>{`There are ${userGames.length} saved games`}</h1> */}
+          {userGames.length === 0 ? <h1>There are no saved games</h1> : <div className='d-flex flex-column align-items-center pt-2'>
             {userGames.slice(startSave, endSave).map((game, index) => (
               <div
                 key={`${game.name}${index}`}
@@ -166,8 +164,8 @@ const BasicModalExample = ({ handleGridUpdate }) => {
                 </Button>
               </div>
             ))}
-            <SavedGamesPagination currentPage={currentPage} firstPage />
-          </div>
+            <SavedGamesPagination totalPages={totalPages} currentPage={currentPage} firstPage={currentPage === 1} lastPage={currentPage === totalPages} />
+          </div>}
         </>
       )}
     </div>
