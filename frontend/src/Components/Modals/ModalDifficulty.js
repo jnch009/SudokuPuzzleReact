@@ -12,6 +12,7 @@ const ModalDifficulty = ({
       <ModalHeader>Change Difficulty</ModalHeader>
       <ModalBody>
         <FormRadio
+          label='Beginner'
           checked={difficulty === 'Beginner'}
           onChange={() => {
             changeDifficulty('Beginner');
