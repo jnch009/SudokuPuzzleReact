@@ -1,22 +1,24 @@
 import React from 'react';
 import Board from './board';
+import SavedGames from '../Components/SavedGames/SavedGames';
+import { Button } from 'shards-react';
+import fn from '../helperFn/boardFunctions';
+import cloneDeep from 'lodash.clonedeep';
+import { withAuth0 } from '@auth0/auth0-react';
+import { withRouter, Switch, Route } from 'react-router-dom';
+
+import PrivateRoute from './PrivateRoute/PrivateRoute';
 import SideNav from '../Components/SideNav/SideNav';
 import NavBar from '../Components/NavBar/NavBar';
 import ModalCredits from '../Components/Modals/ModalCredits';
 import ModalDifficulty from '../Components/Modals/ModalDifficulty';
 import ModalRules from '../Components/Modals/ModalRules';
 import ModalNewGame from '../Components/Modals/ModalNewGame';
+import ModalSaveGame from '../Components/Modals/ModalSaveGame';
 
 import { CSSTransition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-
-import { Button } from 'shards-react';
-import fn from '../helperFn/boardFunctions';
-import cloneDeep from 'lodash.clonedeep';
-import { Alert } from 'shards-react';
-import { withAuth0 } from '@auth0/auth0-react';
-import { withRouter } from 'react-router-dom';
 
 const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -25,8 +27,11 @@ const initialState = {
   openDifficulty: false,
   openRules: false,
   openNewGame: false,
+  openSaveGame: false,
   difficulty: 'Normal',
   newGame: false,
+  solvedButton: false,
+  manageGames: false,
   showHamburger: false,
   showSideNav: false,
   grid: [],
@@ -57,7 +62,13 @@ class Game extends React.PureComponent {
     this.setHamburgerVisibility();
   }
 
-  componentDidUpdate(prevState) {
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.location.pathname === '/save'){
+      this.setState({ openSaveGame: true }, () => {
+        this.props.history.replace('/');
+      });
+    }
+    
     if (prevState.grid !== this.state.grid) {
       sessionStorage.setItem('grid', JSON.stringify(this.state.grid));
       sessionStorage.setItem('difficulty', this.state.difficulty);
@@ -66,7 +77,7 @@ class Game extends React.PureComponent {
   }
 
   setHamburgerVisibility = () => {
-    if (window.innerWidth <= 580) {
+    if (window.innerWidth <= 680) {
       this.setState({ showHamburger: true });
     } else {
       this.setState(() => ({ showHamburger: false }));
@@ -91,23 +102,37 @@ class Game extends React.PureComponent {
       });
   };
 
+  redirectToGrid = () => {
+    if (this.props.location.pathname !== '/save' && this.props.location.pathname !== '/'){
+      this.props.history.push('/');
+    } 
+  }
+
+  handleGridUpdate = (newGrid, difficulty) => {
+    this.setState({
+      grid: newGrid,
+      difficulty: difficulty
+    });
+  }
+
   handleDifficultyClick = () => {
-    this.setState(() => ({ openDifficulty: !this.state.openDifficulty }));
+    this.setState({ openDifficulty: !this.state.openDifficulty }, () => this.redirectToGrid());
   };
 
   handleCreditsClick = () => {
-    this.setState(() => ({ openCredits: !this.state.openCredits }));
+    this.setState({ openCredits: !this.state.openCredits }, () => this.redirectToGrid());
   };
 
   handleRulesClick = () => {
-    this.setState(() => ({ openRules: !this.state.openRules }));
+    this.setState({ openRules: !this.state.openRules }, () => this.redirectToGrid());
   };
 
   handleNewGameClick = () => {
-    this.setState(() => ({ openNewGame: !this.state.openNewGame }));
+    this.setState({ openNewGame: !this.state.openNewGame }, () => this.redirectToGrid());
   };
 
   handleSudokuSolver = () => {
+    this.redirectToGrid();
     let currentGrid = cloneDeep(this.state.grid);
 
     currentGrid = currentGrid.map((row) =>
@@ -119,6 +144,10 @@ class Game extends React.PureComponent {
 
     this.setState({ grid: currentGrid });
   };
+
+  handleSaveGameClick = () => {
+    this.setState({ openSaveGame: !this.state.openSaveGame }, () => this.redirectToGrid());
+  }
 
   handleTimeChange = () => {
     if (this.state.beginTimer < this.state.timeUntilDismissed - 1) {
@@ -165,7 +194,7 @@ class Game extends React.PureComponent {
   };
 
   render() {
-    const { isAuthenticated, isLoading } = this.props.auth0;
+    const { isAuthenticated, isLoading, error } = this.props.auth0;
     const {
       showHamburger,
       showSideNav,
@@ -179,84 +208,106 @@ class Game extends React.PureComponent {
       handleSudokuSolver: this.handleSudokuSolver,
       handleRulesClick: this.handleRulesClick,
       handleNewGameClick: this.handleNewGameClick,
+      handleSaveGameClick: this.handleSaveGameClick,
     };
 
     if (isLoading) {
-      return <h1>Loading</h1>;
-    }
+      return (
+        <h1 className='h-100 m-0 d-flex justify-content-center align-items-center text-white'>
+          Loading...
+        </h1>
+      );
+    } else if (error) {
+      return (
+        <h1 className='h-100 m-0 d-flex justify-content-center align-items-center text-white'>
+          Oops... {error.message}
+        </h1>
+      );
+    } else {
+      return (
+        <>
+          <CSSTransition
+            in={showSideNav}
+            timeout={200}
+            classNames='my-node'
+            unmountOnExit
+          >
+            <SideNav
+              isAuthenticated={isAuthenticated}
+              navClickHandlers={navClickHandlers}
+              setSidebarVisibility={this.setSidebarVisibility}
+            />
+          </CSSTransition>
 
-    return (
-      <>
-        <CSSTransition
-          in={showSideNav}
-          timeout={200}
-          classNames='my-node'
-          unmountOnExit
-        >
-          <SideNav
-            isAuthenticated={isAuthenticated}
-            navClickHandlers={navClickHandlers}
-            setSidebarVisibility={this.setSidebarVisibility}
-          />
-        </CSSTransition>
-
-        {!showHamburger ? (
-          <NavBar
-            isAuthenticated={isAuthenticated}
-            navClickHandlers={navClickHandlers}
-            difficulty={difficulty}
-          />
-        ) : (
-          <div className='d-flex justify-content-center'>
-            <Button onClick={this.setSidebarVisibility}>
-              <FontAwesomeIcon icon={faBars} size='3x' />
-            </Button>
-          </div>
-        )}
-
-        <ModalCredits
-          openCredits={this.state.openCredits}
-          handleCreditsClick={this.handleCreditsClick}
-        />
-
-        <ModalDifficulty
-          openDifficulty={this.state.openDifficulty}
-          handleDifficultyClick={this.handleDifficultyClick}
-          difficulty={this.state.difficulty}
-          changeDifficulty={this.changeDifficulty}
-        />
-
-        <ModalRules
-          openRules={this.state.openRules}
-          handleRulesClick={this.handleRulesClick}
-        />
-
-        <ModalNewGame
-          openNewGame={this.state.openNewGame}
-          handleNewGameClick={this.handleNewGameClick}
-          newGameAccepted={this.newGameAccepted}
-        />
-
-        <div className='game'>
-          <h1>SUDOKU!</h1>
-          {displayError ? (
-            <div className='alertConstraint'>
-              <Alert theme='danger' open={displayError}>
-                Must type a number between 1 and 9
-              </Alert>
+          {!showHamburger ? (
+            <NavBar
+              isAuthenticated={isAuthenticated}
+              navClickHandlers={navClickHandlers}
+              difficulty={difficulty}
+            />
+          ) : (
+            <div className='d-flex justify-content-center'>
+              <Button onClick={this.setSidebarVisibility}>
+                <FontAwesomeIcon icon={faBars} size='3x' />
+              </Button>
             </div>
-          ) : null}
-          <div className='game-board'>
-            <Board
+          )}
+
+          <ModalCredits
+            openCredits={this.state.openCredits}
+            handleCreditsClick={this.handleCreditsClick}
+          />
+
+          <ModalDifficulty
+            openDifficulty={this.state.openDifficulty}
+            handleDifficultyClick={this.handleDifficultyClick}
+            difficulty={this.state.difficulty}
+            changeDifficulty={this.changeDifficulty}
+          />
+
+          <ModalRules
+            openRules={this.state.openRules}
+            handleRulesClick={this.handleRulesClick}
+          />
+
+          <ModalNewGame
+            openNewGame={this.state.openNewGame}
+            handleNewGameClick={this.handleNewGameClick}
+            newGameAccepted={this.newGameAccepted}
+          />
+
+          <ModalSaveGame open={this.state.openSaveGame} setOpen={this.handleSaveGameClick} />
+
+          <Switch>
+            <PrivateRoute
+              path='/manageSaves'
+              component={SavedGames}
+              handleGridUpdate={this.handleGridUpdate}
+              redirectToGrid={this.redirectToGrid}
+            />
+            <PrivateRoute
+              path='/save'
+              component={Board}
               grid={grid}
               complete={this.state.complete}
-              displayError={this.state.displayError}
+              displayError={displayError}
               handleKeyPress={this.handleKeyPress}
             />
-          </div>
-        </div>
-      </>
-    );
+            <Route
+              path='/'
+              render={() => (
+                <Board
+                  grid={grid}
+                  complete={this.state.complete}
+                  displayError={displayError}
+                  handleKeyPress={this.handleKeyPress}
+                />
+              )}
+            />
+          </Switch>
+        </>
+      );
+    }
   }
 }
 
