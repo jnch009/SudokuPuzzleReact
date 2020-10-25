@@ -11,6 +11,9 @@ import './SavedGames.scss';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const gamesPerPage = 3;
+const gameIdCalculation = (index, currentPage, gamesPerPage) => {
+  return index+((currentPage-1)*gamesPerPage);
+};
 
 const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
   const history = useHistory();
@@ -144,7 +147,7 @@ const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
                 <Button
                   className='hide-hover'
                   onClick={() => {
-                    setGameId(index+((currentPage-1)*gamesPerPage)); 
+                    setGameId(gameIdCalculation(index,currentPage,gamesPerPage)); 
                     setOpenLoadModal(true);
                   }}
                 >
@@ -153,7 +156,7 @@ const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
                 <Button
                   className='hide-hover'
                   onClick={() => {
-                    setGameId(index+((currentPage-1)*gamesPerPage));
+                    setGameId(gameIdCalculation(index,currentPage,gamesPerPage));
                     setOpenOverwriteModal(true);
                   }}
                 >
@@ -162,7 +165,7 @@ const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
                 <Button
                   className='hide-hover'
                   onClick={() => {
-                    setGameId(index+((currentPage-1)*gamesPerPage));
+                    setGameId(gameIdCalculation(index,currentPage,gamesPerPage));
                     setOpenDeleteModal(true);
                   }}
                 >
