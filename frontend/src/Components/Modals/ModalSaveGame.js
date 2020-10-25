@@ -69,10 +69,7 @@ const ModalSaveGame = ({ open, setOpen }) => {
       <ModalHeader>Save Game</ModalHeader>
       <ModalBody>
         <h5>Please enter the name of the save</h5>
-        <FormInput
-          onChange={(e) => setSaveName(e.target.value)}
-          placeholder='Save Name'
-        />
+        <FormInput onChange={(e) => setSaveName(e.target.value)} placeholder='Save Name' />
       </ModalBody>
       <ModalFooter>
         <Button onClick={() => setSaveGameAccepted(true)}>Save</Button>

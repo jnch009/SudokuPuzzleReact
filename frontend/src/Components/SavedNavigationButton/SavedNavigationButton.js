@@ -9,12 +9,7 @@ const SavedNavigationButton = ({ navigation, navigationPage, disabled }) => {
       </span>
     </span>
   ) : (
-    <Link
-      className='page-item'
-      to={{
-        search: `?saves=${navigationPage}`,
-      }}
-    >
+    <Link className='page-item' to={{ search: `?saves=${navigationPage}` }}>
       <span className='page-link' aria-hidden='true'>
         {navigation}
       </span>
