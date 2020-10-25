@@ -116,35 +116,19 @@ class Game extends React.PureComponent {
   }
 
   handleDifficultyClick = () => {
-    this.setState(() => ({ openDifficulty: !this.state.openDifficulty }), () => {
-      this.redirectToGrid();
-    });
+    this.setState({ openDifficulty: !this.state.openDifficulty });
   };
 
   handleCreditsClick = () => {
-    this.setState(() => ({ openCredits: !this.state.openCredits }), () => {
-      this.redirectToGrid();
-    });
+    this.setState({ openCredits: !this.state.openCredits });
   };
 
   handleRulesClick = () => {
-    this.setState(() => ({ openRules: !this.state.openRules }), () => {
-      this.redirectToGrid();
-    });
-  };
-
-  handleManageSavesClick = () => {
-    this.setState(
-      () => ({ manageGames: !this.state.manageGames }), () => {
-        this.redirectToGrid();
-      }
-    );
+    this.setState({ openRules: !this.state.openRules });
   };
 
   handleNewGameClick = () => {
-    this.setState(() => ({ openNewGame: !this.state.openNewGame }), () => {
-      this.redirectToGrid();
-    });
+    this.setState({ openNewGame: !this.state.openNewGame });
   };
 
   handleSudokuSolver = () => {
@@ -162,9 +146,7 @@ class Game extends React.PureComponent {
   };
 
   handleSaveGameClick = () => {
-    this.setState(() => ({ openSaveGame: !this.state.openSaveGame }), () => {
-      this.redirectToGrid();
-    });
+    this.setState({ openSaveGame: !this.state.openSaveGame });
   }
 
   handleTimeChange = () => {
@@ -296,8 +278,6 @@ class Game extends React.PureComponent {
             <PrivateRoute
               path='/manageSaves'
               component={SavedGames}
-              open={this.state.manageGames}
-              toggle={this.handleManageSavesClick}
               handleGridUpdate={this.handleGridUpdate}
               redirectToGrid={this.redirectToGrid}
             />
