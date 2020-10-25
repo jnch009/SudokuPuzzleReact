@@ -30,7 +30,6 @@ const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
 
   const [userGamesUpdated, setUserGamesUpdated] = useState(false);
 
-  //useEffect to request user and their games  
   const loadUser = async () => {
     setUserGamesRetrieved(false);
     try {
@@ -84,7 +83,6 @@ const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
     setTotalPages(Math.ceil(userGames.length / gamesPerPage));
   },[userGames]);
 
-  //useEffect for handling page changes
   useEffect(() => {
     const saveNumber = Number(
       queryString.parse(history.location.search)['saves']

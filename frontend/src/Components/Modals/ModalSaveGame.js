@@ -15,9 +15,7 @@ const ModalSaveGame = ({ open, setOpen }) => {
   const [saveGameAccepted, setSaveGameAccepted] = useState(false);
   const { getAccessTokenSilently, user } = useAuth0();
 
-  //useEffect for handling save game success
   useEffect(() => {
-    //fetch call along with validation of name
     const savingGame = async () => {
       if (saveGameAccepted) {
         if (!validateSaveName(saveName)) {

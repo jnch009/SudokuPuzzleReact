@@ -15,14 +15,12 @@ const ModalOverwriteGame = ({ open, setOpen, id, setUserGamesUpdated }) => {
   const [overwriteGameAccepted, setOverwriteGameAccepted] = useState(false);
   const { getAccessTokenSilently, user } = useAuth0();
 
-  //useEffect for handling save overwrite
   useEffect(() => {
     function cleanUp() {
       setOpen(false);
       setUserGamesUpdated(true);
     }
     
-    //fetch call along with validation of name
     const savingGame = async () => {
       if (overwriteGameAccepted) {
         if (!validateSaveName(saveName)) {
