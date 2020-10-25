@@ -218,7 +218,11 @@ class Game extends React.PureComponent {
         </h1>
       );
     } else if (error) {
-      return <div>Oops... {error.message}</div>;
+      return (
+        <h1 className='h-100 m-0 d-flex justify-content-center align-items-center text-white'>
+          Oops... {error.message}
+        </h1>
+      );
     } else {
       return (
         <>

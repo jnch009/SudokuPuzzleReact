@@ -128,7 +128,7 @@ const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
       <ModalOverwriteGame open={openOverwriteSave} setOpen={setOpenOverwriteSaveModal} id={gameId} setUserGamesUpdated={setUserGamesUpdated} />
 
       {!userGamesRetrieved ? (
-        <h1>Loading...</h1>
+        <h1 className='h-100 m-0 d-flex justify-content-center align-items-center text-white'>Loading...</h1>
       ) : (
         <>
           <Button className='mb-2' onClick={redirectToGrid}>Back to the game</Button>
