@@ -7,12 +7,15 @@ const SavedGamesPagination = ({ totalPages, currentPage, firstPage, lastPage }) 
     <nav aria-label='Saved games navigation'>
       <ul className='pagination justify-content-center'>
         <SavedNavigationButton navigation='«' navigationPage={currentPage-1} disabled={firstPage !== false} />
-        {Array(totalPages).fill(null).map((e, index) => (<SavedNavigationLink
-          key={`saveGame${index+1}`}
-          searchQuery={`?saves=${index+1}`}
-          pageNumber={index+1}
-          active={currentPage === index+1}
-        />))}
+        {Array(totalPages).fill(null).map((e, index) => { 
+          let saveIndex = index + 1;
+          return (<SavedNavigationLink
+            key={`saveGame${saveIndex}`}
+            searchQuery={`?saves=${saveIndex}`}
+            pageNumber={saveIndex}
+            active={currentPage === saveIndex}
+          />);
+        })}
         <SavedNavigationButton navigation='»' navigationPage={currentPage+1} disabled={lastPage !== false} />
       </ul>
     </nav>
