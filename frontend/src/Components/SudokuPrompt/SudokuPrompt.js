@@ -28,7 +28,7 @@ const SudokuPrompt = () => {
   return (
     <div>
       {/* bang bang you're boolean, !! means convert to boolean */}
-      <Alert className='alertConstraint' open={!!prompt} theme={prompt && prompt.promptType}>
+      <Alert className='alertConstraint d-flex justify-content-center' open={!!prompt} theme={prompt && prompt.promptType}>
         {prompt && prompt.message}
       </Alert>
     </div>
