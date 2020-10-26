@@ -62,7 +62,7 @@ const ModalSaveGame = ({ open, setOpen }) => {
               addPrompt('Saved Game!', alertTypes.SUCCESS);
             }
           } catch (e) {
-            addPrompt(e,alertTypes.ERROR);
+            addPrompt(typeof e !== 'object' ? e : 'Error Saving Game', alertTypes.ERROR);
           }
 
           setOpen(false);

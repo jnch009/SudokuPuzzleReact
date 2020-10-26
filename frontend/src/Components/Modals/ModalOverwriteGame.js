@@ -9,22 +9,26 @@ import {
   Button,
 } from 'shards-react';
 import validateSaveName from '../../helperFn/validation';
+import usePromptProvider from '../../hooks/usePromptProvider/index';
+import { alertTypes } from '../../helperFn/alertConstants'; 
 
 const ModalOverwriteGame = ({ open, setOpen, id, setUserGamesUpdated }) => {
   const [saveName, setSaveName] = useState('');
   const [overwriteGameAccepted, setOverwriteGameAccepted] = useState(false);
   const { getAccessTokenSilently, user } = useAuth0();
+  const { addPrompt } = usePromptProvider();
 
   useEffect(() => {
     function cleanUp() {
       setOpen(false);
       setUserGamesUpdated(true);
+      addPrompt('Updated Saved Game!', alertTypes.SUCCESS);
     }
     
     const savingGame = async () => {
       if (overwriteGameAccepted) {
         if (!validateSaveName(saveName)) {
-          alert('did not pass validation');
+          addPrompt('Did not pass validation', alertTypes.ERROR);
         } else {
           try {
             const accessToken = await getAccessTokenSilently({
@@ -58,7 +62,7 @@ const ModalOverwriteGame = ({ open, setOpen, id, setUserGamesUpdated }) => {
               }),
             });
           } catch (e) {
-            console.log(e.message);
+            addPrompt('Error Overwriting Saved Game', alertTypes.ERROR);
           }
 
           return cleanUp();

@@ -9,6 +9,8 @@ import SavedGamesPagination from '../SavedGamesPagination/SavedGamesPagination';
 
 import './SavedGames.scss';
 import { useAuth0 } from '@auth0/auth0-react';
+import usePromptProvider from '../../hooks/usePromptProvider/index';
+import { alertTypes } from '../../helperFn/alertConstants'; 
 
 const gamesPerPage = 3;
 const gameIdCalculation = (index, currentPage, gamesPerPage) => {
@@ -18,6 +20,7 @@ const gameIdCalculation = (index, currentPage, gamesPerPage) => {
 const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
   const history = useHistory();
   const { getAccessTokenSilently, user } = useAuth0();
+  const { addPrompt } = usePromptProvider();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
@@ -63,7 +66,7 @@ const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
       setUserGames(Array.isArray(data) ? data : []);
       setUserGamesRetrieved(true);
     } catch (e) {
-      console.log(e.message);
+      addPrompt('Error getting saved games', alertTypes.ERROR);
     }
   };
 

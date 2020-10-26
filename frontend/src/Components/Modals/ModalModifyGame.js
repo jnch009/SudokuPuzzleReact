@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Modal, ModalHeader, ModalBody, Button } from 'shards-react';
+import usePromptProvider from '../../hooks/usePromptProvider/index';
+import { alertTypes } from '../../helperFn/alertConstants'; 
 
 const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, handleOverwriteClick, setUserGamesUpdated }) => {
   const history = useHistory();
   const [accepted, setAccepted] = useState(false);
   const { getAccessTokenSilently, user } = useAuth0();
+  const { addPrompt } = usePromptProvider();
 
   useEffect(() => {
     function cleanUp() {
@@ -19,6 +22,7 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, h
       setOpen(false);
       setAccepted(false);
       setUserGamesUpdated(true);
+      addPrompt('Deleted Game!', alertTypes.SUCCESS);
     }
 
     const saveGameLoad = async () => {
@@ -41,8 +45,9 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, h
           sessionStorage.setItem('grid', saveData.grid);
           sessionStorage.setItem('difficulty', saveData.difficulty);
           await handleGridUpdate(JSON.parse(saveData.grid), saveData.difficulty);
+          addPrompt('Loaded Game!', alertTypes.SUCCESS);
         } catch (e) {
-          console.log(e.message);
+          addPrompt('Error Loading Saved Game', alertTypes.ERROR);
         }
 
         return cleanUp();
@@ -75,9 +80,9 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, h
           });
 
         } catch (e) {
-          console.log(e.message);
+          addPrompt('Error Deleting Saved Game', alertTypes.ERROR);
         }
-  
+        
         return cleanUpAfterDelete();
       }
       setAccepted(false);
