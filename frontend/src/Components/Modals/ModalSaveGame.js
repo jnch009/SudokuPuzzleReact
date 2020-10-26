@@ -9,17 +9,19 @@ import {
   Button,
 } from 'shards-react';
 import validateSaveName from '../../helperFn/validation';
+import usePromptProvider from '../../hooks/usePromptProvider/index';
 
 const ModalSaveGame = ({ open, setOpen }) => {
   const [saveName, setSaveName] = useState('');
   const [saveGameAccepted, setSaveGameAccepted] = useState(false);
   const { getAccessTokenSilently, user } = useAuth0();
+  const { addPrompt } = usePromptProvider();
 
   useEffect(() => {
     const savingGame = async () => {
       if (saveGameAccepted) {
         if (!validateSaveName(saveName)) {
-          alert('did not pass validation');
+          addPrompt('Did not pass validation', 'danger');
         } else {
           try {
             const accessToken = await getAccessTokenSilently({
