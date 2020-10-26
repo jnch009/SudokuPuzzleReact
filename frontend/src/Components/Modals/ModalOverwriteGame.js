@@ -18,6 +18,7 @@ const ModalOverwriteGame = ({ open, setOpen, id, setUserGamesUpdated }) => {
   useEffect(() => {
     function cleanUp() {
       setOpen(false);
+      setOverwriteGameAccepted(false);
       setUserGamesUpdated(true);
     }
     
