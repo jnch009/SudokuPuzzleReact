@@ -58,6 +58,8 @@ const ModalSaveGame = ({ open, setOpen }) => {
 
             if (resp.status !== 200){
               throw await resp.json();
+            } else {
+              addPrompt('Saved Game!', alertTypes.SUCCESS);
             }
           } catch (e) {
             addPrompt(e,alertTypes.ERROR);
