@@ -10,6 +10,7 @@ import {
 } from 'shards-react';
 import validateSaveName from '../../helperFn/validation';
 import usePromptProvider from '../../hooks/usePromptProvider/index';
+import { alertTypes } from '../../helperFn/alertConstants'; 
 
 const ModalSaveGame = ({ open, setOpen }) => {
   const [saveName, setSaveName] = useState('');
@@ -21,7 +22,7 @@ const ModalSaveGame = ({ open, setOpen }) => {
     const savingGame = async () => {
       if (saveGameAccepted) {
         if (!validateSaveName(saveName)) {
-          addPrompt('Did not pass validation', 'danger');
+          addPrompt('Did not pass validation', alertTypes.ERROR);
         } else {
           try {
             const accessToken = await getAccessTokenSilently({
@@ -29,7 +30,7 @@ const ModalSaveGame = ({ open, setOpen }) => {
               scope: process.env.REACT_APP_AUTH0_SCOPE,
             });
       
-            await fetch('http://localhost:3001/sudoku', {
+            const resp = await fetch('http://localhost:3001/sudoku', {
               method: 'POST',
               headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -54,11 +55,16 @@ const ModalSaveGame = ({ open, setOpen }) => {
                 },
               }),
             });
+
+            if (resp.status !== 200){
+              throw await resp.json();
+            }
           } catch (e) {
-            console.log(e.message);
+            addPrompt(e,alertTypes.ERROR);
           }
 
           setOpen(false);
+          setSaveName('');
         }
       }
       setSaveGameAccepted(false);
