@@ -15,7 +15,7 @@ const SudokuPromptProvider = ({ children }) => {
     prompt,
     addPrompt: useCallback((message, promptType) => addPrompt(message, promptType), []),
     removePrompt: useCallback(() => removePrompt(), [])
-  }
+  };
 
   return (
     <SudokuPromptContext.Provider value={contextValue}>{children}</SudokuPromptContext.Provider>
