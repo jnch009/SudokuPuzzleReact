@@ -11,6 +11,7 @@ import {
 import validateSaveName from '../../helperFn/validation';
 import usePromptProvider from '../../hooks/usePromptProvider/index';
 import { alertTypes } from '../../helperFn/alertConstants'; 
+import fn from '../../helperFn/boardFunctions';
 import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
 
 const ModalOverwriteGame = ({ open, setOpen, id, setUserGamesUpdated }) => {
@@ -53,16 +54,8 @@ const ModalOverwriteGame = ({ open, setOpen, id, setUserGamesUpdated }) => {
                   name: saveName,
                   grid: sessionStorage.getItem('grid'),
                   difficulty: sessionStorage.getItem('difficulty'),
-                  date: new Intl.DateTimeFormat('default', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: 'numeric',
-                    minute: 'numeric',
-                    second: 'numeric',
-                    hour12: true,
-                  }).format(new Date(Date.now())),
-                },
+                  date: fn.getCurrentDate()
+                }
               }),
             });
           } catch (e) {
