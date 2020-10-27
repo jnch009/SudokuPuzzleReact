@@ -41,7 +41,7 @@ const ModalOverwriteGame = ({ open, setOpen, id, setUserGamesUpdated }) => {
               scope: process.env.REACT_APP_AUTH0_SCOPE,
             });
 
-            await fetch(`http://localhost:3001/sudoku/${user.sub}/${id}`, {
+            await fetch(`${process.env.REACT_APP_FETCH}/sudoku/${user.sub}/${id}`, {
               method: 'PUT',
               headers: {
                 Authorization: `Bearer ${accessToken}`,
