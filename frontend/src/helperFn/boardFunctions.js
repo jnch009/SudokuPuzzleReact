@@ -2,6 +2,18 @@ function randomlyGeneratedValue(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
+const getCurrentDate = () => {
+  return new Intl.DateTimeFormat('default', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: true,
+  }).format(new Date(Date.now()));
+};
+
 const removingEntries = (newGrid, difficulty) => {
   let minToRemove;
   let maxToRemove;
@@ -151,4 +163,5 @@ export default {
   verifySudoku,
   shuffle,
   solve,
+  getCurrentDate
 };
