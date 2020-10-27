@@ -4,10 +4,12 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { Modal, ModalHeader, ModalBody, Button } from 'shards-react';
 import usePromptProvider from '../../hooks/usePromptProvider/index';
 import { alertTypes } from '../../helperFn/alertConstants'; 
+import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
 
 const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, handleOverwriteClick, setUserGamesUpdated }) => {
   const history = useHistory();
   const [accepted, setAccepted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { getAccessTokenSilently, user } = useAuth0();
   const { addPrompt } = usePromptProvider();
 
@@ -15,6 +17,7 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, h
     function cleanUp() {
       setOpen(false);
       setAccepted(false);
+      setIsLoading(false);
       history.push('/');
     }
 
@@ -22,11 +25,13 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, h
       setOpen(false);
       setAccepted(false);
       setUserGamesUpdated(true);
+      setIsLoading(false);
       addPrompt('Deleted Game!', alertTypes.SUCCESS);
     }
 
     const saveGameLoad = async () => {
       if (accepted){
+        setIsLoading(true);
         try {
           const accessToken = await getAccessTokenSilently({
             audience: process.env.REACT_APP_AUTH0_AUDIENCE,
@@ -52,6 +57,7 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, h
 
         return cleanUp();
       }
+      setIsLoading(false);
       setAccepted(false);
     };
 
@@ -65,6 +71,7 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, h
 
     const saveGameDelete = async () => {
       if (accepted){
+        setIsLoading(true);
         try {
           const accessToken = await getAccessTokenSilently({
             audience: process.env.REACT_APP_AUTH0_AUDIENCE,
@@ -85,6 +92,7 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, h
         
         return cleanUpAfterDelete();
       }
+      setIsLoading(false);
       setAccepted(false);
     };
 
@@ -109,6 +117,7 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, h
       <ModalHeader>{title}</ModalHeader>
       <ModalBody>
         <h5>{`Do you want to ${action} this game?`}</h5>
+        {isLoading ? <LoadingIndicator /> : null}
         <div className='d-flex justify-content-around'>
           <Button className='w-25' onClick={() => setAccepted(true)}>Yes</Button>
           <Button className='w-25' onClick={() => setOpen(false)}>No</Button>

@@ -11,10 +11,12 @@ import {
 import validateSaveName from '../../helperFn/validation';
 import usePromptProvider from '../../hooks/usePromptProvider/index';
 import { alertTypes } from '../../helperFn/alertConstants'; 
+import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
 
 const ModalOverwriteGame = ({ open, setOpen, id, setUserGamesUpdated }) => {
   const [saveName, setSaveName] = useState('');
   const [overwriteGameAccepted, setOverwriteGameAccepted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { getAccessTokenSilently, user } = useAuth0();
   const { addPrompt } = usePromptProvider();
 
@@ -28,6 +30,7 @@ const ModalOverwriteGame = ({ open, setOpen, id, setUserGamesUpdated }) => {
     
     const savingGame = async () => {
       if (overwriteGameAccepted) {
+        setIsLoading(true);
         if (!validateSaveName(saveName)) {
           addPrompt('Did not pass validation', alertTypes.ERROR);
         } else {
@@ -69,6 +72,7 @@ const ModalOverwriteGame = ({ open, setOpen, id, setUserGamesUpdated }) => {
           return cleanUp();
         }
       }
+      setIsLoading(false);
       setOverwriteGameAccepted(false);
     };
     savingGame();
@@ -81,6 +85,7 @@ const ModalOverwriteGame = ({ open, setOpen, id, setUserGamesUpdated }) => {
         <h5>Please enter the name of the save</h5>
         <FormInput onChange={(e) => setSaveName(e.target.value)} placeholder='Save Name' />
       </ModalBody>
+      {isLoading ? <LoadingIndicator /> : null}
       <ModalFooter>
         <Button onClick={() => setOverwriteGameAccepted(true)}>
           Overwrite

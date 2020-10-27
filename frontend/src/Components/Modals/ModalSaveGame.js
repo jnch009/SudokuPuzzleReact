@@ -11,16 +11,19 @@ import {
 import validateSaveName from '../../helperFn/validation';
 import usePromptProvider from '../../hooks/usePromptProvider/index';
 import { alertTypes } from '../../helperFn/alertConstants'; 
+import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
 
 const ModalSaveGame = ({ open, setOpen }) => {
   const [saveName, setSaveName] = useState('');
   const [saveGameAccepted, setSaveGameAccepted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { getAccessTokenSilently, user } = useAuth0();
   const { addPrompt } = usePromptProvider();
 
   useEffect(() => {
     const savingGame = async () => {
       if (saveGameAccepted) {
+        setIsLoading(true);
         if (!validateSaveName(saveName)) {
           addPrompt('Did not pass validation', alertTypes.ERROR);
         } else {
@@ -64,11 +67,11 @@ const ModalSaveGame = ({ open, setOpen }) => {
           } catch (e) {
             addPrompt(typeof e !== 'object' ? e : 'Error Saving Game', alertTypes.ERROR);
           }
-
           setOpen(false);
           setSaveName('');
         }
       }
+      setIsLoading(false);
       setSaveGameAccepted(false);
     };
     savingGame();
@@ -81,6 +84,7 @@ const ModalSaveGame = ({ open, setOpen }) => {
         <h5>Please enter the name of the save</h5>
         <FormInput onChange={(e) => setSaveName(e.target.value)} placeholder='Save Name' />
       </ModalBody>
+      {isLoading ? <LoadingIndicator /> : null}
       <ModalFooter>
         <Button onClick={() => setSaveGameAccepted(true)}>Save</Button>
       </ModalFooter>
