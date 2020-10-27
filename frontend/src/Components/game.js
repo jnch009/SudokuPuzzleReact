@@ -1,7 +1,7 @@
 import React from 'react';
 import Board from './board';
 import SavedGames from '../Components/SavedGames/SavedGames';
-import { Button } from 'shards-react';
+import { Button, Alert } from 'shards-react';
 import fn from '../helperFn/boardFunctions';
 import cloneDeep from 'lodash.clonedeep';
 import { withAuth0 } from '@auth0/auth0-react';
@@ -21,6 +21,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const timeUntilDismissed = 3;
 
 const initialState = {
   openCredits: false,
@@ -37,7 +38,6 @@ const initialState = {
   grid: [],
   displayError: false,
   beginTimer: 0,
-  timeUntilDismissed: 3,
   complete: false,
 };
 
@@ -150,7 +150,7 @@ class Game extends React.PureComponent {
   }
 
   handleTimeChange = () => {
-    if (this.state.beginTimer < this.state.timeUntilDismissed - 1) {
+    if (this.state.beginTimer < timeUntilDismissed - 1) {
       this.setState({ ...this.state, ...{ beginTimer: this.state.beginTimer + 1 } });
       return;
     }
@@ -189,7 +189,7 @@ class Game extends React.PureComponent {
 
   showInvalidKeyPress = () => {
     this.clearInterval();
-    this.setState({ displayError: true, beginTimer: 0, timeUntilDismissed: 3 });
+    this.setState({ displayError: true, beginTimer: 0 });
     this.interval = setInterval(this.handleTimeChange, 1000);
   };
 
@@ -226,6 +226,9 @@ class Game extends React.PureComponent {
     } else {
       return (
         <>
+          <Alert className='alertConstraint' theme='danger' open={displayError}>
+            Must type a number between 1 and 9
+          </Alert>
           <CSSTransition
             in={showSideNav}
             timeout={200}
@@ -290,7 +293,6 @@ class Game extends React.PureComponent {
               component={Board}
               grid={grid}
               complete={this.state.complete}
-              displayError={displayError}
               handleKeyPress={this.handleKeyPress}
             />
             <Route
@@ -299,7 +301,6 @@ class Game extends React.PureComponent {
                 <Board
                   grid={grid}
                   complete={this.state.complete}
-                  displayError={displayError}
                   handleKeyPress={this.handleKeyPress}
                 />
               )}
