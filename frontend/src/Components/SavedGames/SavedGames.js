@@ -44,7 +44,7 @@ const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
         scope: process.env.REACT_APP_AUTH0_SCOPE,
       });
 
-      await fetch('http://localhost:3001/sudoku/register', {
+      await fetch(`${process.env.REACT_APP_FETCH}/sudoku/register`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -54,7 +54,7 @@ const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
         body: JSON.stringify({ user_id: user.sub }),
       });
 
-      const res = await fetch(`http://localhost:3001/sudoku/${user.sub}`, {
+      const res = await fetch(`${process.env.REACT_APP_FETCH}/sudoku/${user.sub}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${accessToken}`,

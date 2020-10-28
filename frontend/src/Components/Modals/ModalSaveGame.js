@@ -34,7 +34,7 @@ const ModalSaveGame = ({ open, setOpen }) => {
               scope: process.env.REACT_APP_AUTH0_SCOPE,
             });
       
-            const resp = await fetch('http://localhost:3001/sudoku', {
+            const resp = await fetch(`${process.env.REACT_APP_FETCH}/sudoku`, {
               method: 'POST',
               headers: {
                 Authorization: `Bearer ${accessToken}`,

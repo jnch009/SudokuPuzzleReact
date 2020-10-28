@@ -38,7 +38,7 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, h
             scope: process.env.REACT_APP_AUTH0_SCOPE,
           });
     
-          const saveLoaded = await fetch(`http://localhost:3001/sudoku/${user.sub}?saveGame=${id}`, {
+          const saveLoaded = await fetch(`${process.env.REACT_APP_FETCH}/sudoku/${user.sub}?saveGame=${id}`, {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${accessToken}`
@@ -78,7 +78,7 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, h
             scope: process.env.REACT_APP_AUTH0_SCOPE,
           });
       
-          await fetch(`http://localhost:3001/sudoku/${user.sub}/${id}`, {
+          await fetch(`${process.env.REACT_APP_FETCH}/sudoku/${user.sub}/${id}`, {
             method: 'DELETE',
             headers: {
               Authorization: `Bearer ${accessToken}`
