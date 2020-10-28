@@ -63,6 +63,25 @@ class Game extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (this.props.auth0.isAuthenticated){
+      const { getAccessTokenSilently, user } = this.props.auth0;
+
+      getAccessTokenSilently({
+        audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+        scope: process.env.REACT_APP_AUTH0_SCOPE,
+      }).then(token => {
+        fetch(`${process.env.REACT_APP_FETCH}/sudoku/register`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({ user_id: user.sub }),
+        });
+      });
+    }
+
     if (this.props.location.pathname === '/save'){
       this.setState({ openSaveGame: true }, () => {
         this.props.history.replace('/');
@@ -266,6 +285,7 @@ class Game extends React.PureComponent {
             handleDifficultyClick={this.handleDifficultyClick}
             difficulty={this.state.difficulty}
             changeDifficulty={this.changeDifficulty}
+<<<<<<< HEAD
           />
 
           <ModalRules
@@ -273,6 +293,15 @@ class Game extends React.PureComponent {
             handleRulesClick={this.handleRulesClick}
           />
 
+=======
+          />
+
+          <ModalRules
+            openRules={this.state.openRules}
+            handleRulesClick={this.handleRulesClick}
+          />
+
+>>>>>>> 2086b950be979a9b367abe590e4e98005e43bd70
           <ModalNewGame
             openNewGame={this.state.openNewGame}
             handleNewGameClick={this.handleNewGameClick}
