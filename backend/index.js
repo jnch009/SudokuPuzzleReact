@@ -2,7 +2,8 @@ require('dotenv').config();
 const { MongoClient } = require('mongodb');
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3001;
+const cors = require('cors');
 const jwt = require('express-jwt');
 const jwtAuthz = require('express-jwt-authz');
 const jwksRsa = require('jwks-rsa');
@@ -30,6 +31,7 @@ app.use(
     extended: true,
   })
 );
+app.use(cors({ origin: true, credentials: true }));
 
 let dbName = 'sudokuSaves';
 const checkJwt = jwt({
