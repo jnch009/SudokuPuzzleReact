@@ -285,7 +285,6 @@ class Game extends React.PureComponent {
             handleDifficultyClick={this.handleDifficultyClick}
             difficulty={this.state.difficulty}
             changeDifficulty={this.changeDifficulty}
-<<<<<<< HEAD
           />
 
           <ModalRules
@@ -293,15 +292,6 @@ class Game extends React.PureComponent {
             handleRulesClick={this.handleRulesClick}
           />
 
-=======
-          />
-
-          <ModalRules
-            openRules={this.state.openRules}
-            handleRulesClick={this.handleRulesClick}
-          />
-
->>>>>>> 2086b950be979a9b367abe590e4e98005e43bd70
           <ModalNewGame
             openNewGame={this.state.openNewGame}
             handleNewGameClick={this.handleNewGameClick}
