@@ -33,7 +33,6 @@ app.use(
 );
 app.use(cors({ origin: true, credentials: true }));
 
-let dbName = 'sudokuSaves';
 const checkJwt = jwt({
   secret: jwksRsa.expressJwtSecret({
     cache: true,
