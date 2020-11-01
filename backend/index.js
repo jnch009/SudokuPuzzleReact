@@ -39,11 +39,11 @@ const checkJwt = jwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: process.env.JWKS_URI,
+    jwksUri: appConstants.JWKS_URI,
   }),
 
-  audience: process.env.AUDIENCE,
-  issuer: process.env.ISSUER,
+  audience: appConstants.AUDIENCE,
+  issuer: appConstants.ISSUER,
   algorithms: ['RS256'],
 });
 
