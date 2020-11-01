@@ -81,6 +81,10 @@ app.delete(
   }
 );
 
+app.get('/', (req, res) => {
+  res.json('Sudoku root route');
+})
+
 app.listen(port, () => {
   console.log(`Sudoku app listening at http://localhost:${port}`);
 });

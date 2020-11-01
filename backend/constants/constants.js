@@ -5,7 +5,7 @@ const appConstants = {
   USER_MAX_SAVES: '6969',
   CONNECTION: 'Username-Password-Authentication',
   MOCK_PASSWORD: "kTL&4e?R9'_dH3.q",
-  MONGO_URL: `mongodb+srv://jnch009:${process.env.MONGO_PASS}@sudokusavedgames.xaesp.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority&useNewUrlParser=true&useUnifiedTopology=true`,
+  MONGO_URL: `${process.env.MONGO_URI}`,
   TEST_GRID: [1, 2, 3, 4, 5],
   CURRENT_DATE: new Date(Date.now()),
 };

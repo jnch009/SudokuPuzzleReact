@@ -1,0 +1,46 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+  sudoku-backend:
+    container_name: sudoku-backend
+    mem_limit: 2048m
+    image: jonch009/sudoku-backend:develop
+    volumes:
+        - '.:/usr/src/app'
+        - '/usr/src/app/node_modules'
+    ports:
+        - 3001:3001
+    env_file: 
+        - ./docker.env
+    environment: 
+        - DB_HOST=smartbrain-db
+    networks:
+        - sudoku
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - db-data:/data/db
+    networks:
+      - sudoku
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+    networks:
+      - sudoku
+
+networks:
+  sudoku:
+volumes:
+  db-data:
