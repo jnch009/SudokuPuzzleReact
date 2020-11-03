@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive './test/*.js' --exit",
-    "start": "nodemon index.js"
+    "start": "nodemon -L index.js"
   },
   "author": "Jeremy Ng",
   "license": "ISC",

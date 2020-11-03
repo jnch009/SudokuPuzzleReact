@@ -39,11 +39,11 @@ const checkJwt = jwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: process.env.JWKS_URI,
+    jwksUri: appConstants.JWKS_URI,
   }),
 
-  audience: process.env.AUDIENCE,
-  issuer: process.env.ISSUER,
+  audience: appConstants.AUDIENCE,
+  issuer: appConstants.ISSUER,
   algorithms: ['RS256'],
 });
 
@@ -80,6 +80,10 @@ app.delete(
     handleDeleteSavedGame(req, res, client, dbName);
   }
 );
+
+app.get('/', (req, res) => {
+  res.json('Sudoku root route');
+})
 
 app.listen(port, () => {
   console.log(`Sudoku app listening at http://localhost:${port}`);
