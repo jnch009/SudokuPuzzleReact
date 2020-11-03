@@ -110,7 +110,7 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, h
       break;
     }
     
-  },[accepted]);
+  },[accepted, action, addPrompt, getAccessTokenSilently, handleGridUpdate, handleOverwriteClick, history, id, setOpen, setUserGamesUpdated, user.sub]);
 
   return (
     <Modal open={open} toggle={() => setOpen(!open)}>

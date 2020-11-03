@@ -30,7 +30,7 @@ const ModalOverwriteGame = ({ open, setOpen, id, setUserGamesUpdated }) => {
     }
     
     const savingGame = async () => {
-      if (overwriteGameAccepted) {
+      if (overwriteGameAccepted && open) {
         setIsLoading(true);
         if (!validateSaveName(saveName)) {
           addPrompt('Did not pass validation', alertTypes.ERROR);
@@ -69,7 +69,7 @@ const ModalOverwriteGame = ({ open, setOpen, id, setUserGamesUpdated }) => {
       setOverwriteGameAccepted(false);
     };
     savingGame();
-  }, [overwriteGameAccepted]);
+  }, [addPrompt, getAccessTokenSilently, id, open, overwriteGameAccepted, saveName, setOpen, setUserGamesUpdated, user.sub]);
 
   return (
     <Modal open={open} toggle={setOpen}>
