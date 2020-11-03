@@ -1,0 +1,49 @@
+# Use root/example as user/password credentials
+version: '2.4'
+
+services:
+  sudoku-frontend:
+    tty: true
+    image: jonch009/sudoku-frontend:develop
+    container_name: sudoku-frontend
+    volumes:
+      - './frontend:/app'
+      - '/app/node_modules'
+    ports:
+      - 3000:3000
+    env_file: 
+      - ./frontend/docker.env
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      - sudoku
+
+  sudoku-backend:
+    container_name: sudoku-backend
+    image: jonch009/sudoku-backend:develop
+    volumes:
+      - './backend:/usr/src/app'
+      - '/usr/src/app/node_modules'
+    ports:
+      - 3001:3001
+    env_file: 
+      - ./backend/docker.env
+    networks:
+      - sudoku
+
+  mongo:
+    image: mongo
+    restart: always
+    env_file: 
+      - ./backend/docker.env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: jnch009
+    volumes:
+      - db-data:/data/db
+    networks:
+      - sudoku
+
+networks:
+  sudoku:
+volumes:
+  db-data:

@@ -28,6 +28,7 @@ yarn-error.log*
 notes.txt
 Sudokunotes.txt
 
-.dockerignore
 Dockerfile
 Dockerfile.prod
+
+docker.env

@@ -1,5 +1,17 @@
 ## Sudoku Puzzle in React (Now built on Netlify: https://competent-aryabhata-ab481d.netlify.app)
 
+**UPDATE (11-02-2020)**
+This is a short update mentioning that the sudoku application is now fully dockerized. Please follow the docker.env.example files in the frontend and backend folders for the creation of those environment files and their values.
+
+Docker steps:
+1) Install docker desktop
+2) run **docker-compose up** at the top level
+3) Congrats, your docker containers are running! Now you can make changes to the frontend or backend and it will update on the fly.
+4) when you want to shut it off, run **docker-compose down**
+    a) if you want to remove the volumes, use **docker-compose down -v**, which is useful if you want to change the password for the mongodb instance.
+
+One of the fields in the docker.env.example for the backend is MONGO_INITDB_ROOT_PASSWORD. This password field will set the password to connect to the MongoDB instance. If you need to change the password for any reason, refer to 4a).
+
 **UPDATE (10-27-2020)**
 
 After a long 2 months, I have now successfully added a save game feature!!!
