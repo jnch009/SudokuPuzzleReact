@@ -5,6 +5,7 @@ import queryString from 'query-string';
 
 import ModalOverwriteGame from '../Modals/ModalOverwriteGame';
 import ModalLoadGame from '../Modals/ModalLoadGame';
+import ModalDeleteGame from '../Modals/ModalDeleteGame';
 import ModalOverwriteConfirm from '../Modals/ModalOverwriteConfirm';
 import SavedGamesPagination from '../SavedGamesPagination/SavedGamesPagination';
 
@@ -12,7 +13,6 @@ import './SavedGames.scss';
 import { useAuth0 } from '@auth0/auth0-react';
 import usePromptProvider from '../../hooks/usePromptProvider/index';
 import { alertTypes } from '../../helperFn/alertConstants'; 
-import ModalDeleteGame from '../Modals/ModalDeleteGame';
 
 const gamesPerPage = 3;
 const gameIdCalculation = (index, currentPage, gamesPerPage) => {
