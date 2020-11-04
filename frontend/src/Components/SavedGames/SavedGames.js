@@ -12,6 +12,7 @@ import './SavedGames.scss';
 import { useAuth0 } from '@auth0/auth0-react';
 import usePromptProvider from '../../hooks/usePromptProvider/index';
 import { alertTypes } from '../../helperFn/alertConstants'; 
+import ModalDeleteGame from '../Modals/ModalDeleteGame';
 
 const gamesPerPage = 3;
 const gameIdCalculation = (index, currentPage, gamesPerPage) => {
@@ -97,14 +98,7 @@ const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
   return (
     <div className='mt-1 d-flex align-items-center flex-column'>
       <ModalLoadGame open={openLoadModal} setOpen={setOpenLoadModal} id={gameId} handleGridUpdate={handleGridUpdate} />
-      <ModalModifyGame
-        open={openDeleteModal}
-        setOpen={setOpenDeleteModal}
-        title='Delete Game'
-        action='delete'
-        id={gameId}
-        setUserGamesUpdated={setUserGamesUpdated}
-      />
+      <ModalDeleteGame open={openDeleteModal} setOpen={setOpenDeleteModal} id={gameId} setUserGamesUpdated={setUserGamesUpdated} />
       <ModalModifyGame
         open={openOverwriteModal}
         setOpen={setOpenOverwriteModal}
