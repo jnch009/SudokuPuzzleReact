@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 
 import ModalOverwriteGame from '../Modals/ModalOverwriteGame';
+import ModalLoadGame from '../Modals/ModalLoadGame';
 import ModalModifyGame from '../Modals/ModalModifyGame';
 import SavedGamesPagination from '../SavedGamesPagination/SavedGamesPagination';
 
@@ -95,14 +96,7 @@ const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
 
   return (
     <div className='mt-1 d-flex align-items-center flex-column'>
-      <ModalModifyGame
-        open={openLoadModal}
-        setOpen={setOpenLoadModal}
-        title='Load Game'
-        action='load'
-        id={gameId}
-        handleGridUpdate={handleGridUpdate}
-      />
+      <ModalLoadGame open={openLoadModal} setOpen={setOpenLoadModal} id={gameId} handleGridUpdate={handleGridUpdate} />
       <ModalModifyGame
         open={openDeleteModal}
         setOpen={setOpenDeleteModal}
