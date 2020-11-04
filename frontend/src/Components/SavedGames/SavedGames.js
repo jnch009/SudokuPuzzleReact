@@ -5,7 +5,7 @@ import queryString from 'query-string';
 
 import ModalOverwriteGame from '../Modals/ModalOverwriteGame';
 import ModalLoadGame from '../Modals/ModalLoadGame';
-import ModalModifyGame from '../Modals/ModalModifyGame';
+import ModalOverwriteConfirm from '../Modals/ModalOverwriteConfirm';
 import SavedGamesPagination from '../SavedGamesPagination/SavedGamesPagination';
 
 import './SavedGames.scss';
@@ -99,14 +99,7 @@ const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
     <div className='mt-1 d-flex align-items-center flex-column'>
       <ModalLoadGame open={openLoadModal} setOpen={setOpenLoadModal} id={gameId} handleGridUpdate={handleGridUpdate} />
       <ModalDeleteGame open={openDeleteModal} setOpen={setOpenDeleteModal} id={gameId} setUserGamesUpdated={setUserGamesUpdated} />
-      <ModalModifyGame
-        open={openOverwriteModal}
-        setOpen={setOpenOverwriteModal}
-        title='Overwrite'
-        action='overwrite'
-        id={gameId}
-        handleOverwriteClick={setOpenOverwriteSaveModal}
-      />
+      <ModalOverwriteConfirm open={openOverwriteModal} setOpen={setOpenOverwriteModal} handleOverwriteClick={setOpenOverwriteSaveModal} />
       <ModalOverwriteGame open={openOverwriteSave} setOpen={setOpenOverwriteSaveModal} id={gameId} setUserGamesUpdated={setUserGamesUpdated} />
 
       {!userGamesRetrieved ? (
