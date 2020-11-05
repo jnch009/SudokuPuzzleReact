@@ -23,7 +23,7 @@ const ModalSaveGame = ({ open, setOpen }) => {
 
   useEffect(() => {
     const savingGame = async () => {
-      if (saveGameAccepted) {
+      if (saveGameAccepted && open) {
         setIsLoading(true);
         if (!validateSaveName(saveName)) {
           addPrompt('Did not pass validation', alertTypes.ERROR);
@@ -68,7 +68,7 @@ const ModalSaveGame = ({ open, setOpen }) => {
       setSaveGameAccepted(false);
     };
     savingGame();
-  }, [saveGameAccepted]);
+  }, [addPrompt, getAccessTokenSilently, open, saveGameAccepted, saveName, setOpen, user.sub]);
 
   return (
     <Modal open={open} toggle={setOpen}>

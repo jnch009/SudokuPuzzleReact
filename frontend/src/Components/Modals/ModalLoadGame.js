@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
+import { alertTypes } from '../../helperFn/alertConstants'; 
 import { Modal, ModalHeader, ModalBody, Button } from 'shards-react';
 import usePromptProvider from '../../hooks/usePromptProvider/index';
-import { alertTypes } from '../../helperFn/alertConstants'; 
 import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
 
-const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, handleOverwriteClick, setUserGamesUpdated }) => {
+const ModalLoadGame = ({ open, setOpen, id, handleGridUpdate }) => {
   const history = useHistory();
   const [accepted, setAccepted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);  
   const { getAccessTokenSilently, user } = useAuth0();
   const { addPrompt } = usePromptProvider();
 
@@ -19,14 +19,6 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, h
       setAccepted(false);
       setIsLoading(false);
       history.push('/');
-    }
-
-    function cleanUpAfterDelete() {
-      setOpen(false);
-      setAccepted(false);
-      setUserGamesUpdated(true);
-      setIsLoading(false);
-      addPrompt('Deleted Game!', alertTypes.SUCCESS);
     }
 
     const saveGameLoad = async () => {
@@ -61,62 +53,14 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, h
       setAccepted(false);
     };
 
-    const saveGameOverwrite = async () => {
-      if (accepted){
-        setOpen(false);
-        setAccepted(false);
-        handleOverwriteClick(true);
-      }
-    };
-
-    const saveGameDelete = async () => {
-      if (accepted){
-        setIsLoading(true);
-        try {
-          const accessToken = await getAccessTokenSilently({
-            audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-            scope: process.env.REACT_APP_AUTH0_SCOPE,
-          });
-      
-          await fetch(`${process.env.REACT_APP_FETCH}/sudoku/${user.sub}/${id}`, {
-            method: 'DELETE',
-            headers: {
-              Authorization: `Bearer ${accessToken}`
-            },
-            credentials: 'include',
-          });
-
-        } catch (e) {
-          addPrompt('Error Deleting Saved Game', alertTypes.ERROR);
-        }
-        
-        return cleanUpAfterDelete();
-      }
-      setIsLoading(false);
-      setAccepted(false);
-    };
-
-    switch (action) {
-    case 'load':
-      saveGameLoad();
-      break;
-    case 'overwrite':
-      saveGameOverwrite();
-      break;
-    case 'delete':
-      saveGameDelete();
-      break;
-    default:
-      break;
-    }
-    
-  },[accepted]);
+    saveGameLoad();
+  }, [accepted, addPrompt, getAccessTokenSilently, handleGridUpdate, history, id, setOpen, user.sub]);
 
   return (
     <Modal open={open} toggle={() => setOpen(!open)}>
-      <ModalHeader>{title}</ModalHeader>
+      <ModalHeader>Load</ModalHeader>
       <ModalBody>
-        <h5>{`Do you want to ${action} this game?`}</h5>
+        <h5>Do you really want to load this game?</h5>
         {isLoading ? <LoadingIndicator /> : null}
         <div className='d-flex justify-content-around'>
           <Button className='w-25' onClick={() => setAccepted(true)}>Yes</Button>
@@ -127,4 +71,4 @@ const ModalModifyGame = ({ open, setOpen, title, action, id, handleGridUpdate, h
   );
 };
 
-export default ModalModifyGame;
+export default ModalLoadGame;

@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from 'shards-react';
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 
 import ModalOverwriteGame from '../Modals/ModalOverwriteGame';
-import ModalModifyGame from '../Modals/ModalModifyGame';
+import ModalLoadGame from '../Modals/ModalLoadGame';
+import ModalDeleteGame from '../Modals/ModalDeleteGame';
+import ModalOverwriteConfirm from '../Modals/ModalOverwriteConfirm';
 import SavedGamesPagination from '../SavedGamesPagination/SavedGamesPagination';
 
 import './SavedGames.scss';
@@ -36,7 +38,7 @@ const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
 
   const [userGamesUpdated, setUserGamesUpdated] = useState(false);
 
-  const loadUser = async () => {
+  const loadUser = useCallback(async () => {
     setUserGamesRetrieved(false);
     try {
       const accessToken = await getAccessTokenSilently({
@@ -58,26 +60,27 @@ const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
     } catch (e) {
       addPrompt('Error getting saved games', alertTypes.ERROR);
     }
-  };
+  },[addPrompt, getAccessTokenSilently, user.sub]);
 
   useEffect(() => {
     loadUser();
-  }, []);
+  }, [loadUser]);
 
   useEffect(() => {
     if (userGamesUpdated){
       loadUser();
       setUserGamesUpdated(false);
     }
-  }, [userGamesUpdated]);
+  }, [loadUser, userGamesUpdated]);
 
   useEffect(() => {
-    if (totalPages !== undefined && currentPage > Math.ceil(userGames.length / gamesPerPage)){
-      history.replace(`/manageSaves?saves=${currentPage-1}`);
+    if (userGamesRetrieved){
+      if (currentPage > Math.ceil(userGames.length / gamesPerPage)){
+        history.replace(`/manageSaves?saves=${currentPage-1}`);
+      }
     }
-    
     setTotalPages(Math.ceil(userGames.length / gamesPerPage));
-  },[userGames]);
+  },[currentPage, history, userGames.length, userGamesRetrieved]);
 
   useEffect(() => {
     const saveNumber = Number(
@@ -87,37 +90,16 @@ const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
     if (saveNumber <= totalPages){
       setCurrentPage(saveNumber);
     }
-  }, [history.location]);
+  }, [history.location, totalPages]);
 
   const startSave = (currentPage - 1) * gamesPerPage;
   const endSave = startSave + gamesPerPage;
 
   return (
     <div className='mt-1 d-flex align-items-center flex-column'>
-      <ModalModifyGame
-        open={openLoadModal}
-        setOpen={setOpenLoadModal}
-        title='Load Game'
-        action='load'
-        id={gameId}
-        handleGridUpdate={handleGridUpdate}
-      />
-      <ModalModifyGame
-        open={openDeleteModal}
-        setOpen={setOpenDeleteModal}
-        title='Delete Game'
-        action='delete'
-        id={gameId}
-        setUserGamesUpdated={setUserGamesUpdated}
-      />
-      <ModalModifyGame
-        open={openOverwriteModal}
-        setOpen={setOpenOverwriteModal}
-        title='Overwrite'
-        action='overwrite'
-        id={gameId}
-        handleOverwriteClick={setOpenOverwriteSaveModal}
-      />
+      <ModalLoadGame open={openLoadModal} setOpen={setOpenLoadModal} id={gameId} handleGridUpdate={handleGridUpdate} />
+      <ModalDeleteGame open={openDeleteModal} setOpen={setOpenDeleteModal} id={gameId} setUserGamesUpdated={setUserGamesUpdated} />
+      <ModalOverwriteConfirm open={openOverwriteModal} setOpen={setOpenOverwriteModal} handleOverwriteClick={setOpenOverwriteSaveModal} />
       <ModalOverwriteGame open={openOverwriteSave} setOpen={setOpenOverwriteSaveModal} id={gameId} setUserGamesUpdated={setUserGamesUpdated} />
 
       {!userGamesRetrieved ? (

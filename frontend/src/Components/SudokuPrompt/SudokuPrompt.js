@@ -23,7 +23,7 @@ const SudokuPrompt = () => {
       setCountdown(0);      
       removePrompt();
     }
-  },[countdown]);
+  },[countdown, removePrompt]);
 
   return (
     <div>
