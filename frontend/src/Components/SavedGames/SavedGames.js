@@ -4,7 +4,9 @@ import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 
 import ModalOverwriteGame from '../Modals/ModalOverwriteGame';
-import ModalModifyGame from '../Modals/ModalModifyGame';
+import ModalLoadGame from '../Modals/ModalLoadGame';
+import ModalDeleteGame from '../Modals/ModalDeleteGame';
+import ModalOverwriteConfirm from '../Modals/ModalOverwriteConfirm';
 import SavedGamesPagination from '../SavedGamesPagination/SavedGamesPagination';
 
 import './SavedGames.scss';
@@ -95,30 +97,9 @@ const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
 
   return (
     <div className='mt-1 d-flex align-items-center flex-column'>
-      <ModalModifyGame
-        open={openLoadModal}
-        setOpen={setOpenLoadModal}
-        title='Load Game'
-        action='load'
-        id={gameId}
-        handleGridUpdate={handleGridUpdate}
-      />
-      <ModalModifyGame
-        open={openDeleteModal}
-        setOpen={setOpenDeleteModal}
-        title='Delete Game'
-        action='delete'
-        id={gameId}
-        setUserGamesUpdated={setUserGamesUpdated}
-      />
-      <ModalModifyGame
-        open={openOverwriteModal}
-        setOpen={setOpenOverwriteModal}
-        title='Overwrite'
-        action='overwrite'
-        id={gameId}
-        handleOverwriteClick={setOpenOverwriteSaveModal}
-      />
+      <ModalLoadGame open={openLoadModal} setOpen={setOpenLoadModal} id={gameId} handleGridUpdate={handleGridUpdate} />
+      <ModalDeleteGame open={openDeleteModal} setOpen={setOpenDeleteModal} id={gameId} setUserGamesUpdated={setUserGamesUpdated} />
+      <ModalOverwriteConfirm open={openOverwriteModal} setOpen={setOpenOverwriteModal} handleOverwriteClick={setOpenOverwriteSaveModal} />
       <ModalOverwriteGame open={openOverwriteSave} setOpen={setOpenOverwriteSaveModal} id={gameId} setUserGamesUpdated={setUserGamesUpdated} />
 
       {!userGamesRetrieved ? (
