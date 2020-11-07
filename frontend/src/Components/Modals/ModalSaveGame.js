@@ -68,7 +68,7 @@ const ModalSaveGame = ({ open, setOpen }) => {
       setSaveGameAccepted(false);
     };
     savingGame();
-  }, [addPrompt, getAccessTokenSilently, open, saveGameAccepted, saveName, setOpen, user.sub]);
+  }, [addPrompt, getAccessTokenSilently, open, saveGameAccepted, saveName, setOpen, user]);
 
   return (
     <Modal open={open} toggle={setOpen}>

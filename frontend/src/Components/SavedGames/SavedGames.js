@@ -60,7 +60,7 @@ const SavedGames = ({ handleGridUpdate, redirectToGrid }) => {
     } catch (e) {
       addPrompt('Error getting saved games', alertTypes.ERROR);
     }
-  },[addPrompt, getAccessTokenSilently, user.sub]);
+  },[addPrompt, getAccessTokenSilently, user]);
 
   useEffect(() => {
     loadUser();

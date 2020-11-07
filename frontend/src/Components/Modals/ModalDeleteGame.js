@@ -47,7 +47,7 @@ const ModalDeleteGame = ({ open, setOpen, id, setUserGamesUpdated }) => {
       setAccepted(false);
     };
     saveGameDelete();
-  },[accepted, addPrompt, getAccessTokenSilently, id, setOpen, setUserGamesUpdated, user.sub]);
+  },[accepted, addPrompt, getAccessTokenSilently, id, setOpen, setUserGamesUpdated, user]);
 
 
   return (
