@@ -12,10 +12,7 @@
   "dependencies": {
     "axios": "^0.20.0",
     "cors": "^2.8.5",
-<<<<<<< HEAD
-=======
     "dotenv": "^8.2.0",
->>>>>>> 1b63424727dde90fe31d96229fda6c33487f2881
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
     "express-jwt-authz": "^2.4.1",

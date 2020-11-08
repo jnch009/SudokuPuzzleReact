@@ -9,10 +9,6 @@ const Auth0ProviderWithHistory = ({ children }) => {
 
   const onRedirectCallback = (appState) => {
     history.replace(appState?.returnTo || window.location.pathname);
-<<<<<<< HEAD
-    history.go(0);
-=======
->>>>>>> 1b63424727dde90fe31d96229fda6c33487f2881
   };
 
   return (
@@ -21,12 +17,9 @@ const Auth0ProviderWithHistory = ({ children }) => {
       clientId={clientId}
       redirectUri={window.location.origin}
       onRedirectCallback={onRedirectCallback}
-<<<<<<< HEAD
-=======
       audience={process.env.REACT_APP_AUTH0_AUDIENCE}
       scope={process.env.REACT_APP_AUTH0_SCOPE}
       useRefreshTokens={true}
->>>>>>> 1b63424727dde90fe31d96229fda6c33487f2881
     >
       {children}
     </Auth0Provider>

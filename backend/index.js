@@ -2,11 +2,7 @@ require('dotenv').config();
 const { MongoClient } = require('mongodb');
 const express = require('express');
 const app = express();
-<<<<<<< HEAD
-const port = 3001;
-=======
 const port = process.env.PORT || 3001;
->>>>>>> 1b63424727dde90fe31d96229fda6c33487f2881
 const cors = require('cors');
 const jwt = require('express-jwt');
 const jwtAuthz = require('express-jwt-authz');

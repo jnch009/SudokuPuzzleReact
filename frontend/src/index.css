@@ -74,11 +74,6 @@ ul {
 }
 
 .alertConstraint {
-<<<<<<< HEAD
-  position: fixed;
-  top: 50px;
-  z-index: 1;
-=======
   position: absolute; 
   left: 0; 
   right: 0; 
@@ -87,7 +82,6 @@ ul {
   width: 320px;
   top: 8%;
   z-index: 1100;
->>>>>>> 1b63424727dde90fe31d96229fda6c33487f2881
 }
 
 .winCondition {
