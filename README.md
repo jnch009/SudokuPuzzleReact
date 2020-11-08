@@ -5,7 +5,7 @@ This is a short update mentioning that the sudoku application is now fully docke
 
 Docker steps:
 1) Install docker desktop
-2) run **docker-compose up** at the top level
+2) run **docker-compose up -d --build** at the top level
 3) Congrats, your docker containers are running! Now you can make changes to the frontend or backend and it will update on the fly.
 4) when you want to shut it off, run **docker-compose down**
     a) if you want to remove the volumes, use **docker-compose down -v**, which is useful if you want to change the password for the mongodb instance.

@@ -69,7 +69,7 @@ const ModalOverwriteGame = ({ open, setOpen, id, setUserGamesUpdated }) => {
       setOverwriteGameAccepted(false);
     };
     savingGame();
-  }, [addPrompt, getAccessTokenSilently, id, open, overwriteGameAccepted, saveName, setOpen, setUserGamesUpdated, user.sub]);
+  }, [addPrompt, getAccessTokenSilently, id, open, overwriteGameAccepted, saveName, setOpen, setUserGamesUpdated, user]);
 
   return (
     <Modal open={open} toggle={setOpen}>

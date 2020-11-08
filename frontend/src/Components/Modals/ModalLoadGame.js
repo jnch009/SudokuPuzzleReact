@@ -54,7 +54,7 @@ const ModalLoadGame = ({ open, setOpen, id, handleGridUpdate }) => {
     };
 
     saveGameLoad();
-  }, [accepted, addPrompt, getAccessTokenSilently, handleGridUpdate, history, id, setOpen, user.sub]);
+  }, [accepted, addPrompt, getAccessTokenSilently, handleGridUpdate, history, id, setOpen, user]);
 
   return (
     <Modal open={open} toggle={() => setOpen(!open)}>
