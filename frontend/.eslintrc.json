@@ -25,11 +25,7 @@
     "jsx-quotes": ["warn", "prefer-single"],
     "semi": ["error", "always"],
     "react/display-name": [0],
-<<<<<<< HEAD
-    "no-console": [1],
-=======
     "no-console": ["warn"],
->>>>>>> 1b63424727dde90fe31d96229fda6c33487f2881
     "eol-last": ["error", "always"],
     "operator-linebreak": ["error", "none"],
     "no-multi-spaces": ["error"]
