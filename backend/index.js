@@ -2,7 +2,11 @@ require('dotenv').config();
 const { MongoClient } = require('mongodb');
 const express = require('express');
 const app = express();
+<<<<<<< HEAD
 const port = 3001;
+=======
+const port = process.env.PORT || 3001;
+>>>>>>> 1b63424727dde90fe31d96229fda6c33487f2881
 const cors = require('cors');
 const jwt = require('express-jwt');
 const jwtAuthz = require('express-jwt-authz');
@@ -39,11 +43,11 @@ const checkJwt = jwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: process.env.JWKS_URI,
+    jwksUri: appConstants.JWKS_URI,
   }),
 
-  audience: process.env.AUDIENCE,
-  issuer: process.env.ISSUER,
+  audience: appConstants.AUDIENCE,
+  issuer: appConstants.ISSUER,
   algorithms: ['RS256'],
 });
 
@@ -80,6 +84,10 @@ app.delete(
     handleDeleteSavedGame(req, res, client, dbName);
   }
 );
+
+app.get('/', (req, res) => {
+  res.json('Sudoku root route');
+})
 
 app.listen(port, () => {
   console.log(`Sudoku app listening at http://localhost:${port}`);
