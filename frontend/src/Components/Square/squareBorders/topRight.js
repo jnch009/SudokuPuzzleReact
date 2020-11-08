@@ -7,6 +7,4 @@ const SquareBorderTopRight = styled.button`
   cursor: ${(props) => (props.modify ? null : 'not-allowed!important')};
 `;
 
-export default {
-  SquareBorderTopRight,
-};
+export default SquareBorderTopRight;

@@ -4,6 +4,4 @@ const noBorder = styled.button`
   cursor: ${(props) => (props.modify ? null : 'not-allowed!important')};
 `;
 
-export default {
-  noBorder,
-};
+export default noBorder;

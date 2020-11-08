@@ -2,15 +2,15 @@ import React from 'react';
 import { FormInput } from 'shards-react';
 import './square.scss';
 import boxLookupAssignment from './squareUtility';
-import tl from './squareBorders/topLeft';
-import tr from './squareBorders/topRight';
-import t from './squareBorders/Top';
-import bl from './squareBorders/bottomLeft';
-import br from './squareBorders/bottomRight';
-import b from './squareBorders/Bottom';
-import l from './squareBorders/Left';
-import r from './squareBorders/Right';
-import none from './squareBorders/None';
+import SquareBorderTopLeft from './squareBorders/topLeft';
+import SquareBorderTopRight from './squareBorders/topRight';
+import SquareBorderTop from './squareBorders/Top';
+import SquareBorderBottomLeft from './squareBorders/bottomLeft';
+import SquareBorderBottomRight from './squareBorders/bottomRight';
+import SquareBorderBottom from './squareBorders/Bottom';
+import SquareBorderLeft from './squareBorders/Left';
+import SquareBorderRight from './squareBorders/Right';
+import noBorder from './squareBorders/None';
 import squareBtnLight from './squareState/Active';
 import squareBtnDanger from './squareState/Danger';
 import disabledBtn from './squareState/Disabled';
@@ -30,41 +30,41 @@ const boxConditionLookup = () => {
     boxLookup,
     rowTopLeft,
     rowTopLeft,
-    tl.SquareBorderTopLeft
+    SquareBorderTopLeft
   );
 
   boxLookupAssignment(
     boxLookup,
     rowTopLeft,
     topRightRange,
-    tr.SquareBorderTopRight
+    SquareBorderTopRight
   );
 
   boxLookupAssignment(
     boxLookup,
     topRightRange,
     rowTopLeft,
-    bl.SquareBorderBottomLeft
+    SquareBorderBottomLeft
   );
 
   boxLookupAssignment(
     boxLookup,
     topRightRange,
     topRightRange,
-    br.SquareBorderBottomRight
+    SquareBorderBottomRight
   );
 
-  boxLookupAssignment(boxLookup, rowTopLeft, topBorder, t.SquareBorderTop);
+  boxLookupAssignment(boxLookup, rowTopLeft, topBorder, SquareBorderTop);
 
   boxLookupAssignment(
     boxLookup,
     topRightRange,
     topBorder,
-    b.SquareBorderBottom
+    SquareBorderBottom
   );
 
-  boxLookupAssignment(boxLookup, topBorder, rowTopLeft, l.SquareBorderLeft);
-  boxLookupAssignment(boxLookup, topBorder, topRightRange, r.SquareBorderRight);
+  boxLookupAssignment(boxLookup, topBorder, rowTopLeft, SquareBorderLeft);
+  boxLookupAssignment(boxLookup, topBorder, topRightRange, SquareBorderRight);
 
   return boxLookup;
 };
@@ -113,7 +113,7 @@ class Square extends React.Component {
     const startRow = parseInt(squareProps.row / 3) * 3;
     const startCol = parseInt(squareProps.col / 3) * 3;
     const boxColor = setBorderColor(startRow, startCol);
-    const boxLookup = boxConditionLookup()[`${squareProps.row} ${squareProps.col}`] || none.noBorder;
+    const boxLookup = boxConditionLookup()[`${squareProps.row} ${squareProps.col}`] || noBorder;
 
     if (!modify) {
       btn = disabledBtn(boxLookup, squareProps.number, boxColor);
