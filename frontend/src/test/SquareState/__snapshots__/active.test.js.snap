@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Square Active 1`] = `
+<button
+  class="sc-AxjAm eoPTQw square light"
+>
+  1
+</button>
+`;
