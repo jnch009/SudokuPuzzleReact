@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`No border 1`] = `
+<button
+  class=""
+/>
+`;
+
+exports[`No border not modifiable 1`] = `
+.c0 {
+  color: #fff;
+  cursor: not-allowed!important;
+}
+
+<button
+  class="c0"
+/>
+`;
