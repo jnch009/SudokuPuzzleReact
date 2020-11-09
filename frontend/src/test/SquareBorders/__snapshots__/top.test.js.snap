@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Top border 1`] = `
+.c0 {
+  border-top: 0.2em blue solid;
+}
+
+<button
+  class="c0"
+/>
+`;
+
+exports[`Top border not modifiable 1`] = `
+.c0 {
+  border-top: 0.2em blue solid;
+  color: #fff;
+  cursor: not-allowed!important;
+}
+
+<button
+  class="c0"
+/>
+`;
