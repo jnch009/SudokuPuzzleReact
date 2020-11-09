@@ -5,13 +5,13 @@ import SquareBorderLeft from '../../Components/Square/squareBorders/Left';
 
 const borderColor = 'blue';
 
-it('Bottom border', () => {
+it('Left border', () => {
   const { container } = render(<SquareBorderLeft borderColor={borderColor} modify={true} />);
   expect(container.firstChild).toMatchSnapshot();
   expect(container.firstChild).toHaveStyleRule('border-left', `0.2em ${borderColor} solid`);
 });
 
-it('Bottom border not modifiable', () => {
+it('Left border not modifiable', () => {
   const { container } = render(<SquareBorderLeft borderColor={borderColor} modify={false} />);
   expect(container.firstChild).toMatchSnapshot();
   expect(container.firstChild).toHaveStyleRule('border-left', `0.2em ${borderColor} solid`);
