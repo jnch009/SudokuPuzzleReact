@@ -38,7 +38,7 @@ class Square extends React.Component {
     const startRow = parseInt(squareProps.row / 3) * 3;
     const startCol = parseInt(squareProps.col / 3) * 3;
     const boxColor = setBorderColor(startRow, startCol);
-    const boxLookup = boxConditionLookup()[`${squareProps.row} ${squareProps.col}`] || noBorder;
+    const boxLookup = squareProps.boxLookup[`${squareProps.row} ${squareProps.col}`] || noBorder;
 
     if (!modify) {
       btn = disabledBtn(boxLookup, squareProps.number, boxColor);
