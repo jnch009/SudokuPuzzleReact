@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormInput } from 'shards-react';
 import './square.scss';
-import { setBorderColor, boxConditionLookup } from './squareUtility';
+import { setBorderColor } from './squareUtility';
 
 import noBorder from './squareBorders/None';
 import squareBtnLight from './squareState/Active';
