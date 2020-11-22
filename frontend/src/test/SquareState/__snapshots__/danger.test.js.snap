@@ -2,7 +2,7 @@
 
 exports[`Square Active 1`] = `
 <button
-  class="sc-AxjAm eoPTQw square danger"
+  class="square danger"
 >
   1
 </button>
