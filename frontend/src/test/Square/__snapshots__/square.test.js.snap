@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Valid Square 1`] = `
+.c0 {
+  border-top: 0.2em blue solid;
+  border-left: 0.2em blue solid;
+}
+
+<button
+  class="c0 square light"
+>
+  1
+</button>
+`;
