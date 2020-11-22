@@ -1,8 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Square Active 1`] = `
+.c0 {
+  color: #fff;
+  cursor: not-allowed!important;
+}
+
 <button
-  class="sc-AxjAm jwizLy square primary"
+  class="c0 square primary"
 >
   1
 </button>
