@@ -1,3 +1,4 @@
+import 'jest-styled-components';
 import { render, screen } from '@testing-library/react';
 import { squareStateConstants } from '../../helperFn/testHelpers';
 import SquareBtnLight from '../../Components/Square/squareState/Active';
