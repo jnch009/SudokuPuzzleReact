@@ -1,6 +1,8 @@
 import React from 'react';
 import Row from './row';
+import { boxConditionLookup } from './Square/squareUtility';
 
+const boxLookup = boxConditionLookup();
 const Board = ({ grid, complete, handleKeyPress }) => {  
   return (
     <div className='sudoku'>
@@ -16,6 +18,7 @@ const Board = ({ grid, complete, handleKeyPress }) => {
           grid={grid}
           cells={row}
           rowNum={rowNum}
+          boxLookup={boxLookup}
           handleKeyPress={handleKeyPress}
         />
       ))}
