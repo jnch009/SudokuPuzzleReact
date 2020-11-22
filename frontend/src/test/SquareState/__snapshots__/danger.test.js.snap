@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Square Active 1`] = `
+exports[`Square Danger 1`] = `
 <button
   class="square danger"
 >

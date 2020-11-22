@@ -4,7 +4,7 @@ import { squareStateConstants } from '../../helperFn/testHelpers';
 import SquareDisabledBtn from '../../Components/Square/squareState/Disabled';
 import NoBorder from '../../Components/Square/squareBorders/None';
 
-it('Square Active', () => {
+it('Square Disabled', () => {
   const { container } = render(SquareDisabledBtn(NoBorder, squareStateConstants.num, squareStateConstants.borderColor));
   expect(container.firstChild).toMatchSnapshot();
   expect(container.firstChild.classList.contains('square')).toBeTruthy();
