@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Invalid Square 1`] = `
+.c0 {
+  border-top: 0.2em blue solid;
+  border-left: 0.2em blue solid;
+}
+
+<button
+  class="c0 square danger"
+>
+  1
+</button>
+`;
+
+exports[`Unmodifiable Square 1`] = `
+.c0 {
+  border-top: 0.2em blue solid;
+  border-left: 0.2em blue solid;
+  color: #fff;
+  cursor: not-allowed!important;
+}
+
+<button
+  class="c0 square primary"
+>
+  1
+</button>
+`;
+
+exports[`Valid Square 1`] = `
+.c0 {
+  border-top: 0.2em blue solid;
+  border-left: 0.2em blue solid;
+}
+
+<button
+  class="c0 square light"
+>
+  1
+</button>
+`;
