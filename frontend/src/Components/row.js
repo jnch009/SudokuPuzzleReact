@@ -3,11 +3,12 @@ import Square from './Square/square';
 import fn from '../helperFn/boardFunctions';
 import cloneDeep from 'lodash.clonedeep';
 
-const renderSquare = (grid, num, row, col, handleKeyPress) => {
+const renderSquare = (grid, num, row, col, boxLookup, handleKeyPress) => {
   const gridEntry = num;
   const commonProps = {
     number: gridEntry,
     pressKey: handleKeyPress,
+    boxLookup: boxLookup,
     row: row,
     col: col,
     grid: grid,
@@ -44,11 +45,11 @@ const renderSquare = (grid, num, row, col, handleKeyPress) => {
   }
 };
 
-const Row = ({ cells = [], rowNum, grid, handleKeyPress }) => {
+const Row = ({ cells = [], rowNum, grid, boxLookup, handleKeyPress }) => {
   return (
     <div className='sudoku-row'>
       {cells.map((cell, cellNum) =>
-        renderSquare(grid, cell, rowNum, cellNum, handleKeyPress)
+        renderSquare(grid, cell, rowNum, cellNum, boxLookup, handleKeyPress)
       )}
     </div>
   );
